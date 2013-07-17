@@ -33,7 +33,8 @@ TODO
 
 ## Motivation
 
-TODO
+I'm tired to organize directory structure of every new Haskell project which comes with some test.
+This library is heavily inspired by [grunt-init](https://github.com/gruntjs/grunt-init).
 
 ## Contributing
 
