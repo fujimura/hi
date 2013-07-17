@@ -11,12 +11,12 @@ This application generates a scaffold for Haskell project from a Git repository.
 
 ```
 boilerplate: Usage: boilerplate [OPTION...]
-  -n NAME        --name=NAME               Name
-  -m MODULENAME  --module-name=MODULENAME  Name of Module
-  -a NAME        --author=NAME             Name of the project's author
-  -e EMAIL       --email=EMAIL             Email address of the maintainer
-  -r REPOSITORY  --repository=REPOSITORY   Template repository
-  -v             --version                 show version number
+  -p package-name  --package-name=package-name  Name of package
+  -m Module.Name   --module-name=Module.Name    Name of Module
+  -a NAME          --author=NAME                Name of the project's author
+  -e EMAIL         --email=EMAIL                Email address of the maintainer
+  -r REPOSITORY    --repository=REPOSITORY      Template repository
+  -v               --version                    show version number
 ```
 
 ## Installation
