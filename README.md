@@ -1,4 +1,4 @@
-boilerplate
+boilerplate [![Build Status](https://travis-ci.org/fujimura/boilerplate.png?branch=master)](https://travis-ci.org/fujimura/boilerplate)
 ===========
 
 Generate scaffold for a Haskell project
