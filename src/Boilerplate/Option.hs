@@ -28,7 +28,7 @@ options =
     , Option ['m'] ["module-name"] (ReqArg (Val "moduleName") "Module.Name")  "Name of Module"
     , Option ['a'] ["author"]      (ReqArg (Val "author") "NAME")  "Name of the project's author"
     , Option ['e'] ["email"]       (ReqArg (Val "email") "EMAIL")  "Email address of the maintainer"
-    , Option ['r'] ["repository"]  (ReqArg (Val "repository") "REPOSITORY")  "Template repository"
+    , Option ['r'] ["repository"]  (ReqArg (Val "repository") "REPOSITORY")  "Template repository(optional)"
     , Option ['v'] ["version"]     (NoArg Version) "show version number"
     ]
 
