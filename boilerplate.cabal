@@ -3,8 +3,8 @@
 
 name:                boilerplate
 version:             0.0.1
-synopsis:            Generate boilerplate for cabal project
--- description:         
+synopsis:            Generate scaffold for cabal project
+description:         This application generates a scaffold for Haskell project from a Git repository.
 license:             BSD3
 license-file:        LICENSE
 author:              Fujimura Daisuke
@@ -17,7 +17,6 @@ cabal-version:       >=1.8
 library
   exposed-modules:
       Boilerplate
-  other-modules:
       Boilerplate.Compiler
       Boilerplate.Context
       Boilerplate.Directory

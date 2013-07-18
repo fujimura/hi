@@ -7,7 +7,7 @@ import qualified Data.Text.IO       as T
 import qualified Data.Text.Lazy.IO  as LT
 import           Data.Text.Template (Context, substitute)
 
--- | Compile a file from template with given context.
+-- | Compile a file from template with given 'Context'.
 compile :: FilePath -- Source
         -> FilePath -- Destionation
         -> Context  -- Context

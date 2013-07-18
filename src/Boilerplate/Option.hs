@@ -19,9 +19,13 @@ type Options = Map.Map String String
 
 type Label = String
 
+-- | Arguments.
 data Arg = Version | Name String | Val Label String deriving(Eq, Show)
-data Mode = ShowVersion | Run
 
+-- | Run mode.
+data Mode = ShowVersion | Run deriving(Eq, Show)
+
+-- | Available options.
 options :: [OptDescr Arg]
 options =
     [ Option ['p'] ["package-name"](ReqArg (Val "packageName") "package-name")  "Name of package"

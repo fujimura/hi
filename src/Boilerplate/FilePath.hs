@@ -11,15 +11,20 @@ import           Data.List.Split      (splitOn)
 import           Data.Map             ((!))
 import           System.FilePath      (joinPath)
 
+-- | Convert given path to the destination path, with given options.
 toDestionationPath :: Options -> FilePath -> FilePath
 toDestionationPath options = rename1 . rename2 . untemplate
   where
     rename1 = replace "package-name" (options ! "packageName")
     rename2 = replace "ModuleName" (toDir $ options ! "moduleName")
 
+-- | Return path of module like `Foo/Bar`.
 modulePath :: Options -> FilePath
 modulePath options = toDir $ options ! "moduleName"
 
+-- @
+-- toDir "Foo.bar" # => "Foo/Bar"
+-- @
 toDir :: String -> String
 toDir = joinPath . splitOn "."
 

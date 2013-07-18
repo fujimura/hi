@@ -12,6 +12,7 @@ import           System.Directory     (createDirectoryIfMissing,
                                        getCurrentDirectory)
 import           System.FilePath      (joinPath)
 
+-- | Main function
 cli :: Options -> IO ()
 cli options = do
     currentDirecotory <- getCurrentDirectory
