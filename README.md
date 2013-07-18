@@ -8,7 +8,34 @@ Generate scaffold for a Haskell project
 This application generates a scaffold for Haskell project from a Git repository.
 [boilerplate-hspec](https://github.com/fujimura/boilerplate-hspec) will be used as a default template.
 
-## How to use
+
+## How it wokrs
+
+```
+$ boilerplate --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
+"
+$ tree .
+.
+├── LICENSE
+├── README.md
+├── foo-bar-baz.cabal
+├── src
+│   └── Foo
+│       └── Bar
+│           ├── Baz
+│           │   └── Internal.hs
+│           └── Baz.hs
+└── test
+    ├── Foo
+    │   └── Bar
+    │       ├── Baz
+    │       └── BazSpec.hs
+    └── Spec.hs
+
+8 directories, 7 files
+```
+
+## Usage
 
 ```
 boilerplate: Usage: boilerplate [OPTION...]
@@ -16,7 +43,7 @@ boilerplate: Usage: boilerplate [OPTION...]
   -m Module.Name   --module-name=Module.Name    Name of Module
   -a NAME          --author=NAME                Name of the project's author
   -e EMAIL         --email=EMAIL                Email address of the maintainer
-  -r REPOSITORY    --repository=REPOSITORY      Template repository
+  -r REPOSITORY    --repository=REPOSITORY      Template repository(optional)
   -v               --version                    show version number
 ```
 
