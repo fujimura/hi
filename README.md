@@ -9,7 +9,7 @@ This application generates a scaffold for Haskell project from a Git repository.
 [boilerplate-hspec](https://github.com/fujimura/boilerplate-hspec) will be used as a default template.
 
 
-## How it wokrs
+## How it works
 
 ```
 $ boilerplate --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
