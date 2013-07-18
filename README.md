@@ -6,7 +6,7 @@ Generate scaffold for a Haskell project
 ## Overview
 
 This application generates a scaffold for Haskell project from a Git repository.
-[boilerplate-hspec](https://github.com/fujimura/boilerplate) will be used as a default template.
+[boilerplate-hspec](https://github.com/fujimura/boilerplate-hspec) will be used as a default template.
 
 ## How to use
 
