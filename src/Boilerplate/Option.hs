@@ -63,4 +63,4 @@ addYear opts = do
 addRepo :: Options -> Options
 addRepo opts = if Map.member "repository" opts
                  then opts
-                 else Map.insert "repository" "git@github.com:fujimura/boilerplate.git" opts
+                 else Map.insert "repository" "git://github.com/fujimura/boilerplate-hspec.git" opts
