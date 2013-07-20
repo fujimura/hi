@@ -1,10 +1,10 @@
 module Boilerplate.FilePath
     (
       toDestionationPath
-    , modulePath
+    , toDir
     ) where
 
-import           Boilerplate.Option   (InitFlags(..))
+import           Boilerplate.Types
 import           Boilerplate.Template (untemplate)
 import           Data.List
 import           Data.List.Split      (splitOn)
@@ -18,10 +18,7 @@ toDestionationPath InitFlags {moduleName=m, packageName=p} =
     rename1 = replace "package-name" p
     rename2 = replace "ModuleName" (toDir m)
 
--- | Return path of module like `Foo/Bar`.
-modulePath :: InitFlags -> FilePath
-modulePath InitFlags {moduleName=m} = toDir m
-
+-- | Convert module name to path
 -- @
 -- toDir "Foo.bar" # => "Foo/Bar"
 -- @

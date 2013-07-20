@@ -4,7 +4,7 @@ module Boilerplate.Context
       context
     ) where
 
-import           Boilerplate.Option (InitFlags(..))
+import           Boilerplate.Types
 import qualified Data.Text          as T
 import           Data.Text.Template (Context)
 
