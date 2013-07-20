@@ -2,28 +2,17 @@
 
 module Boilerplate.Option
     (
-      getOptions
+      getInitFlags
     , getMode
-    , Options
-    , Mode(..)
     ) where
 
+import           Boilerplate.Flag      (extractInitFlags)
+import           Boilerplate.Types
 import           Control.Applicative
-import qualified Data.Map              as Map
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
 import           System.Environment    (getArgs)
-
-type Options = Map.Map String String
-
-type Label = String
-
--- | Arguments.
-data Arg = Version | Name String | Val Label String deriving(Eq, Show)
-
--- | Run mode.
-data Mode = ShowVersion | Run deriving(Eq, Show)
 
 -- | Available options.
 options :: [OptDescr Arg]
@@ -36,9 +25,8 @@ options =
     , Option ['v'] ["version"]     (NoArg Version) "show version number"
     ]
 
-getOptions :: IO Options
-getOptions = do
-    addYear =<< addRepo . extractOptions <$> fst <$> parseArgs <$> getArgs
+getInitFlags :: IO InitFlags
+getInitFlags = extractInitFlags <$> (addYear =<< fst <$> parseArgs <$> getArgs)
 
 getMode :: IO Mode
 getMode = do
@@ -56,15 +44,7 @@ parseArgs argv =
   where
     header = "Usage: boilerplate [OPTION...]"
 
-extractOptions :: [Arg] -> Options
-extractOptions args = Map.fromList $ [(l,v) | (Val l v) <- args]
-
-addYear :: Options -> IO Options
-addYear opts = do
+addYear :: [Arg] -> IO [Arg]
+addYear args = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-    return $ Map.insert "year" (show y) opts
-
-addRepo :: Options -> Options
-addRepo opts = if Map.member "repository" opts
-                 then opts
-                 else Map.insert "repository" "git://github.com/fujimura/boilerplate-hspec.git" opts
+    return $ (Val "year" $ show y):args
