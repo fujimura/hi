@@ -26,9 +26,7 @@ options =
     ]
 
 getInitFlags :: IO InitFlags
-getInitFlags = do
-    flags' <- addYear =<< fst <$> parseArgs <$> getArgs
-    return $ extractInitFlags flags'
+getInitFlags = extractInitFlags <$> (addYear =<< fst <$> parseArgs <$> getArgs)
 
 getMode :: IO Mode
 getMode = do
