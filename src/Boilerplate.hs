@@ -1,27 +1,27 @@
+{-# LANGUAGE NamedFieldPuns #-}
 module Boilerplate where
 
 import           Boilerplate.Compiler (compile)
-import           Boilerplate.FilePath (toDestionationPath, modulePath)
+import           Boilerplate.FilePath (toDestionationPath, toDir)
 import           Boilerplate.Context  (context)
-import           Boilerplate.Option   (Options)
+import           Boilerplate.Types
 import           Boilerplate.Template (withTemplatesFromRepo)
 import           Control.Arrow        ((&&&))
 import           Control.Monad
-import           Data.Map             ((!))
 import           System.Directory     (createDirectoryIfMissing,
                                        getCurrentDirectory)
 import           System.FilePath      (joinPath)
 
 -- | Main function
-cli :: Options -> IO ()
-cli options = do
+cli :: InitFlags -> IO ()
+cli initFlags@(InitFlags {moduleName, repository}) = do
     currentDirecotory <- getCurrentDirectory
 
-    withTemplatesFromRepo (options ! "repository") $ \templates -> do
+    withTemplatesFromRepo (repository) $ \templates -> do
 
-      let sourceAndDestinations = map (id &&& toDestionationPath options) templates
+      let sourceAndDestinations = map (id &&& toDestionationPath initFlags) templates
 
-      createDirectoryIfMissing True $ joinPath [currentDirecotory, "src",  modulePath options]
-      createDirectoryIfMissing True $ joinPath [currentDirecotory, "test", modulePath options]
+      createDirectoryIfMissing True $ joinPath [currentDirecotory, "src",  toDir moduleName]
+      createDirectoryIfMissing True $ joinPath [currentDirecotory, "test", toDir moduleName]
 
-      forM_ sourceAndDestinations $ \(s,d) -> compile s (joinPath [currentDirecotory, d]) $ context options
+      forM_ sourceAndDestinations $ \(s,d) -> compile s (joinPath [currentDirecotory, d]) $ context initFlags

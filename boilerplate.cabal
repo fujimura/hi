@@ -33,7 +33,6 @@ library
       , bytestring
       , template == 0.2.*
       , text
-      , containers
       , directory
       , filepath
       , Glob
@@ -55,7 +54,6 @@ executable boilerplate
       , bytestring
       , template == 0.2.*
       , text
-      , containers
       , directory
       , filepath
       , Glob
