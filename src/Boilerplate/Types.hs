@@ -12,12 +12,12 @@ module Boilerplate.Types
 type Flag = String
 
 data InitFlags =
-    InitFlags { packageName :: Flag
-              , moduleName  :: Flag
-              , author      :: Flag
-              , email       :: Flag
-              , repository  :: Flag
-              , year        :: Flag
+    InitFlags { packageName :: !Flag
+              , moduleName  :: !Flag
+              , author      :: !Flag
+              , email       :: !Flag
+              , repository  :: !Flag
+              , year        :: !Flag
               } deriving(Eq, Show)
 
 type Label = String
