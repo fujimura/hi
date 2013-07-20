@@ -3,12 +3,10 @@ module Boilerplate where
 import           Boilerplate.Compiler (compile)
 import           Boilerplate.FilePath (toDestionationPath, modulePath)
 import           Boilerplate.Context  (context)
-import           Boilerplate.Option   (Options)
 import           Boilerplate.Option   (InitFlags(..))
 import           Boilerplate.Template (withTemplatesFromRepo)
 import           Control.Arrow        ((&&&))
 import           Control.Monad
-import           Data.Map             ((!))
 import           System.Directory     (createDirectoryIfMissing,
                                        getCurrentDirectory)
 import           System.FilePath      (joinPath)

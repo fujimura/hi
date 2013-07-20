@@ -8,7 +8,6 @@ import           Boilerplate.Option   (InitFlags(..))
 import           Boilerplate.Template (untemplate)
 import           Data.List
 import           Data.List.Split      (splitOn)
-import           Data.Map             ((!))
 import           System.FilePath      (joinPath)
 
 -- | Convert given path to the destination path, with given options.
