@@ -4,6 +4,7 @@ import           Boilerplate.Compiler (compile)
 import           Boilerplate.FilePath (toDestionationPath, modulePath)
 import           Boilerplate.Context  (context)
 import           Boilerplate.Option   (Options)
+import           Boilerplate.Option   (InitFlags(..))
 import           Boilerplate.Template (withTemplatesFromRepo)
 import           Control.Arrow        ((&&&))
 import           Control.Monad
@@ -13,15 +14,15 @@ import           System.Directory     (createDirectoryIfMissing,
 import           System.FilePath      (joinPath)
 
 -- | Main function
-cli :: Options -> IO ()
-cli options = do
+cli :: InitFlags -> IO ()
+cli initFlags = do
     currentDirecotory <- getCurrentDirectory
 
-    withTemplatesFromRepo (options ! "repository") $ \templates -> do
+    withTemplatesFromRepo (repository initFlags) $ \templates -> do
 
-      let sourceAndDestinations = map (id &&& toDestionationPath options) templates
+      let sourceAndDestinations = map (id &&& toDestionationPath initFlags) templates
 
-      createDirectoryIfMissing True $ joinPath [currentDirecotory, "src",  modulePath options]
-      createDirectoryIfMissing True $ joinPath [currentDirecotory, "test", modulePath options]
+      createDirectoryIfMissing True $ joinPath [currentDirecotory, "src",  modulePath initFlags]
+      createDirectoryIfMissing True $ joinPath [currentDirecotory, "test", modulePath initFlags]
 
-      forM_ sourceAndDestinations $ \(s,d) -> compile s (joinPath [currentDirecotory, d]) $ context options
+      forM_ sourceAndDestinations $ \(s,d) -> compile s (joinPath [currentDirecotory, d]) $ context initFlags

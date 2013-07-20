@@ -4,7 +4,7 @@ module Boilerplate.FilePath
     , modulePath
     ) where
 
-import           Boilerplate.Option   (Options)
+import           Boilerplate.Option   (InitFlags(..))
 import           Boilerplate.Template (untemplate)
 import           Data.List
 import           Data.List.Split      (splitOn)
@@ -12,15 +12,16 @@ import           Data.Map             ((!))
 import           System.FilePath      (joinPath)
 
 -- | Convert given path to the destination path, with given options.
-toDestionationPath :: Options -> FilePath -> FilePath
-toDestionationPath options = rename1 . rename2 . untemplate
+toDestionationPath :: InitFlags -> FilePath -> FilePath
+toDestionationPath InitFlags {moduleName=m, packageName=p} =
+    rename1 . rename2 . untemplate
   where
-    rename1 = replace "package-name" (options ! "packageName")
-    rename2 = replace "ModuleName" (toDir $ options ! "moduleName")
+    rename1 = replace "package-name" p
+    rename2 = replace "ModuleName" (toDir m)
 
 -- | Return path of module like `Foo/Bar`.
-modulePath :: Options -> FilePath
-modulePath options = toDir $ options ! "moduleName"
+modulePath :: InitFlags -> FilePath
+modulePath InitFlags {moduleName=m} = toDir m
 
 -- @
 -- toDir "Foo.bar" # => "Foo/Bar"
