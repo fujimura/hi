@@ -23,7 +23,7 @@ data InitFlags =
 type Label = String
 
 -- | Arguments.
-data Arg = Version | Name String | Val Label String deriving(Eq, Show)
+data Arg = Version | Val Label String deriving(Eq, Show)
 
 -- | Run mode.
 data Mode = ShowVersion | Run deriving(Eq, Show)
