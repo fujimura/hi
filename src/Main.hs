@@ -9,5 +9,6 @@ main :: IO ()
 main = do
     mode <- getMode
     case mode of
-      ShowVersion -> print version
-      Run         -> Hi.cli =<< getInitFlags
+      ShowVersion                -> print version
+      RunWithNoConfigurationFile -> Hi.cli =<< getInitFlags
+      Run                        -> Hi.cli =<< getInitFlags

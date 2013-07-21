@@ -100,5 +100,6 @@ withCompiledFile cb = do
           , " -a \"Fujimura Daisuke\""
           , " -e \"me@fujimuradaisuke.com\""
           , " -r " ++ pwd ++ "/template"
+          , " --no-configuration-file"
           ]
         cb

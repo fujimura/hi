@@ -23,6 +23,7 @@ options =
     , Option ['e'] ["email"]       (ReqArg (Val "email") "EMAIL")  "Email address of the maintainer"
     , Option ['r'] ["repository"]  (ReqArg (Val "repository") "REPOSITORY")  "Template repository(optional)"
     , Option ['v'] ["version"]     (NoArg Version) "show version number"
+    , Option []    ["no-configuration-file"] (NoArg NoConfigurationFile) "run without configuration file"
     ]
 
 -- | Returns 'InitFlags'.
@@ -35,7 +36,9 @@ getMode = do
     args <- fst <$> parseArgs <$> getArgs
     return $ if any id [True |Version <- args]
                then ShowVersion
-               else Run
+               else if any id [True |NoConfigurationFile <- args]
+                      then RunWithNoConfigurationFile
+                      else Run
 
 parseArgs :: [String] -> ([Arg], [String])
 parseArgs argv =
