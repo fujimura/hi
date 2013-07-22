@@ -53,6 +53,7 @@ library
   exposed-modules:
       Distribution.Hi
       Distribution.Hi.Compiler
+      Distribution.Hi.Config
       Distribution.Hi.Context
       Distribution.Hi.Directory
       Distribution.Hi.FilePath

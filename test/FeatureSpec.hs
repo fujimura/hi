@@ -113,7 +113,6 @@ runWithConfigurationFile cb = do
             , "author: " ++ author
             , "email: " ++ email
             , "repository: " ++ pwd ++ "/template"
-            , "" -- FIXME allow files with no new line at last line
             ]
         pwd' <- getCurrentDirectory
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
