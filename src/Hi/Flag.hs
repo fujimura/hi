@@ -32,4 +32,4 @@ extractInitFlags args = InitFlags { packageName = lookupPackageName
                                ]
 
 defaultRepo :: String
-defaultRepo = "git://github.com/fujimura/boilerplate-hspec.git"
+defaultRepo = "git://github.com/fujimura/hi-hspec.git"
