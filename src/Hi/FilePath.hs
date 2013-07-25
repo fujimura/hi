@@ -1,11 +1,11 @@
-module Boilerplate.FilePath
+module Hi.FilePath
     (
       toDestionationPath
     , toDir
     ) where
 
-import           Boilerplate.Types
-import           Boilerplate.Template (untemplate)
+import           Hi.Types
+import           Hi.Template (untemplate)
 import           Data.List
 import           Data.List.Split      (splitOn)
 import           System.FilePath      (joinPath)
