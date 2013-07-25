@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Boilerplate.Option
+module Hi.Option
     (
       getInitFlags
     , getMode
     ) where
 
-import           Boilerplate.Flag      (extractInitFlags)
-import           Boilerplate.Types
+import           Hi.Flag      (extractInitFlags)
+import           Hi.Types
 import           Control.Applicative
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
@@ -42,7 +42,7 @@ parseArgs argv =
       (o,n,[]   ) -> (o,n)
       (_,_,errs ) -> error $ concat errs ++ usageInfo header options
   where
-    header = "Usage: boilerplate [OPTION...]"
+    header = "Usage: hi [OPTION...]"
 
 addYear :: [Arg] -> IO [Arg]
 addYear args = do

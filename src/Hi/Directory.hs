@@ -1,4 +1,4 @@
-module Boilerplate.Directory
+module Hi.Directory
     (
       inDirectory
     , inTemporaryDirectory

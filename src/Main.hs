@@ -1,13 +1,13 @@
 module Main where
 
-import qualified Boilerplate
-import qualified Boilerplate.Version
-import           Boilerplate.Option (getInitFlags, getMode)
-import           Boilerplate.Types
+import qualified Hi
+import qualified Hi.Version
+import           Hi.Option (getInitFlags, getMode)
+import           Hi.Types
 
 main :: IO ()
 main = do
     mode <- getMode
     case mode of
-      ShowVersion -> print Boilerplate.Version.version
-      Run         -> Boilerplate.cli =<< getInitFlags
+      ShowVersion -> print Hi.Version.version
+      Run         -> Hi.cli =<< getInitFlags

@@ -1,11 +1,11 @@
 {-# LANGUAGE NamedFieldPuns #-}
-module Boilerplate where
+module Hi where
 
-import           Boilerplate.Compiler (compile)
-import           Boilerplate.FilePath (toDestionationPath, toDir)
-import           Boilerplate.Context  (context)
-import           Boilerplate.Types
-import           Boilerplate.Template (withTemplatesFromRepo)
+import           Hi.Compiler (compile)
+import           Hi.FilePath (toDestionationPath, toDir)
+import           Hi.Context  (context)
+import           Hi.Types
+import           Hi.Template (withTemplatesFromRepo)
 import           Control.Arrow        ((&&&))
 import           Control.Monad
 import           System.Directory     (createDirectoryIfMissing,

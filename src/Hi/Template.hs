@@ -1,10 +1,10 @@
-module Boilerplate.Template
+module Hi.Template
     (
       withTemplatesFromRepo
     , untemplate
     ) where
 
-import           Boilerplate.Directory (inTemporaryDirectory)
+import           Hi.Directory (inTemporaryDirectory)
 import           Data.List.Split       (splitOn)
 import           System.Exit           (ExitCode)
 import           System.FilePath.Glob  (compile, globDir1)
@@ -15,7 +15,7 @@ withTemplatesFromRepo :: String               -- ^ Repository url
                       -> ([FilePath] -> IO a) -- ^ Callback which takes list of the template file
                       -> IO a                 -- ^ Result
 withTemplatesFromRepo repo cb =
-    inTemporaryDirectory "boilerplate" $ do
+    inTemporaryDirectory "hi" $ do
         _ <- cloneRepo repo
         paths <- globDir1 (compile "./**/*.template") "./"
         cb paths
