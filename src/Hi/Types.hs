@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Boilerplate.Types
+module Hi.Types
     (
       Flag
     , InitFlags(..)

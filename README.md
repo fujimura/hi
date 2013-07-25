@@ -1,4 +1,4 @@
-boilerplate [![Build Status](https://travis-ci.org/fujimura/boilerplate.png?branch=master)](https://travis-ci.org/fujimura/boilerplate)
+hi [![Build Status](https://travis-ci.org/fujimura/hi.png?branch=master)](https://travis-ci.org/fujimura/hi)
 ===========
 
 Generate scaffold for a Haskell project
@@ -6,13 +6,13 @@ Generate scaffold for a Haskell project
 ## Overview
 
 This application generates a scaffold for Haskell project from a Git repository.
-[boilerplate-hspec](https://github.com/fujimura/boilerplate-hspec) will be used as a default template.
+[hi-hspec](https://github.com/fujimura/hi-hspec) will be used as a default template.
 
 
 ## How it works
 
 ```
-$ boilerplate --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
+$ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
 "
 $ tree .
 .
@@ -38,7 +38,7 @@ $ tree .
 ## Usage
 
 ```
-boilerplate: Usage: boilerplate [OPTION...]
+hi: Usage: hi [OPTION...]
   -p package-name  --package-name=package-name  Name of package
   -m Module.Name   --module-name=Module.Name    Name of Module
   -a NAME          --author=NAME                Name of the project's author
@@ -50,7 +50,7 @@ boilerplate: Usage: boilerplate [OPTION...]
 ## Installation
 
 ```
-$ cabal install boilerplate
+$ cabal install hi
 ```
 
 ## Making your own project template

@@ -2,8 +2,8 @@
 
 module FeatureSpec ( spec ) where
 
-import           Boilerplate.Directory      (inTemporaryDirectory)
-import qualified Boilerplate.Version
+import           Hi.Directory      (inTemporaryDirectory)
+import qualified Hi.Version
 import           Control.Applicative
 import           Data.ByteString.Lazy.Char8 ()
 import qualified Data.ByteString.Lazy.Char8 as LBS
@@ -86,15 +86,15 @@ spec = do
 
   describe "-v" $ do
     it "should show version number" $ do
-      r <- LBS.pack <$> readProcess ("./dist/build/boilerplate/boilerplate") ["-v"] []
-      r `shouldContain` LBS.pack Boilerplate.Version.version
+      r <- LBS.pack <$> readProcess ("./dist/build/hi/hi") ["-v"] []
+      r `shouldContain` LBS.pack Hi.Version.version
 
 withCompiledFile :: IO a -> IO a
 withCompiledFile cb = do
     pwd <- getCurrentDirectory
-    inTemporaryDirectory "boilerplate-test" $ do
+    inTemporaryDirectory "hi-test" $ do
         _ <- system $ concat
-          [ pwd ++ "/dist/build/boilerplate/boilerplate"
+          [ pwd ++ "/dist/build/hi/hi"
           , " -p testapp"
           , " -m System.Awesome.Library"
           , " -a \"Fujimura Daisuke\""

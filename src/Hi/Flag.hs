@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Boilerplate.Flag
+module Hi.Flag
     (
       extractInitFlags
     ) where
 
-import           Boilerplate.Types
+import           Hi.Types
 
 extractInitFlags :: [Arg] -> InitFlags
 extractInitFlags args = InitFlags { packageName = lookupPackageName

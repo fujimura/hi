@@ -1,10 +1,10 @@
 {-# LANGUAGE RecordWildCards #-}
-module Boilerplate.Context
+module Hi.Context
     (
       context
     ) where
 
-import           Boilerplate.Types
+import           Hi.Types
 import qualified Data.Text          as T
 import           Data.Text.Template (Context)
 

@@ -1,4 +1,4 @@
-module Boilerplate.Compiler
+module Hi.Compiler
     (
       compile
     ) where

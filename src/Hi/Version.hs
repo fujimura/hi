@@ -1,4 +1,4 @@
-module Boilerplate.Version
+module Hi.Version
     (
       version
     ) where
