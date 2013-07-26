@@ -7,6 +7,7 @@ module Hi.Flag
 
 import           Hi.Types
 
+-- | Extract 'InitFlags' from a list of 'Arg'
 extractInitFlags :: [Arg] -> InitFlags
 extractInitFlags args = InitFlags { packageName = lookupPackageName
                                   , moduleName  = lookupModuleName

@@ -25,9 +25,11 @@ options =
     , Option ['v'] ["version"]     (NoArg Version) "show version number"
     ]
 
+-- | Returns 'InitFlags'.
 getInitFlags :: IO InitFlags
 getInitFlags = extractInitFlags <$> (addYear =<< fst <$> parseArgs <$> getArgs)
 
+-- | Returns 'Mode'.
 getMode :: IO Mode
 getMode = do
     args <- fst <$> parseArgs <$> getArgs
