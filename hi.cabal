@@ -4,7 +4,6 @@
 name:                hi
 version:             0.0.1
 synopsis:            Generate scaffold for cabal project
-description:         This application generates a scaffold for Haskell project from a Git repository.
 license:             BSD3
 license-file:        LICENSE
 author:              Fujimura Daisuke
@@ -13,6 +12,45 @@ maintainer:          me@fujimuradaisuke.com
 category:            Distribution
 build-type:          Simple
 cabal-version:       >=1.8
+description:
+    This application generates a scaffold for Haskell project from a Git repository.
+
+    .
+    This command
+    .
+
+    .
+    > $ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
+    .
+
+    .
+    will generate:
+    .
+
+    .
+    > $ tree .
+    > .
+    > ├── LICENSE
+    > ├── README.md
+    > ├── foo-bar-baz.cabal
+    > ├── src
+    > │  └── Foo
+    > │      └── Bar
+    > │          ├── Baz
+    > │          │  └── Internal.hs
+    > │          └── Baz.hs
+    > └── test
+    >     ├── Foo
+    >     │  └── Bar
+    >     │      ├── Baz
+    >     │      └── BazSpec.hs
+    >     └── Spec.hs
+    .
+
+    .
+    See <https://github.com/fujimura/hi> for further usage.
+    .
+
 
 library
   exposed-modules:
