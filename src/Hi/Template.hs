@@ -16,6 +16,7 @@ withTemplatesFromRepo :: String               -- ^ Repository url
                       -> IO a                 -- ^ Result
 withTemplatesFromRepo repo cb =
     inTemporaryDirectory "hi" $ do
+        -- TODO Handle error
         _ <- cloneRepo repo
         paths <- globDir1 (compile "./**/*.template") "./"
         cb paths
@@ -27,5 +28,5 @@ untemplate = head . splitOn ".template"
 -- | Clone given repository to current directory
 cloneRepo :: String -> IO ExitCode
 cloneRepo repoUrl = do
-    system $ "git clone --no-checkout --quiet --depth=1 " ++ repoUrl ++ " ./"
+    _ <- system $ "git clone --no-checkout --quiet --depth=1 " ++ repoUrl ++ " ./"
     system "git checkout HEAD --quiet"
