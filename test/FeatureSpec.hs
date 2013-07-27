@@ -2,11 +2,11 @@
 
 module FeatureSpec ( spec ) where
 
-import           Distribution.Hi.Directory      (inTemporaryDirectory)
-import qualified Distribution.Hi.Version
 import           Control.Applicative
 import           Data.ByteString.Lazy.Char8 ()
 import qualified Data.ByteString.Lazy.Char8 as LBS
+import           Distribution.Hi.Directory  (inTemporaryDirectory)
+import           Distribution.Hi.Version    (version)
 import           Helper
 import           System.Directory           (doesDirectoryExist, doesFileExist,
                                              getCurrentDirectory)
@@ -87,7 +87,7 @@ spec = do
   describe "-v" $ do
     it "should show version number" $ do
       r <- LBS.pack <$> readProcess ("./dist/build/hi/hi") ["-v"] []
-      r `shouldContain` LBS.pack Distribution.Hi.Version.version
+      r `shouldContain` LBS.pack version
 
 withCompiledFile :: IO a -> IO a
 withCompiledFile cb = do
