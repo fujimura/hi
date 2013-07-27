@@ -12,10 +12,15 @@ import           System.Directory           (doesDirectoryExist, doesFileExist,
                                              getCurrentDirectory)
 import           System.Process             (readProcess, system)
 
+type Context = IO () -> IO ()
+
 spec :: Spec
 spec = do
-  let setup      = withCompiledFile
-      readResult = LBS.readFile
+    featureSpec runWithCommandLineOptions
+
+featureSpec :: Context -> Spec
+featureSpec setup = do
+  let readResult = LBS.readFile
 
   describe "LICENSE" $ do
     it "should include author" $ setup $ do
@@ -89,17 +94,24 @@ spec = do
       r <- LBS.pack <$> readProcess ("./dist/build/hi/hi") ["-v"] []
       r `shouldContain` LBS.pack version
 
-withCompiledFile :: IO a -> IO a
-withCompiledFile cb = do
+runWithCommandLineOptions :: Context
+runWithCommandLineOptions cb = do
+    let packageName = "testapp"
+        moduleName  = "System.Awesome.Library"
+        author      = quote "Fujimura Daisuke"
+        email       = quote "me@fujimuradaisuke.com"
+
     pwd <- getCurrentDirectory
+
     inTemporaryDirectory "hi-test" $ do
-        _ <- system $ concat
-          [ pwd ++ "/dist/build/hi/hi"
-          , " -p testapp"
-          , " -m System.Awesome.Library"
-          , " -a \"Fujimura Daisuke\""
-          , " -e \"me@fujimuradaisuke.com\""
-          , " -r " ++ pwd ++ "/template"
-          , " --no-configuration-file"
-          ]
+        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " -p ", packageName
+                             , " -m ", moduleName
+                             , " -a ", author
+                             , " -e ", email
+                             , " -r " ++ pwd ++ "/template"
+                             , " --no-configuration-file"
+                             ]
         cb
+  where
+    quote s = "\"" ++ s ++ "\""
