@@ -56,8 +56,10 @@ library
       Hi.Context
       Hi.Directory
       Hi.FilePath
+      Hi.Flag
       Hi.Option
       Hi.Template
+      Hi.Types
       Hi.Version
   ghc-options:
       -Wall -Werror
