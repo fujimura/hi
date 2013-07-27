@@ -62,7 +62,7 @@ library
       Hi.Types
       Hi.Version
   ghc-options:
-      -Wall -Werror
+      -Wall
   hs-source-dirs:
       src
   build-depends:
@@ -82,7 +82,7 @@ executable hi
   main-is:
       Main.hs
   ghc-options:
-      -Wall -Werror
+      -Wall
   hs-source-dirs:
       src
   build-depends:
@@ -104,7 +104,7 @@ test-suite spec
   type:
       exitcode-stdio-1.0
   ghc-options:
-      -Wall -Werror
+      -Wall
   hs-source-dirs:
       src
     , test
