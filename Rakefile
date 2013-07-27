@@ -33,18 +33,21 @@ namespace :doc do
     sh "cabal build"
     sh "cabal haddock"
   end
+  desc "Open document"
   task :open do
     sh "open dist/doc/html/hi/index.html"
   end
 end
 
 namespace :release do
+  desc "Check releasable or not"
   task :check do
     sh './make_sdist.sh'
   end
 end
 
 namespace :watch do
+  desc "Run test with changes"
   task :test do
     Listen.to! 'test', 'src', filter: /.*\.hs/ do |modified, added, removed|
       Rake::Task[:test].execute
@@ -53,6 +56,7 @@ namespace :watch do
     exit_with_int
   end
 
+  desc "Build doc with changes"
   task :doc do
     Listen.to! 'src', filter: /.*\.hs/ do |modified, added, removed|
       Rake::Task[:haddock].execute
@@ -63,4 +67,5 @@ namespace :watch do
   end
 end
 
+desc "Run tests"
 task :default => :test
