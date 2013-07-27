@@ -46,26 +46,5 @@ namespace :release do
   end
 end
 
-namespace :watch do
-  desc "Run test with changes"
-  task :test do
-    Listen.to! 'test', 'src', filter: /.*\.hs/ do |modified, added, removed|
-      Rake::Task[:test].execute
-    end
-
-    exit_with_int
-  end
-
-  desc "Build doc with changes"
-  task :doc do
-    Listen.to! 'src', filter: /.*\.hs/ do |modified, added, removed|
-      Rake::Task[:haddock].execute
-      Rake::Task[:doc].execute
-    end
-
-    exit_with_int
-  end
-end
-
 desc "Run tests"
 task :default => :test
