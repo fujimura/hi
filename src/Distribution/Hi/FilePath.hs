@@ -1,11 +1,11 @@
-module Hi.FilePath
+module Distribution.Hi.FilePath
     (
       toDestionationPath
     , toDir
     ) where
 
-import           Hi.Types
-import           Hi.Template (untemplate)
+import           Distribution.Hi.Types
+import           Distribution.Hi.Template (untemplate)
 import           Data.List
 import           Data.List.Split      (splitOn)
 import           System.FilePath      (joinPath)

@@ -1,13 +1,13 @@
 module Main where
 
-import qualified Hi
-import qualified Hi.Version
-import           Hi.Option (getInitFlags, getMode)
-import           Hi.Types
+import qualified Distribution.Hi
+import qualified Distribution.Hi.Version
+import           Distribution.Hi.Option (getInitFlags, getMode)
+import           Distribution.Hi.Types
 
 main :: IO ()
 main = do
     mode <- getMode
     case mode of
-      ShowVersion -> print Hi.Version.version
-      Run         -> Hi.cli =<< getInitFlags
+      ShowVersion -> print Distribution.Hi.Version.version
+      Run         -> Distribution.Hi.cli =<< getInitFlags

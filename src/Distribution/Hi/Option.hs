@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hi.Option
+module Distribution.Hi.Option
     (
       getInitFlags
     , getMode
     ) where
 
-import           Hi.Flag      (extractInitFlags)
-import           Hi.Types
+import           Distribution.Hi.Flag      (extractInitFlags)
+import           Distribution.Hi.Types
 import           Control.Applicative
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)

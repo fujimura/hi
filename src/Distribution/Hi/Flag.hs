@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hi.Flag
+module Distribution.Hi.Flag
     (
       extractInitFlags
     ) where
 
-import           Hi.Types
+import           Distribution.Hi.Types
 
 -- | Extract 'InitFlags' from a list of 'Arg'
 extractInitFlags :: [Arg] -> InitFlags

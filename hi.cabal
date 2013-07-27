@@ -51,16 +51,16 @@ description:
 
 library
   exposed-modules:
-      Hi
-      Hi.Compiler
-      Hi.Context
-      Hi.Directory
-      Hi.FilePath
-      Hi.Flag
-      Hi.Option
-      Hi.Template
-      Hi.Types
-      Hi.Version
+      Distribution.Hi
+      Distribution.Hi.Compiler
+      Distribution.Hi.Context
+      Distribution.Hi.Directory
+      Distribution.Hi.FilePath
+      Distribution.Hi.Flag
+      Distribution.Hi.Option
+      Distribution.Hi.Template
+      Distribution.Hi.Types
+      Distribution.Hi.Version
   ghc-options:
       -Wall
   hs-source-dirs:

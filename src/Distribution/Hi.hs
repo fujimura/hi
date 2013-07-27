@@ -1,11 +1,11 @@
 {-# LANGUAGE NamedFieldPuns #-}
-module Hi where
+module Distribution.Hi where
 
-import           Hi.Compiler (compile)
-import           Hi.FilePath (toDestionationPath, toDir)
-import           Hi.Context  (context)
-import           Hi.Types
-import           Hi.Template (withTemplatesFromRepo)
+import           Distribution.Hi.Compiler (compile)
+import           Distribution.Hi.FilePath (toDestionationPath, toDir)
+import           Distribution.Hi.Context  (context)
+import           Distribution.Hi.Types
+import           Distribution.Hi.Template (withTemplatesFromRepo)
 import           Control.Arrow        ((&&&))
 import           Control.Monad
 import           System.Directory     (createDirectoryIfMissing,

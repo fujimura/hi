@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hi.Types
+module Distribution.Hi.Types
     (
       Flag
     , InitFlags(..)

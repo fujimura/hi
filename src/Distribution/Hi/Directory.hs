@@ -1,4 +1,4 @@
-module Hi.Directory
+module Distribution.Hi.Directory
     (
       inDirectory
     , inTemporaryDirectory

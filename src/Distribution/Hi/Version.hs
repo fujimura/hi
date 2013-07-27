@@ -1,4 +1,4 @@
-module Hi.Version
+module Distribution.Hi.Version
     (
       version
     ) where

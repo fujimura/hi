@@ -1,10 +1,10 @@
-module Hi.Template
+module Distribution.Hi.Template
     (
       withTemplatesFromRepo
     , untemplate
     ) where
 
-import           Hi.Directory (inTemporaryDirectory)
+import           Distribution.Hi.Directory (inTemporaryDirectory)
 import           Data.List.Split       (splitOn)
 import           System.Exit           (ExitCode)
 import           System.FilePath.Glob  (compile, globDir1)
