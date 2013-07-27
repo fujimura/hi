@@ -38,6 +38,12 @@ namespace :doc do
   end
 end
 
+namespace :release do
+  task :check do
+    sh './make_sdist.sh'
+  end
+end
+
 namespace :watch do
   task :test do
     Listen.to! 'test', 'src', filter: /.*\.hs/ do |modified, added, removed|
