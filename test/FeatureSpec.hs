@@ -17,6 +17,7 @@ type Context = IO () -> IO ()
 spec :: Spec
 spec = do
     featureSpec runWithCommandLineOptions
+    featureSpec runWithConfigurationFile
 
 featureSpec :: Context -> Spec
 featureSpec setup = do
@@ -93,6 +94,30 @@ featureSpec setup = do
     it "should show version number" $ do
       r <- LBS.pack <$> readProcess ("./dist/build/hi/hi") ["-v"] []
       r `shouldContain` LBS.pack version
+
+runWithConfigurationFile :: Context
+runWithConfigurationFile cb = do
+    let packageName = "testapp"
+        moduleName  = "System.Awesome.Library"
+        author      = quote "Fujimura Daisuke"
+        email       = quote "me@fujimuradaisuke.com"
+        fileName    = ".hirc"
+
+    pwd <- getCurrentDirectory
+
+    inTemporaryDirectory "hi-test" $ do
+        LBS.writeFile fileName $ LBS.pack $ concat [ " -p ", packageName
+                                                   , " -m ", moduleName
+                                                   , " -a ", author
+                                                   , " -e ", email
+                                                   , " -r " ++ pwd ++ "/template"
+                                                   ]
+        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " --configuration-file ", fileName
+                             ]
+        cb
+  where
+    quote s = "\"" ++ s ++ "\""
 
 runWithCommandLineOptions :: Context
 runWithCommandLineOptions cb = do
