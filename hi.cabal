@@ -9,14 +9,6 @@ category:            Distribution
 build-type:          Simple
 cabal-version:       >=1.8
 homepage:            https://github.com/fujimura/hi
-data-files:          template/LICENSE.template
-                     template/README.md
-                     template/README.md.template
-                     template/package-name.cabal.template
-                     template/src/ModuleName.hs.template
-                     template/src/ModuleName/Internal.hs.template
-                     template/test/ModuleNameSpec.hs.template
-                     template/test/Spec.hs.template
 description:
     This application generates a scaffold for Haskell project from a Git repository.
 
