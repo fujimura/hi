@@ -71,6 +71,7 @@ library
       , bytestring
       , directory
       , filepath
+      , parsec
       , process
       , split
       , template   == 0.2.*
@@ -91,6 +92,7 @@ executable hi
       , bytestring
       , directory
       , filepath
+      , parsec
       , process
       , split
       , template   == 0.2.*
@@ -114,6 +116,7 @@ test-suite spec
       , bytestring
       , directory
       , hspec       >= 1.5
+      , parsec
       , process
       , template    == 0.2.*
       , temporary
