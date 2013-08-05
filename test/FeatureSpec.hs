@@ -5,6 +5,7 @@ module FeatureSpec ( spec ) where
 import           Control.Applicative
 import           Data.ByteString.Lazy.Char8 ()
 import qualified Data.ByteString.Lazy.Char8 as LBS
+import           Data.List                  (intercalate)
 import           Distribution.Hi.Directory  (inTemporaryDirectory)
 import           Distribution.Hi.Version    (version)
 import           Helper
@@ -16,11 +17,11 @@ type Context = IO () -> IO ()
 
 spec :: Spec
 spec = do
-    featureSpec runWithCommandLineOptions
-    featureSpec runWithConfigurationFile
+    featureSpec "Run with command line options" runWithCommandLineOptions
+    featureSpec "Run with configuration file" runWithConfigurationFile
 
-featureSpec :: Context -> Spec
-featureSpec setup = do
+featureSpec :: String -> Context -> Spec
+featureSpec desc setup = describe desc $ do
   let readResult = LBS.readFile
 
   describe "LICENSE" $ do
@@ -92,32 +93,36 @@ featureSpec setup = do
 
   describe "-v" $ do
     it "should show version number" $ do
-      r <- LBS.pack <$> readProcess ("./dist/build/hi/hi") ["-v"] []
+      r <- LBS.pack <$> readProcess "./dist/build/hi/hi" ["-v"] []
       r `shouldContain` LBS.pack version
 
 runWithConfigurationFile :: Context
 runWithConfigurationFile cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
-        author      = quote "Fujimura Daisuke"
-        email       = quote "me@fujimuradaisuke.com"
+        author      = "Fujimura Daisuke"
+        email       = "me@fujimuradaisuke.com"
         fileName    = ".hirc"
 
     pwd <- getCurrentDirectory
 
     inTemporaryDirectory "hi-test" $ do
-        LBS.writeFile fileName $ LBS.pack $ concat [ " -p ", packageName
-                                                   , " -m ", moduleName
-                                                   , " -a ", author
-                                                   , " -e ", email
-                                                   , " -r " ++ pwd ++ "/template"
-                                                   ]
+        LBS.writeFile fileName $ LBS.pack $ concatLines
+            [ "packageName: " ++ packageName
+            , "moduleName: " ++ moduleName
+            , "author: " ++ author
+            , "email: " ++ email
+            , "repository: " ++ pwd ++ "/template"
+            , "" -- FIXME allow files with no new line at last line
+            ]
+        pwd' <- getCurrentDirectory
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " --configuration-file ", fileName
+                             , " --configuration-file ", pwd' ++ "/" ++ fileName
                              ]
         cb
   where
-    quote s = "\"" ++ s ++ "\""
+    concatLines :: [String] -> String
+    concatLines = intercalate "\n"
 
 runWithCommandLineOptions :: Context
 runWithCommandLineOptions cb = do
