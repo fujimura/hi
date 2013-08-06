@@ -14,7 +14,7 @@ extractInitFlags args = InitFlags { packageName = lookupPackageName
                                   , author      = lookupAuthor
                                   , email       = lookupEmail
                                   , repository  = lookupRepository
-                                  , year        = lookupRepository
+                                  , year        = lookupYear
                                   }
   where
     lookupPackageName = lookup' "packageName"
@@ -22,6 +22,7 @@ extractInitFlags args = InitFlags { packageName = lookupPackageName
     lookupAuthor      = lookup' "author"
     lookupEmail       = lookup' "email"
     lookupRepository  = lookup' "repository"
+    lookupYear        = lookup' "year"
     lookup' label = case lookup label $ [(l, v) | (Val l v) <- args] of
                         Just v  -> v
                         Nothing -> if label == "repository"

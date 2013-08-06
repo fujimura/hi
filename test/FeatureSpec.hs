@@ -6,6 +6,8 @@ import           Control.Applicative
 import           Data.ByteString.Lazy.Char8 ()
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.List                  (intercalate)
+import           Data.Time.Calendar         (toGregorian)
+import           Data.Time.Clock            (getCurrentTime, utctDay)
 import           Distribution.Hi.Directory  (inTemporaryDirectory)
 import           Distribution.Hi.Version    (version)
 import           Helper
@@ -28,6 +30,11 @@ featureSpec desc setup = describe desc $ do
     it "should include author" $ setup $ do
       compiled <- readResult "LICENSE"
       compiled `shouldContain` "Fujimura Daisuke"
+
+    it "should include year" $ setup $ do
+      (year,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
+      compiled   <- readResult "LICENSE"
+      compiled `shouldContain` (LBS.pack $ show year)
 
   describe "README.md" $ do
     it "should include name" $ setup $ do
