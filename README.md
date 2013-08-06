@@ -9,7 +9,9 @@ This application generates a scaffold for Haskell project from a Git repository.
 [hi-hspec](https://github.com/fujimura/hi-hspec) will be used as a default template.
 
 
-## How it works
+## Example
+
+With command line option:
 
 ```
 $ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
@@ -35,16 +37,51 @@ $ tree .
 8 directories, 7 files
 ```
 
+If you have a configuration file like:
+
+```
+$ cat ~/.hirc
+author: Fujimura Daisuke
+email: me@fujimuradaisuke.com
+```
+
+Then options in the configuration file can be omitted:
+
+```
+$ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz"
+$ tree .
+.
+├── LICENSE
+├── README.md
+├── foo-bar-baz.cabal
+├── src
+│   └── Foo
+│       └── Bar
+│           ├── Baz
+│           │   └── Internal.hs
+│           └── Baz.hs
+└── test
+    ├── Foo
+    │   └── Bar
+    │       ├── Baz
+    │       └── BazSpec.hs
+    └── Spec.hs
+
+8 directories, 7 files
+```
+
 ## Usage
 
 ```
 hi: Usage: hi [OPTION...]
-  -p package-name  --package-name=package-name  Name of package
-  -m Module.Name   --module-name=Module.Name    Name of Module
-  -a NAME          --author=NAME                Name of the project's author
-  -e EMAIL         --email=EMAIL                Email address of the maintainer
-  -r REPOSITORY    --repository=REPOSITORY      Template repository(optional)
-  -v               --version                    show version number
+  -p package-name  --package-name=package-name      Name of package
+  -m Module.Name   --module-name=Module.Name        Name of Module
+  -a NAME          --author=NAME                    Name of the project's author
+  -e EMAIL         --email=EMAIL                    Email address of the maintainer
+  -r REPOSITORY    --repository=REPOSITORY          Template repository(optional)
+  -v               --version                        Show version number
+                   --no-configuration-file          Run without configuration file
+                   --configuration-file=CONFIGFILE  Run with configuration file
 ```
 
 ## Installation
