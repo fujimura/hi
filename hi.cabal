@@ -1,5 +1,5 @@
 name:                hi
-version:             0.0.1
+version:             0.0.2
 synopsis:            Generate scaffold for cabal project
 license:             BSD3
 license-file:        LICENSE
