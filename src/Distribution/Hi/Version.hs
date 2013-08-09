@@ -4,4 +4,4 @@ module Distribution.Hi.Version
     ) where
 
 version :: String
-version = "0.0.1"
+version = "0.0.2"
