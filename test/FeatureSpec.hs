@@ -5,6 +5,9 @@ module FeatureSpec ( spec ) where
 import           Control.Applicative
 import           Data.ByteString.Lazy.Char8 ()
 import qualified Data.ByteString.Lazy.Char8 as LBS
+import           Data.List                  (intercalate)
+import           Data.Time.Calendar         (toGregorian)
+import           Data.Time.Clock            (getCurrentTime, utctDay)
 import           Distribution.Hi.Directory  (inTemporaryDirectory)
 import           Distribution.Hi.Version    (version)
 import           Helper
@@ -12,15 +15,26 @@ import           System.Directory           (doesDirectoryExist, doesFileExist,
                                              getCurrentDirectory)
 import           System.Process             (readProcess, system)
 
+type Context = IO () -> IO ()
+
 spec :: Spec
 spec = do
-  let setup      = withCompiledFile
-      readResult = LBS.readFile
+    featureSpec "Run with command line options" runWithCommandLineOptions
+    featureSpec "Run with configuration file" runWithConfigurationFile
+
+featureSpec :: String -> Context -> Spec
+featureSpec desc setup = describe desc $ do
+  let readResult = LBS.readFile
 
   describe "LICENSE" $ do
     it "should include author" $ setup $ do
       compiled <- readResult "LICENSE"
       compiled `shouldContain` "Fujimura Daisuke"
+
+    it "should include year" $ setup $ do
+      (year,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
+      compiled   <- readResult "LICENSE"
+      compiled `shouldContain` (LBS.pack $ show year)
 
   describe "README.md" $ do
     it "should include name" $ setup $ do
@@ -86,19 +100,54 @@ spec = do
 
   describe "-v" $ do
     it "should show version number" $ do
-      r <- LBS.pack <$> readProcess ("./dist/build/hi/hi") ["-v"] []
+      r <- LBS.pack <$> readProcess "./dist/build/hi/hi" ["-v"] []
       r `shouldContain` LBS.pack version
 
-withCompiledFile :: IO a -> IO a
-withCompiledFile cb = do
+runWithConfigurationFile :: Context
+runWithConfigurationFile cb = do
+    let packageName = "testapp"
+        moduleName  = "System.Awesome.Library"
+        author      = "Fujimura Daisuke"
+        email       = "me@fujimuradaisuke.com"
+        fileName    = ".hirc"
+
     pwd <- getCurrentDirectory
+
     inTemporaryDirectory "hi-test" $ do
-        _ <- system $ concat
-          [ pwd ++ "/dist/build/hi/hi"
-          , " -p testapp"
-          , " -m System.Awesome.Library"
-          , " -a \"Fujimura Daisuke\""
-          , " -e \"me@fujimuradaisuke.com\""
-          , " -r " ++ pwd ++ "/template"
-          ]
+        LBS.writeFile fileName $ LBS.pack $ concatLines
+            [ "packageName: " ++ packageName
+            , "moduleName: " ++ moduleName
+            , "author: " ++ author
+            , "email: " ++ email
+            , "repository: " ++ pwd ++ "/template"
+            ]
+        pwd' <- getCurrentDirectory
+        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " --configuration-file ", pwd' ++ "/" ++ fileName
+                             ]
         cb
+  where
+    concatLines :: [String] -> String
+    concatLines = intercalate "\n"
+
+runWithCommandLineOptions :: Context
+runWithCommandLineOptions cb = do
+    let packageName = "testapp"
+        moduleName  = "System.Awesome.Library"
+        author      = quote "Fujimura Daisuke"
+        email       = quote "me@fujimuradaisuke.com"
+
+    pwd <- getCurrentDirectory
+
+    inTemporaryDirectory "hi-test" $ do
+        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " -p ", packageName
+                             , " -m ", moduleName
+                             , " -a ", author
+                             , " -e ", email
+                             , " -r " ++ pwd ++ "/template"
+                             , " --no-configuration-file"
+                             ]
+        cb
+  where
+    quote s = "\"" ++ s ++ "\""

@@ -53,6 +53,7 @@ library
   exposed-modules:
       Distribution.Hi
       Distribution.Hi.Compiler
+      Distribution.Hi.Config
       Distribution.Hi.Context
       Distribution.Hi.Directory
       Distribution.Hi.FilePath
@@ -71,6 +72,7 @@ library
       , bytestring
       , directory
       , filepath
+      , parsec
       , process
       , split
       , template   == 0.2.*
@@ -91,6 +93,7 @@ executable hi
       , bytestring
       , directory
       , filepath
+      , parsec
       , process
       , split
       , template   == 0.2.*
@@ -114,10 +117,12 @@ test-suite spec
       , bytestring
       , directory
       , hspec       >= 1.5
+      , parsec
       , process
       , template    == 0.2.*
       , temporary
       , text
+      , time
 
 source-repository head
   type:     git
