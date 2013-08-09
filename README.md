@@ -92,13 +92,21 @@ $ cabal install hi
 
 ## Making your own project template
 
-TODO
-
 [Template](http://hackage.haskell.org/package/template) is used for templating.
+
+Available variables:
+
+- `$packageName` : name of package, like 'hi'
+- `$moduleName` : name of module, like 'Distribution.Hi'
+- `$author` : name of author, like 'Fujimura Daisuke'
+- `$email` : email address of maintainer, like 'me@fujimuradaisuke.com'
+- `$year` : created year
+
+'package-name' and 'ModuleName' in filepath will be replaced with given variable.
 
 ## Motivation
 
-I'm tired to organize directory structure of every new Haskell project which has some test.
+I'm tired to organize directory structure for every new Haskell project which has some test.
 This library is heavily inspired by [grunt-init](https://github.com/gruntjs/grunt-init).
 
 ## Contributing
