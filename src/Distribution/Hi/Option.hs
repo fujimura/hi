@@ -13,11 +13,13 @@ import           Data.Time.Clock        (getCurrentTime, utctDay)
 import           Distribution.Hi.Config (parseConfig)
 import           Distribution.Hi.Flag   (extractInitFlags)
 import           Distribution.Hi.Types
+import           Prelude                hiding (catch)
 import           System.Console.GetOpt
 import           System.Directory       (getHomeDirectory)
 import           System.Environment     (getArgs)
 import           System.FilePath        (joinPath)
 import           System.IO              (hPutStr, stderr)
+
 
 -- | Available options.
 options :: [OptDescr Arg]
