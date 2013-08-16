@@ -53,12 +53,12 @@ getInitFlags' args = extractInitFlags <$> (addYear . fst . parseArgs $ args)
 -- | Returns 'Mode'.
 getMode :: IO Mode
 getMode = do
-    args <- fst <$> parseArgs <$> getArgs
-    return $ if any id [True |Version <- args]
-               then ShowVersion
-               else if any id [True |NoConfigurationFile <- args]
-                      then RunWithNoConfigurationFile
-                      else Run
+    go . fst . parseArgs <$> getArgs
+  where
+    go []                      = Run
+    go (Version:_)             = ShowVersion
+    go (NoConfigurationFile:_) = RunWithNoConfigurationFile
+    go (_:xs)                  = go xs
 
 parseArgs :: [String] -> ([Arg], [String])
 parseArgs argv =
