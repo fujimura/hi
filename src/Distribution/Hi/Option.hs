@@ -79,8 +79,7 @@ defaultConfigFileName = ".hirc"
 
 getConfigFileName :: IO FilePath
 getConfigFileName = do
-    args <- (fst . parseArgs) <$> getArgs
-    go args
+    go =<< (fst . parseArgs) <$> getArgs
   where
     go []                       = defaultConfigFilePath
     go ((Val "configFile" p):_) = return p
