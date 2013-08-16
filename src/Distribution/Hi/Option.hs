@@ -39,14 +39,16 @@ getInitFlags = do
       RunWithNoConfigurationFile -> runWithNoConfigurationFile
       _                          -> error "Unexpected run mode"
   where
-    runWithNoConfigurationFile = getInitFlagsPure =<< getArgs
+    runWithNoConfigurationFile = getInitFlags' =<< getArgs
     runWithConfigurationFile   = do
         (xs,_) <- parseArgs <$> getArgs
         ys     <- addYear <$> parseConfig =<< readFile =<< getConfigFileName
         return $ extractInitFlags (ys ++ xs)
 
-getInitFlagsPure :: [String] -> IO InitFlags
-getInitFlagsPure args = extractInitFlags <$> (addYear . fst . parseArgs $ args)
+-- | Returns `InitFlags` from given args, attaching year if it's missing in
+-- args
+getInitFlags' :: [String] -> IO InitFlags
+getInitFlags' args = extractInitFlags <$> (addYear . fst . parseArgs $ args)
 
 -- | Returns 'Mode'.
 getMode :: IO Mode
