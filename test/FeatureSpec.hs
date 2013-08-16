@@ -20,7 +20,13 @@ type Context = IO () -> IO ()
 spec :: Spec
 spec = do
     featureSpec "Run with command line options" runWithCommandLineOptions
+    featureSpec "Run with command line option, without configuration file" runWithNoConfigurationFile
     featureSpec "Run with configuration file" runWithConfigurationFile
+
+    describe "-v" $ do
+      it "should show version number" $ do
+        r <- LBS.pack <$> readProcess "./dist/build/hi/hi" ["-v"] []
+        r `shouldContain` LBS.pack version
 
 featureSpec :: String -> Context -> Spec
 featureSpec desc setup = describe desc $ do
@@ -98,11 +104,6 @@ featureSpec desc setup = describe desc $ do
       compiled <- readResult "test/System/Awesome/LibrarySpec.hs"
       compiled `shouldContain` "module Test.System.Awesome.LibrarySpec (main, spec) where"
 
-  describe "-v" $ do
-    it "should show version number" $ do
-      r <- LBS.pack <$> readProcess "./dist/build/hi/hi" ["-v"] []
-      r `shouldContain` LBS.pack version
-
 runWithConfigurationFile :: Context
 runWithConfigurationFile cb = do
     let packageName = "testapp"
@@ -129,6 +130,30 @@ runWithConfigurationFile cb = do
   where
     concatLines :: [String] -> String
     concatLines = intercalate "\n"
+
+runWithNoConfigurationFile :: Context
+runWithNoConfigurationFile cb = do
+    let packageName = "testapp"
+        moduleName  = "System.Awesome.Library"
+        author      = quote "Fujimura Daisuke"
+        email       = quote "me@fujimuradaisuke.com"
+
+    pwd <- getCurrentDirectory
+
+    inTemporaryDirectory "hi-test" $ do
+        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " -p ", packageName
+                             , " -m ", moduleName
+                             , " -a ", author
+                             , " -e ", email
+                             , " -r " ++ pwd ++ "/template"
+                             -- .hirc doesn't exist because here is a new
+                             -- temporary directory
+                             , " --configuration-file " ++ ".hirc"
+                             ]
+        cb
+  where
+    quote s = "\"" ++ s ++ "\""
 
 runWithCommandLineOptions :: Context
 runWithCommandLineOptions cb = do

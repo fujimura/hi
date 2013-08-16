@@ -7,15 +7,19 @@ module Distribution.Hi.Option
     ) where
 
 import           Control.Applicative
+import           Control.Exception      (IOException, catch)
 import           Data.Time.Calendar     (toGregorian)
 import           Data.Time.Clock        (getCurrentTime, utctDay)
 import           Distribution.Hi.Config (parseConfig)
 import           Distribution.Hi.Flag   (extractInitFlags)
 import           Distribution.Hi.Types
+import           Prelude                hiding (catch)
 import           System.Console.GetOpt
 import           System.Directory       (getHomeDirectory)
 import           System.Environment     (getArgs)
 import           System.FilePath        (joinPath)
+import           System.IO              (hPutStr, stderr)
+
 
 -- | Available options.
 options :: [OptDescr Arg]
@@ -42,8 +46,12 @@ getInitFlags = do
     runWithNoConfigurationFile = getInitFlags' =<< getArgs
     runWithConfigurationFile   = do
         (xs,_) <- parseArgs <$> getArgs
-        ys     <- addYear <$> parseConfig =<< readFile =<< getConfigFileName
+        ys     <- addYear <$> parseConfig =<< readFile' =<< getConfigFileName
         return $ extractInitFlags (ys ++ xs)
+    readFile' f = catch (readFile f)
+                  (\e -> do let err = show (e :: IOException)
+                            hPutStr stderr ("Warning: Couldn't open " ++ f ++ ": " ++ err)
+                            return "")
 
 -- | Returns `InitFlags` from given args, attaching year if it's missing in
 -- args
