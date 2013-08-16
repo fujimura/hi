@@ -40,7 +40,7 @@ line = do
 configFile :: Parser [(String, String)]
 configFile = catMaybes <$> many line <* eof
 
-parseConfig :: String -> IO [Arg]
+parseConfig :: String -> [Arg]
 parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
       Left  l  -> error $ show l
-      Right xs -> return $ map (uncurry Val) xs
+      Right xs -> map (uncurry Val) xs

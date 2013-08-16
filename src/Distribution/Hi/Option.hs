@@ -42,7 +42,7 @@ getInitFlags = do
     runWithNoConfigurationFile = getInitFlagsPure =<< getArgs
     runWithConfigurationFile   = do
         (xs,_) <- parseArgs <$> getArgs
-        ys     <- addYear =<< parseConfig =<< readFile =<< getConfigFileName
+        ys     <- addYear <$> parseConfig =<< readFile =<< getConfigFileName
         return $ extractInitFlags (ys ++ xs)
 
 getInitFlagsPure :: [String] -> IO InitFlags
