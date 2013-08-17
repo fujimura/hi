@@ -1,7 +1,6 @@
 module Distribution.Hi.FilePath
     (
       toDestionationPath
-    , toDir
     ) where
 
 import           Distribution.Hi.Types
