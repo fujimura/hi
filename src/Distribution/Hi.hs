@@ -17,7 +17,7 @@ cli :: InitFlags -> IO ()
 cli initFlags@(InitFlags {repository}) = do
     currentDirecotory <- getCurrentDirectory
 
-    withTemplatesFromRepo (repository) $ \templates -> do
+    withTemplatesFromRepo repository $ \templates -> do
 
       let sourceAndDestinations = map (id &&& toDestionationPath initFlags) templates
 
