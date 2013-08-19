@@ -25,8 +25,8 @@ spec = do
 
     describe "-v" $ do
       it "should show version number" $ do
-        r <- LBS.pack <$> readProcess "./dist/build/hi/hi" ["-v"] []
-        r `shouldContain` LBS.pack version
+        r <- readProcess "./dist/build/hi/hi" ["-v"] []
+        r `shouldBe` version ++ "\n"
 
 featureSpec :: String -> Context -> Spec
 featureSpec desc setup = describe desc $ do
