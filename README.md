@@ -90,6 +90,12 @@ hi: Usage: hi [OPTION...]
 $ cabal install hi
 ```
 
+## Available templates
+
+- [hi-hspec](https://github.com/fujimura/hi-hspec) : Sources in `src`, tests in `test` by [Hspec](https://github.com/hspec/hspec) .
+
+- [hi-flat](https://github.com/fujimura/hi-flat) : Everything is in root directory, like `cabal init`.
+
 ## Making your own project template
 
 [Template](http://hackage.haskell.org/package/template) is used for templating.
