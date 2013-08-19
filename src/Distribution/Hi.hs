@@ -23,6 +23,5 @@ cli initFlags@(InitFlags {repository}) = do
 
       forM_ sourceAndDestinations $ \(src,dst) -> do
         let dst' = joinPath [currentDirecotory, dst]
-        -- TODO Dont' try to create existing directory
         createDirectoryIfMissing True $ dropFileName dst'
         compile src dst' $ context initFlags
