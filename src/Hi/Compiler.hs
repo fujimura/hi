@@ -1,4 +1,4 @@
-module Distribution.Hi.Compiler
+module Hi.Compiler
     (
       compile
     ) where

@@ -103,7 +103,7 @@ $ cabal install hi
 Available variables:
 
 - `$packageName` : name of package, like 'hi'
-- `$moduleName` : name of module, like 'Distribution.Hi'
+- `$moduleName` : name of module, like 'Hi'
 - `$author` : name of author, like 'Fujimura Daisuke'
 - `$email` : email address of maintainer, like 'me@fujimuradaisuke.com'
 - `$year` : created year

@@ -51,17 +51,17 @@ description:
 
 library
   exposed-modules:
-      Distribution.Hi
-      Distribution.Hi.Compiler
-      Distribution.Hi.Config
-      Distribution.Hi.Context
-      Distribution.Hi.Directory
-      Distribution.Hi.FilePath
-      Distribution.Hi.Flag
-      Distribution.Hi.Option
-      Distribution.Hi.Template
-      Distribution.Hi.Types
-      Distribution.Hi.Version
+      Hi
+      Hi.Compiler
+      Hi.Config
+      Hi.Context
+      Hi.Directory
+      Hi.FilePath
+      Hi.Flag
+      Hi.Option
+      Hi.Template
+      Hi.Types
+      Hi.Version
   ghc-options:
       -Wall
   hs-source-dirs:

@@ -1,10 +1,10 @@
 {-# LANGUAGE RecordWildCards #-}
-module Distribution.Hi.Context
+module Hi.Context
     (
       context
     ) where
 
-import           Distribution.Hi.Types
+import           Hi.Types
 import qualified Data.Text          as T
 import           Data.Text.Template (Context)
 

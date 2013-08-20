@@ -1,12 +1,12 @@
 {-# OPTIONS_GHC -fno-warn-unused-do-bind #-}
-module Distribution.Hi.Config
+module Hi.Config
     (
       parseConfig
     ) where
 
 import           Control.Applicative   ((<$>), (<*))
 import           Data.Maybe            (catMaybes)
-import           Distribution.Hi.Types
+import           Hi.Types
 import           Text.Parsec
 import           Text.Parsec.String
 

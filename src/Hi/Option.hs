@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Distribution.Hi.Option
+module Hi.Option
     (
       getInitFlags
     , getMode
@@ -10,9 +10,9 @@ import           Control.Applicative
 import           Control.Exception      (IOException, catch)
 import           Data.Time.Calendar     (toGregorian)
 import           Data.Time.Clock        (getCurrentTime, utctDay)
-import           Distribution.Hi.Config (parseConfig)
-import           Distribution.Hi.Flag   (extractInitFlags)
-import           Distribution.Hi.Types
+import           Hi.Config (parseConfig)
+import           Hi.Flag   (extractInitFlags)
+import           Hi.Types
 import           Prelude                hiding (catch)
 import           System.Console.GetOpt
 import           System.Directory       (getHomeDirectory)

@@ -8,8 +8,8 @@ import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.List                  (intercalate)
 import           Data.Time.Calendar         (toGregorian)
 import           Data.Time.Clock            (getCurrentTime, utctDay)
-import           Distribution.Hi.Directory  (inTemporaryDirectory)
-import           Distribution.Hi.Version    (version)
+import           Hi.Directory  (inTemporaryDirectory)
+import           Hi.Version    (version)
 import           Helper
 import           System.Directory           (doesDirectoryExist, doesFileExist,
                                              getCurrentDirectory)

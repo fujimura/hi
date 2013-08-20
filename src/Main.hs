@@ -1,9 +1,9 @@
 module Main where
 
-import qualified Distribution.Hi         as Hi
-import           Distribution.Hi.Option  (getInitFlags, getMode)
-import           Distribution.Hi.Types
-import           Distribution.Hi.Version (version)
+import qualified Hi         as Hi
+import           Hi.Option  (getInitFlags, getMode)
+import           Hi.Types
+import           Hi.Version (version)
 
 main :: IO ()
 main = do
