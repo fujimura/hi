@@ -14,6 +14,7 @@ import           Helper
 import           System.Directory           (doesDirectoryExist, doesFileExist,
                                              getCurrentDirectory)
 import           System.Process             (readProcess, system)
+import           Test.Hspec
 
 type Context = IO () -> IO ()
 
@@ -30,7 +31,7 @@ spec = do
 
 featureSpec :: String -> Context -> Spec
 featureSpec desc setup = describe desc $ do
-  let readResult = LBS.readFile
+  let readResult = readFile
 
   describe "LICENSE" $ do
     it "should include author" $ setup $ do
@@ -40,7 +41,7 @@ featureSpec desc setup = describe desc $ do
     it "should include year" $ setup $ do
       (year,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
       compiled   <- readResult "LICENSE"
-      compiled `shouldContain` (LBS.pack $ show year)
+      compiled `shouldContain` show year
 
   describe "README.md" $ do
     it "should include name" $ setup $ do
