@@ -36,42 +36,41 @@ spec = do
 
 features :: Spec
 features = do
-  let readResult = readFile
 
   describe "LICENSE" $ do
     it "should include author" $  do
-      compiled <- readResult "LICENSE"
+      compiled <- readFile "LICENSE"
       compiled `shouldContain` "Fujimura Daisuke"
 
     it "should include year" $  do
       (year,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-      compiled   <- readResult "LICENSE"
+      compiled   <- readFile "LICENSE"
       compiled `shouldContain` show year
 
   describe "README.md" $ do
     it "should include name" $  do
-      compiled <- readResult "README.md"
+      compiled <- readFile "README.md"
       compiled `shouldContain` "testapp"
 
   describe "module-name.cabal" $ do
     it "should include name" $  do
-      compiled <- readResult "testapp.cabal"
+      compiled <- readFile "testapp.cabal"
       compiled `shouldContain` "testapp"
 
     it "should include author" $  do
-      compiled <- readResult "testapp.cabal"
+      compiled <- readFile "testapp.cabal"
       compiled `shouldContain` "Fujimura Daisuke"
 
     it "should include email" $  do
-      compiled <- readResult "testapp.cabal"
+      compiled <- readFile "testapp.cabal"
       compiled `shouldContain` "me@fujimuradaisuke.com"
 
     it "should include exposed-modules" $  do
-      compiled <- readResult "testapp.cabal"
+      compiled <- readFile "testapp.cabal"
       compiled `shouldContain` "Exposed-Modules:      System.Awesome.Library"
 
     it "should include other-modules" $  do
-      compiled <- readResult "testapp.cabal"
+      compiled <- readFile "testapp.cabal"
       compiled `shouldContain` "Other-Modules:        System.Awesome.Library.Internal"
 
   describe "directory" $ do
@@ -83,7 +82,7 @@ features = do
       doesFileExist "src/System/Awesome/Library.hs" `shouldReturn` True
 
     it "should include proper module name" $  do
-      compiled <- readResult "src/System/Awesome/Library.hs"
+      compiled <- readFile "src/System/Awesome/Library.hs"
       compiled `shouldContain` "module System.Awesome.Library"
 
   describe "Internal module" $ do
@@ -91,7 +90,7 @@ features = do
       doesFileExist "src/System/Awesome/Library/Internal.hs" `shouldReturn` True
 
     it "should include proper module name" $  do
-      compiled <- readResult "src/System/Awesome/Library/Internal.hs"
+      compiled <- readFile "src/System/Awesome/Library/Internal.hs"
       compiled `shouldContain` "module System.Awesome.Library.Internal"
 
   describe "Spec.hs" $ do
@@ -99,7 +98,7 @@ features = do
       doesFileExist "test/Spec.hs" `shouldReturn` True
 
     it "should include proper content" $  do
-      compiled <- readResult "test/Spec.hs"
+      compiled <- readFile "test/Spec.hs"
       compiled `shouldContain` "{-# OPTIONS_GHC -F -pgmF hspec-discover #-}"
 
   describe "Main spec" $ do
@@ -107,7 +106,7 @@ features = do
       doesFileExist "test/System/Awesome/LibrarySpec.hs" `shouldReturn` True
 
     it "should include proper content" $  do
-      compiled <- readResult "test/System/Awesome/LibrarySpec.hs"
+      compiled <- readFile "test/System/Awesome/LibrarySpec.hs"
       compiled `shouldContain` "module Test.System.Awesome.LibrarySpec (main, spec) where"
 
 setupWithConfigurationFile :: IO () -> IO ()
