@@ -116,7 +116,7 @@ test-suite spec
       , HUnit
       , bytestring
       , directory
-      , hspec       >= 1.7.1
+      , hspec       >= 1.7.2
       , parsec
       , process
       , template    == 0.2.*
