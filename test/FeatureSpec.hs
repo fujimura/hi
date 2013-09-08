@@ -1,11 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module FeatureSpec ( spec ) where
 
 import           Control.Applicative
 import           Control.Exception          (bracket_)
-import           Data.ByteString.Lazy.Char8 ()
-import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.List                  (intercalate)
 import           Data.Time.Calendar         (toGregorian)
 import           Data.Time.Clock            (getCurrentTime, utctDay)
@@ -120,7 +116,7 @@ setupWithConfigurationFile cb = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
-        LBS.writeFile fileName $ LBS.pack $ concatLines
+        writeFile fileName $ concatLines
             [ "packageName: " ++ packageName
             , "moduleName: " ++ moduleName
             , "author: " ++ author
