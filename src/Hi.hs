@@ -17,6 +17,8 @@ cli :: InitFlags -> IO ()
 cli initFlags@(InitFlags {repository}) = do
     currentDirecotory <- getCurrentDirectory
 
+    putStrLn $ "Creating new project from repository: " ++ repository
+
     withTemplatesFromRepo repository $ \templates -> do
 
       let sourceAndDestinations = map (id &&& toDestionationPath initFlags) templates
@@ -24,4 +26,8 @@ cli initFlags@(InitFlags {repository}) = do
       forM_ sourceAndDestinations $ \(src,dst) -> do
         let dst' = joinPath [currentDirecotory, dst]
         createDirectoryIfMissing True $ dropFileName dst'
+        putStrLn $ "    " ++ green "create" ++ "  " ++ dst
         compile src dst' $ context initFlags
+
+green :: String -> String
+green x = "\x1b[32m" ++ x ++ "\x1b[0m"

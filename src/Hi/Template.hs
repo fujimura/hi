@@ -18,7 +18,7 @@ withTemplatesFromRepo repo cb =
     inTemporaryDirectory "hi" $ do
         -- TODO Handle error
         _ <- cloneRepo repo
-        paths <- globDir1 (compile "./**/*.template") "./"
+        paths <- globDir1 (compile "**/*.template") "./"
         cb paths
 
 -- | Remove \".template\" from 'FilePath'
