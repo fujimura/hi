@@ -126,7 +126,7 @@ setupWithConfigurationFile cb = do
             , "moduleName: " ++ moduleName
             , "author: " ++ author
             , "email: " ++ email
-            , "repository: " ++ pwd ++ "/template"
+            , "repository: file://" ++ pwd ++ "/template"
             ]
         pwd' <- getCurrentDirectory
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
@@ -152,7 +152,7 @@ setupWithNoConfigurationFile cb = do
                              , " -m ", moduleName
                              , " -a ", author
                              , " -e ", email
-                             , " -r " ++ pwd ++ "/template"
+                             , " -r file://" ++ pwd ++ "/template"
                              -- .hirc doesn't exist because here is a new
                              -- temporary directory
                              , " --configuration-file " ++ ".hirc"
@@ -176,7 +176,7 @@ setupWithCommandLineOptions cb = do
                              , " -m ", moduleName
                              , " -a ", author
                              , " -e ", email
-                             , " -r " ++ pwd ++ "/template"
+                             , " -r file://" ++ pwd ++ "/template"
                              , " --no-configuration-file"
                              ]
         cb
