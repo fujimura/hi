@@ -21,13 +21,13 @@ import           Test.Hspec
 spec :: Spec
 spec = do
     describe "with command line options" $
-      around runWithCommandLineOptions features
+      around setupWithCommandLineOptions features
 
     describe "with command line options, without configuration file" $
-      around runWithNoConfigurationFile features
+      around setupWithNoConfigurationFile features
 
     describe "with configuration file" $
-      around runWithConfigurationFile features
+      around setupWithConfigurationFile features
 
     describe "-v" $ do
       it "should show version number" $ do
@@ -110,8 +110,8 @@ features = do
       compiled <- readResult "test/System/Awesome/LibrarySpec.hs"
       compiled `shouldContain` "module Test.System.Awesome.LibrarySpec (main, spec) where"
 
-runWithConfigurationFile :: IO () -> IO ()
-runWithConfigurationFile cb = do
+setupWithConfigurationFile :: IO () -> IO ()
+setupWithConfigurationFile cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
         author      = "Fujimura Daisuke"
@@ -137,8 +137,8 @@ runWithConfigurationFile cb = do
     concatLines :: [String] -> String
     concatLines = intercalate "\n"
 
-runWithNoConfigurationFile :: IO () -> IO ()
-runWithNoConfigurationFile cb = do
+setupWithNoConfigurationFile :: IO () -> IO ()
+setupWithNoConfigurationFile cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
         author      = quote "Fujimura Daisuke"
@@ -161,8 +161,8 @@ runWithNoConfigurationFile cb = do
   where
     quote s = "\"" ++ s ++ "\""
 
-runWithCommandLineOptions :: IO () -> IO ()
-runWithCommandLineOptions cb = do
+setupWithCommandLineOptions :: IO () -> IO ()
+setupWithCommandLineOptions cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
         author      = quote "Fujimura Daisuke"
