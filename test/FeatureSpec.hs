@@ -30,6 +30,13 @@ spec = do
         r <- readProcess "./dist/build/hi/hi" ["-v"] []
         r `shouldBe` version ++ "\n"
 
+packageName, moduleName, author, email, fileName :: String
+packageName = "testapp"
+moduleName  = "System.Awesome.Library"
+author      = "Fujimura Daisuke"
+email       = "me@fujimuradaisuke.com"
+fileName    = ".hirc"
+
 features :: Spec
 features = do
 
@@ -173,10 +180,3 @@ testDirectory = "test_project"
 
 quote :: String -> String
 quote s = "\"" ++ s ++ "\""
-
-packageName, moduleName, author, email, fileName :: String
-packageName = "testapp"
-moduleName  = "System.Awesome.Library"
-author      = "Fujimura Daisuke"
-email       = "me@fujimuradaisuke.com"
-fileName    = ".hirc"
