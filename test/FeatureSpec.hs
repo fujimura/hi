@@ -106,7 +106,7 @@ features = do
       compiled `shouldContain` "module Test.System.Awesome.LibrarySpec (main, spec) where"
 
 setupWithConfigurationFile :: IO () -> IO ()
-setupWithConfigurationFile cb = do
+setupWithConfigurationFile action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
@@ -121,13 +121,13 @@ setupWithConfigurationFile cb = do
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
                              , " --configuration-file ", pwd' ++ "/" ++ fileName
                              ]
-        cb
+        action
   where
     concatLines :: [String] -> String
     concatLines = intercalate "\n"
 
 setupWithNoConfigurationFile :: IO () -> IO ()
-setupWithNoConfigurationFile cb = do
+setupWithNoConfigurationFile action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
@@ -141,10 +141,10 @@ setupWithNoConfigurationFile cb = do
                              -- temporary directory
                              , " --configuration-file " ++ ".hirc"
                              ]
-        cb
+        action
 
 setupWithCommandLineOptions :: IO () -> IO ()
-setupWithCommandLineOptions cb = do
+setupWithCommandLineOptions action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
@@ -156,17 +156,17 @@ setupWithCommandLineOptions cb = do
                              , " -r file://" ++ pwd ++ "/template"
                              , " --no-configuration-file"
                              ]
-        cb
+        action
 
 inTestDirectory :: IO () -> IO ()
-inTestDirectory cb = do
+inTestDirectory action = do
     pwd <- getCurrentDirectory
     let go    = do
             createDirectoryIfMissing True testDirectory
             setCurrentDirectory testDirectory
         flush = removeDirectoryRecursive testDirectory
         back  = setCurrentDirectory pwd
-    bracket_ go (back >> flush) cb
+    bracket_ go (back >> flush) action
 
 testDirectory :: String
 testDirectory = "test_project"
