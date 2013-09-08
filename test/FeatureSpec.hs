@@ -18,8 +18,6 @@ import           System.Directory           (createDirectoryIfMissing,
 import           System.Process             (readProcess, system)
 import           Test.Hspec
 
-type Context = IO () -> IO ()
-
 spec :: Spec
 spec = do
     describe "with command line options" $
@@ -112,7 +110,7 @@ features = do
       compiled <- readResult "test/System/Awesome/LibrarySpec.hs"
       compiled `shouldContain` "module Test.System.Awesome.LibrarySpec (main, spec) where"
 
-runWithConfigurationFile :: Context
+runWithConfigurationFile :: IO () -> IO ()
 runWithConfigurationFile cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
@@ -139,7 +137,7 @@ runWithConfigurationFile cb = do
     concatLines :: [String] -> String
     concatLines = intercalate "\n"
 
-runWithNoConfigurationFile :: Context
+runWithNoConfigurationFile :: IO () -> IO ()
 runWithNoConfigurationFile cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
@@ -163,7 +161,7 @@ runWithNoConfigurationFile cb = do
   where
     quote s = "\"" ++ s ++ "\""
 
-runWithCommandLineOptions :: Context
+runWithCommandLineOptions :: IO () -> IO ()
 runWithCommandLineOptions cb = do
     let packageName = "testapp"
         moduleName  = "System.Awesome.Library"
