@@ -158,7 +158,7 @@ setupWithCommandLineOptions cb = do
                              ]
         cb
 
-inTestDirectory :: (IO () -> IO ())
+inTestDirectory :: IO () -> IO ()
 inTestDirectory cb = do
     pwd <- getCurrentDirectory
     let go    = do
