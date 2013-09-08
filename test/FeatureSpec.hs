@@ -107,21 +107,15 @@ features = do
 
 setupWithConfigurationFile :: IO () -> IO ()
 setupWithConfigurationFile cb = do
-    let packageName = "testapp"
-        moduleName  = "System.Awesome.Library"
-        author      = "Fujimura Daisuke"
-        email       = "me@fujimuradaisuke.com"
-        fileName    = ".hirc"
-
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
         writeFile fileName $ concatLines
             [ "packageName: " ++ packageName
-            , "moduleName: " ++ moduleName
-            , "author: " ++ author
-            , "email: " ++ email
-            , "repository: file://" ++ pwd ++ "/template"
+            , "moduleName: "  ++ moduleName
+            , "author: "      ++ author
+            , "email: "       ++ email
+            , "repository: "  ++ "file://" ++ pwd ++ "/template"
             ]
         pwd' <- getCurrentDirectory
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
@@ -134,49 +128,35 @@ setupWithConfigurationFile cb = do
 
 setupWithNoConfigurationFile :: IO () -> IO ()
 setupWithNoConfigurationFile cb = do
-    let packageName = "testapp"
-        moduleName  = "System.Awesome.Library"
-        author      = quote "Fujimura Daisuke"
-        email       = quote "me@fujimuradaisuke.com"
-
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
                              , " -p ", packageName
                              , " -m ", moduleName
-                             , " -a ", author
-                             , " -e ", email
+                             , " -a ", quote author
+                             , " -e ", quote email
                              , " -r file://" ++ pwd ++ "/template"
                              -- .hirc doesn't exist because here is a new
                              -- temporary directory
                              , " --configuration-file " ++ ".hirc"
                              ]
         cb
-  where
-    quote s = "\"" ++ s ++ "\""
 
 setupWithCommandLineOptions :: IO () -> IO ()
 setupWithCommandLineOptions cb = do
-    let packageName = "testapp"
-        moduleName  = "System.Awesome.Library"
-        author      = quote "Fujimura Daisuke"
-        email       = quote "me@fujimuradaisuke.com"
-
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
                              , " -p ", packageName
                              , " -m ", moduleName
-                             , " -a ", author
-                             , " -e ", email
+                             , " -a ", quote author
+                             , " -e ", quote email
                              , " -r file://" ++ pwd ++ "/template"
                              , " --no-configuration-file"
                              ]
         cb
-  where
-    quote s = "\"" ++ s ++ "\""
 
 inTestDirectory :: (IO () -> IO ())
 inTestDirectory cb = do
@@ -190,3 +170,13 @@ inTestDirectory cb = do
 
 testDirectory :: String
 testDirectory = "test_project"
+
+quote :: String -> String
+quote s = "\"" ++ s ++ "\""
+
+packageName, moduleName, author, email, fileName :: String
+packageName = "testapp"
+moduleName  = "System.Awesome.Library"
+author      = "Fujimura Daisuke"
+email       = "me@fujimuradaisuke.com"
+fileName    = ".hirc"
