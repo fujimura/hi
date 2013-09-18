@@ -1,5 +1,9 @@
 # Releases
 
+## 0.0.5
+
+Output logs to stdout
+
 ## 0.0.4
 
 Stop generating `src` and `test` directory if it doesn't exist in template
