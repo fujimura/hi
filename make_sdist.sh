@@ -8,6 +8,7 @@ cabal sdist
 cd dist/
 tar xvf hi-*.tar.gz
 cd hi-*/
+cabal sandbox init --sandbox ../../.cabal-sandbox
 cabal install --only-dependencies --enable-tests
 cabal configure --enable-tests --disable-optimization --disable-library-profiling
 cabal build && cabal test
