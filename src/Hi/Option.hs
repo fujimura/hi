@@ -46,8 +46,9 @@ getInitFlags = do
     runWithNoConfigurationFile = getInitFlags' =<< getArgs
     runWithConfigurationFile   = do
         xs <- parseArgs <$> getArgs
-        ys <- addYear <$> parseConfig =<< readFile' =<< getConfigFileName
-        return $ extractInitFlags (ys ++ xs)
+        y  <- getCurrentYear
+        ys <- parseConfig <$> (readFile' =<< getConfigFileName)
+        return $ extractInitFlags (ys ++ xs ++ [y])
     readFile' f = catch (readFile f)
                   (\e -> do let err = show (e :: IOException)
                             hPutStr stderr ("Warning: Couldn't open " ++ f ++ ": " ++ err)
@@ -56,7 +57,9 @@ getInitFlags = do
 -- | Returns `InitFlags` from given args, attaching year if it's missing in
 -- args
 getInitFlags' :: [String] -> IO InitFlags
-getInitFlags' args = extractInitFlags <$> (addYear . parseArgs $ args)
+getInitFlags' args = do
+    y <- getCurrentYear
+    return $ extractInitFlags $ (parseArgs $ args) ++ [y]
 
 -- | Returns 'Mode'.
 getMode :: IO Mode
@@ -93,7 +96,7 @@ getConfigFileName = do
     go ((Val "configFile" p):_) = return p
     go (_:xs)                   = go xs
 
-addYear :: [Arg] -> IO [Arg]
-addYear args = do
+getCurrentYear :: IO Arg
+getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-    return $ (Val "year" $ show y):args
+    return $ (Val "year" $ show y)
