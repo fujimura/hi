@@ -7,18 +7,16 @@ module Hi.Option
     ) where
 
 import           Control.Applicative
-import           Control.Exception      (IOException, catch)
+import           Data.Maybe             (fromMaybe)
 import           Data.Time.Calendar     (toGregorian)
 import           Data.Time.Clock        (getCurrentTime, utctDay)
 import           Hi.Config (parseConfig)
 import           Hi.Flag   (extractInitFlags)
 import           Hi.Types
-import           Prelude                hiding (catch)
 import           System.Console.GetOpt
-import           System.Directory       (getHomeDirectory)
+import           System.Directory       (getHomeDirectory, doesFileExist)
 import           System.Environment     (getArgs)
 import           System.FilePath        (joinPath)
-import           System.IO              (hPutStr, stderr)
 
 
 -- | Available options.
@@ -47,12 +45,17 @@ getInitFlags = do
     runWithConfigurationFile   = do
         xs <- parseArgs <$> getArgs
         y  <- getCurrentYear
-        ys <- parseConfig <$> (readFile' =<< getConfigFileName)
-        return $ extractInitFlags (ys ++ xs ++ [y])
-    readFile' f = catch (readFile f)
-                  (\e -> do let err = show (e :: IOException)
-                            hPutStr stderr ("Warning: Couldn't open " ++ f ++ ": " ++ err)
-                            return "")
+        ys <- do
+            mfile <- readFileMaybe =<< getConfigFileName
+            return $ fromMaybe [] (parseConfig <$> mfile)
+        return $ extractInitFlags (xs ++ ys ++ [y])
+
+-- | Return file contents in Maybe String or Nothing.
+--
+readFileMaybe :: FilePath -> IO (Maybe String)
+readFileMaybe f = do
+    e <- doesFileExist f
+    if e then Just <$> readFile f else return Nothing
 
 -- | Returns `InitFlags` from given args, attaching year if it's missing in
 -- args
