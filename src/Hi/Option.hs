@@ -45,8 +45,8 @@ getInitFlags = do
   where
     runWithNoConfigurationFile = getInitFlags' =<< getArgs
     runWithConfigurationFile   = do
-        (xs,_) <- parseArgs <$> getArgs
-        ys     <- addYear <$> parseConfig =<< readFile' =<< getConfigFileName
+        xs <- parseArgs <$> getArgs
+        ys <- addYear <$> parseConfig =<< readFile' =<< getConfigFileName
         return $ extractInitFlags (ys ++ xs)
     readFile' f = catch (readFile f)
                   (\e -> do let err = show (e :: IOException)
@@ -56,23 +56,23 @@ getInitFlags = do
 -- | Returns `InitFlags` from given args, attaching year if it's missing in
 -- args
 getInitFlags' :: [String] -> IO InitFlags
-getInitFlags' args = extractInitFlags <$> (addYear . fst . parseArgs $ args)
+getInitFlags' args = extractInitFlags <$> (addYear . parseArgs $ args)
 
 -- | Returns 'Mode'.
 getMode :: IO Mode
 getMode = do
-    go . fst . parseArgs <$> getArgs
+    go . parseArgs <$> getArgs
   where
     go []                      = Run
     go (Version:_)             = ShowVersion
     go (NoConfigurationFile:_) = RunWithNoConfigurationFile
     go (_:xs)                  = go xs
 
-parseArgs :: [String] -> ([Arg], [String])
+parseArgs :: [String] -> [Arg]
 parseArgs argv =
    case getOpt Permute options argv of
       ([],_,errs) -> error $ concat errs ++ usageInfo header options
-      (o,n,[]   ) -> (o,n)
+      (o,_,[]   ) -> o
       (_,_,errs ) -> error $ concat errs ++ usageInfo header options
   where
     header = "Usage: hi [OPTION...]"
@@ -87,7 +87,7 @@ defaultConfigFileName = ".hirc"
 
 getConfigFileName :: IO FilePath
 getConfigFileName = do
-    go =<< (fst . parseArgs) <$> getArgs
+    go =<< parseArgs <$> getArgs
   where
     go []                       = defaultConfigFilePath
     go ((Val "configFile" p):_) = return p
