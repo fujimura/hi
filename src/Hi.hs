@@ -1,7 +1,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 module Hi
   (
-    cli
+    run
   ) where
 
 import           Hi.Context          (context)
@@ -46,7 +46,7 @@ createFileList :: InitFlags -> IO Files
 createFileList initFlags@(InitFlags {repository}) =
     process initFlags <$> readTemplates repository
 
-cli :: InitFlags -> IO ()
-cli initFlags@(InitFlags {repository}) = do
+run :: InitFlags -> IO ()
+run initFlags@(InitFlags {repository}) = do
     putStrLn $ "Creating new project from repository: " ++ repository
     writeFiles =<< showFileList =<< createFileList initFlags

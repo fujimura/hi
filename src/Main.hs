@@ -1,6 +1,6 @@
 module Main where
 
-import qualified Hi         as Hi
+import           Hi         (run)
 import           Hi.Option  (getInitFlags, getMode)
 import           Hi.Types
 import           Hi.Version (version)
@@ -10,5 +10,5 @@ main = do
     mode <- getMode
     case mode of
       ShowVersion                -> putStrLn version
-      RunWithNoConfigurationFile -> Hi.cli =<< getInitFlags
-      Run                        -> Hi.cli =<< getInitFlags
+      RunWithNoConfigurationFile -> run =<< getInitFlags
+      Run                        -> run =<< getInitFlags
