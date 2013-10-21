@@ -1,7 +1,6 @@
 module Hi.Directory
     (
-      inDirectory
-    , inTemporaryDirectory
+      inTemporaryDirectory
     ) where
 
 import           Control.Exception    (bracket_)

@@ -1,25 +1,24 @@
 module Hi.Template
     (
-      withTemplatesFromRepo
+      readTemplates
     , untemplate
     ) where
 
 import           Hi.Directory (inTemporaryDirectory)
+import           Hi.Types
 import           Data.List.Split       (splitOn)
 import           System.Exit           (ExitCode)
 import           System.FilePath.Glob  (compile, globDir1)
 import           System.Process        (system)
 
--- | Run callback with list of template files.
-withTemplatesFromRepo :: String               -- ^ Repository url
-                      -> ([FilePath] -> IO a) -- ^ Callback which takes list of the template file
-                      -> IO a                 -- ^ Result
-withTemplatesFromRepo repo cb =
+readTemplates :: String -> IO Files
+readTemplates repo =
     inTemporaryDirectory "hi" $ do
         -- TODO Handle error
         _ <- cloneRepo repo
         paths <- globDir1 (compile "**/*.template") "./"
-        cb paths
+        contents <- mapM readFile paths
+        return $ zip paths contents
 
 -- | Remove \".template\" from 'FilePath'
 untemplate :: FilePath -> FilePath

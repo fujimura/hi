@@ -7,7 +7,10 @@ module Hi.Types
     , Label
     , Arg(..)
     , Mode(..)
+    , Files
     ) where
+
+type Files = [(FilePath, String)]
 
 type Flag = String
 
