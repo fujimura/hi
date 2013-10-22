@@ -52,7 +52,6 @@ description:
 library
   exposed-modules:
       Hi
-      Hi.Compiler
       Hi.Config
       Hi.Context
       Hi.Directory
