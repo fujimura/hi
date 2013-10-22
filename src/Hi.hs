@@ -5,7 +5,7 @@ module Hi
   ) where
 
 import           Hi.Context          (context)
-import           Hi.FilePath         (toDestionationPath)
+import           Hi.FilePath         (rewritePath)
 import           Hi.Template         (readTemplates)
 import           Hi.Types
 import           Control.Applicative
@@ -27,9 +27,8 @@ writeFiles = mapM_ (uncurry write)
 process :: InitFlags -> Files -> Files
 process initFlags = map go
   where
-    go (path, content) = (rewritePath path, substitute' content)
-    substitute' t = LT.unpack $ substitute (T.pack t) (context initFlags)
-    rewritePath path = toDestionationPath initFlags path
+    go (path, content) = (rewritePath initFlags path, substitute' content)
+    substitute' t      = LT.unpack $ substitute (T.pack t) (context initFlags)
 
 showFileList :: Files -> IO Files
 showFileList files = do
