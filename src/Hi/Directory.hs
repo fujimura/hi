@@ -8,7 +8,7 @@ import           System.Directory
 import           System.IO.Temp       (withSystemTempDirectory)
 
 -- |Run callback in a temporary directory.
-inTemporaryDirectory :: String         -- ^ Base of temorary directory name
+inTemporaryDirectory :: String         -- ^ Base of temporary directory name
                      -> (IO a -> IO a) -- ^ Callback
 inTemporaryDirectory name callback =
     withSystemTempDirectory name $ flip inDirectory callback
