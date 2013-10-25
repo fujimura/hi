@@ -41,11 +41,7 @@ showFileList files = do
 green :: String -> String
 green x = "\x1b[32m" ++ x ++ "\x1b[0m"
 
-createFileList :: InitFlags -> IO Files
-createFileList initFlags@(InitFlags {repository}) =
-    process initFlags <$> readTemplates repository
-
 run :: InitFlags -> IO ()
 run initFlags@(InitFlags {repository}) = do
     putStrLn $ "Creating new project from repository: " ++ repository
-    writeFiles =<< showFileList =<< createFileList initFlags
+    writeFiles =<< showFileList =<< (process initFlags) <$> readTemplates repository
