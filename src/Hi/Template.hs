@@ -4,19 +4,19 @@ module Hi.Template
     , untemplate
     ) where
 
-import           Hi.Directory (inTemporaryDirectory)
+import           Hi.Directory         (inTemporaryDirectory)
 import           Hi.Types
-import           Data.List.Split       (splitOn)
-import           System.Exit           (ExitCode)
-import           System.FilePath.Glob  (compile, globDir1)
-import           System.Process        (system)
+import           Control.Applicative
+import           Data.List.Split      (splitOn)
+import           System.Exit          (ExitCode)
+import           System.Process       (system, readProcess)
 
 readTemplates :: String -> IO Files
 readTemplates repo =
     inTemporaryDirectory "hi" $ do
         -- TODO Handle error
         _ <- cloneRepo repo
-        paths <- globDir1 (compile "**/*.template") "./"
+        paths <- lsFiles
         contents <- mapM readFile paths
         return $ zip paths contents
 
@@ -27,5 +27,9 @@ untemplate = head . splitOn ".template"
 -- | Clone given repository to current directory
 cloneRepo :: String -> IO ExitCode
 cloneRepo repoUrl = do
-    _ <- system $ "git clone --no-checkout --quiet --depth=1 " ++ repoUrl ++ " ./"
+    _ <- system $ "git clone --no-checkout --quiet --depth=1 " ++ repoUrl ++ " " ++ "./"
     system "git checkout HEAD --quiet"
+
+-- | Return file list by `git ls-files`
+lsFiles :: IO [String]
+lsFiles = lines <$> readProcess "git" ["ls-files"] []
