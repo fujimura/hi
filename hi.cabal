@@ -67,7 +67,6 @@ library
       src
   build-depends:
         base       == 4.*
-      , Glob
       , bytestring
       , directory
       , filepath
@@ -88,7 +87,6 @@ executable hi
       src
   build-depends:
         base       == 4.*
-      , Glob
       , bytestring
       , directory
       , filepath

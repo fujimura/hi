@@ -8,13 +8,14 @@ import           Hi.Context          (context)
 import           Hi.FilePath         (rewritePath)
 import           Hi.Template         (readTemplates)
 import           Hi.Types
-import           Control.Applicative
-import           System.Directory    (createDirectoryIfMissing)
-import           System.FilePath     (dropFileName)
 
+import           Control.Applicative
+import           Data.List           (isSuffixOf)
 import qualified Data.Text           as T
 import qualified Data.Text.Lazy      as LT
 import           Data.Text.Template  (substitute)
+import           System.Directory    (createDirectoryIfMissing)
+import           System.FilePath     (dropFileName)
 
 writeFiles :: Files -> IO ()
 writeFiles = mapM_ (uncurry write)
@@ -25,10 +26,11 @@ writeFiles = mapM_ (uncurry write)
       writeFile path content
 
 process :: InitFlags -> Files -> Files
-process initFlags = map go
+process initFlags files = map go $ filter isTemplate files
   where
-    go (path, content) = (rewritePath initFlags path, substitute' content)
-    substitute' t      = LT.unpack $ substitute (T.pack t) (context initFlags)
+    isTemplate (path,_) = ".template" `isSuffixOf` path
+    go (path, content)  = (rewritePath initFlags path, substitute' content)
+    substitute' t       = LT.unpack $ substitute (T.pack t) (context initFlags)
 
 showFileList :: Files -> IO Files
 showFileList files = do
@@ -41,11 +43,7 @@ showFileList files = do
 green :: String -> String
 green x = "\x1b[32m" ++ x ++ "\x1b[0m"
 
-createFileList :: InitFlags -> IO Files
-createFileList initFlags@(InitFlags {repository}) =
-    process initFlags <$> readTemplates repository
-
 run :: InitFlags -> IO ()
 run initFlags@(InitFlags {repository}) = do
     putStrLn $ "Creating new project from repository: " ++ repository
-    writeFiles =<< showFileList =<< createFileList initFlags
+    writeFiles =<< showFileList =<< process initFlags <$> readTemplates repository

@@ -110,7 +110,11 @@ features = do
 
     it "should include proper content" $  do
       compiled <- readFile "test/System/Awesome/LibrarySpec.hs"
-      compiled `shouldContain` "module Test.System.Awesome.LibrarySpec (main, spec) where"
+      compiled `shouldContain` "module System.Awesome.LibrarySpec (main, spec) where"
+
+  describe ".gitignore" $ do
+    it "should be made" $  do
+      doesFileExist ".gitignore" `shouldReturn` True
 
 setupWithConfigurationFile :: IO () -> IO ()
 setupWithConfigurationFile action = do
