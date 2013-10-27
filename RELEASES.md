@@ -1,5 +1,9 @@
 # Releases
 
+## 0.0.6
+
+Fix "Hidden file in template is ignored" ([#10](https://github.com/fujimura/hi/pull/10))
+
 ## 0.0.5
 
 Output logs to stdout
