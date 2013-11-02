@@ -11,6 +11,7 @@ import           Hi.Types
 
 import           Control.Applicative
 import           Data.List           (isSuffixOf)
+import           Data.Map            ((!))
 import qualified Data.Text           as T
 import qualified Data.Text.Lazy      as LT
 import           Data.Text.Template  (substitute)
@@ -44,6 +45,8 @@ green :: String -> String
 green x = "\x1b[32m" ++ x ++ "\x1b[0m"
 
 run :: InitFlags -> IO ()
-run initFlags@(InitFlags {repository}) = do
+run initFlags = do
     putStrLn $ "Creating new project from repository: " ++ repository
     writeFiles =<< showFileList =<< process initFlags <$> readTemplates repository
+  where
+    repository = initFlags ! "repository"

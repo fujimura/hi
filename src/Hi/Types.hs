@@ -3,24 +3,32 @@
 module Hi.Types
     (
       Flag
-    , InitFlags(..)
+    , InitFlags'(..)
+    , InitFlags
     , Label
     , Arg(..)
     , Mode(..)
     , Files
+    , Error
     ) where
+
+import qualified Data.Map as M
 
 type Files = [(FilePath, String)]
 
 type Flag = String
 
-data InitFlags =
-    InitFlags { packageName :: !Flag
-              , moduleName  :: !Flag
-              , author      :: !Flag
-              , email       :: !Flag
-              , repository  :: !Flag
-              , year        :: !Flag
+type InitFlags = M.Map String String
+
+type Error = String
+
+data InitFlags' =
+    InitFlags' { packageName :: !Flag
+              , moduleName   :: !Flag
+              , author       :: !Flag
+              , email        :: !Flag
+              , repository   :: !Flag
+              , year         :: !Flag
               } deriving(Eq, Show)
 
 type Label = String

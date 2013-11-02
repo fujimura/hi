@@ -6,17 +6,18 @@ module Hi.Option
     , getMode
     ) where
 
-import           Control.Applicative
-import           Data.Maybe             (fromMaybe)
-import           Data.Time.Calendar     (toGregorian)
-import           Data.Time.Clock        (getCurrentTime, utctDay)
-import           Hi.Config (parseConfig)
-import           Hi.Flag   (extractInitFlags)
+import           Hi.Config             (parseConfig)
+import           Hi.Flag               (extractInitFlags)
 import           Hi.Types
+
+import           Control.Applicative
+import           Data.Maybe            (fromMaybe)
+import           Data.Time.Calendar    (toGregorian)
+import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
-import           System.Directory       (getHomeDirectory, doesFileExist)
-import           System.Environment     (getArgs)
-import           System.FilePath        (joinPath)
+import           System.Directory      (doesFileExist, getHomeDirectory)
+import           System.Environment    (getArgs)
+import           System.FilePath       (joinPath)
 
 
 -- | Available options.
@@ -35,12 +36,15 @@ options =
 -- | Returns 'InitFlags'.
 getInitFlags :: IO InitFlags
 getInitFlags = do
-    mode <- getMode
-    case mode of
+    result <- go =<< getMode
+    case result of
+      Left  errors -> undefined
+      Right x -> return $ x
+  where
+    go mode = case mode of
       Run                        -> runWithConfigurationFile
       RunWithNoConfigurationFile -> runWithNoConfigurationFile
       _                          -> error "Unexpected run mode"
-  where
     runWithNoConfigurationFile = getInitFlags' =<< getArgs
     runWithConfigurationFile   = do
         xs <- parseArgs <$> getArgs
@@ -59,7 +63,7 @@ readFileMaybe f = do
 
 -- | Returns `InitFlags` from given args, attaching year if it's missing in
 -- args
-getInitFlags' :: [String] -> IO InitFlags
+getInitFlags' :: [String] -> IO (Either [Error] InitFlags)
 getInitFlags' args = do
     y <- getCurrentYear
     return $ extractInitFlags $ (parseArgs $ args) ++ [y]
