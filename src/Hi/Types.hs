@@ -11,13 +11,11 @@ module Hi.Types
     , Error
     ) where
 
-import qualified Data.Map as M
-
 type Files = [(FilePath, String)]
 
 type Flag = String
 
-type InitFlags = M.Map String String
+type InitFlags = [(String, String)]
 
 type Error = String
 

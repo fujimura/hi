@@ -7,8 +7,6 @@ import           Hi.Version          (version)
 import           Control.Applicative
 import           Control.Exception   (bracket_)
 import           Data.List           (intercalate)
-import           Data.Map            ((!))
-import qualified Data.Map            as M
 import           Data.Maybe          (fromJust)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
@@ -46,17 +44,17 @@ spec = do
       it "should include author " $ do
         templates <- readDefaultTemplates
         let files = process options templates
-        (fromJust $ lookup "LICENSE" files) `shouldContain` (options ! "author")
+        (fromJust $ lookup "LICENSE" files) `shouldContain` (fromJust $ lookup "author" options)
 
-options :: M.Map String String
-options = M.fromList [ ("packageName" ,"testapp")
-                     , ("moduleName"  ,"System.Awesome.Library")
-                     , ("author"      ,"Fujimura Daisuke")
-                     , ("email"       ,"me@fujimuradaisuke.com")
-                     , ("fileName"    ,".hirc")
-                     , ("year"        ,"2013")
-                     , ("repository"  ,"file://somewhere")
-                     ]
+options :: [(String,String)]
+options = [ ("packageName" ,"testapp")
+          , ("moduleName"  ,"System.Awesome.Library")
+          , ("author"      ,"Fujimura Daisuke")
+          , ("email"       ,"me@fujimuradaisuke.com")
+          , ("fileName"    ,".hirc")
+          , ("year"        ,"2013")
+          , ("repository"  ,"file://somewhere")
+          ]
 readDefaultTemplates = do
    pwd <- getCurrentDirectory
    readTemplates $ "file://" ++ pwd ++ "/template"

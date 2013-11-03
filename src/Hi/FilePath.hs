@@ -8,7 +8,7 @@ import           Hi.Types
 
 import           Data.List
 import           Data.List.Split (splitOn)
-import           Data.Map        ((!))
+import           Data.Maybe      (fromJust)
 import           System.FilePath (joinPath)
 
 -- | Convert given path to the destination path, with given options.
@@ -16,8 +16,8 @@ rewritePath :: InitFlags -> FilePath -> FilePath
 rewritePath flags =
     rename1 . rename2 . untemplate
   where
-    rename1 = replace "package-name" $ flags ! "packageName"
-    rename2 = replace "ModuleName" (toDir $ flags ! "moduleName")
+    rename1 = replace "package-name" $ fromJust $ lookup "packageName" flags
+    rename2 = replace "ModuleName" (toDir . fromJust $ lookup "moduleName" flags)
 
 -- | Convert module name to path
 -- @

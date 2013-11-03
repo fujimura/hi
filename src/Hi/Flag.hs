@@ -5,12 +5,11 @@ module Hi.Flag
       extractInitFlags
     ) where
 
-import qualified Data.Map   as M
 import           Data.Maybe (mapMaybe)
 import           Hi.Types
 
 extractInitFlags :: [Arg] -> Either [Error] InitFlags
-extractInitFlags args = validateAll $ M.fromList [(l, v) | (Val l v) <- args]
+extractInitFlags args = validateAll [(l, v) | (Val l v) <- args]
   where
     validateAll :: InitFlags -> Either [Error] InitFlags
     validateAll values = case mapMaybe ($ values) validations of
@@ -25,7 +24,7 @@ extractInitFlags args = validateAll $ M.fromList [(l, v) | (Val l v) <- args]
                   , hasKey "year"
                   ]
     hasKey :: String -> InitFlags -> Maybe String
-    hasKey k values = case lookup k $ M.toList values of
+    hasKey k values = case lookup k values of
                         Just _  -> Nothing
                         Nothing -> Just $ "Could not find option: " ++ k
 

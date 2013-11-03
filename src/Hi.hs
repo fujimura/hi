@@ -11,7 +11,7 @@ import           Hi.Types
 
 import           Control.Applicative
 import           Data.List           (isSuffixOf)
-import           Data.Map            ((!))
+import           Data.Maybe          (fromJust)
 import qualified Data.Text           as T
 import qualified Data.Text.Lazy      as LT
 import           Data.Text.Template  (Context, substitute)
@@ -34,7 +34,7 @@ process initFlags files = map go $ filter isTemplate files
     substitute' t       = LT.unpack $ substitute (T.pack t) (context initFlags)
 
 context :: InitFlags -> Context
-context flags x = T.pack (flags !  T.unpack x)
+context flags x = T.pack (fromJust $ lookup (T.unpack x) flags)
 
 showFileList :: Files -> IO Files
 showFileList files = do
@@ -52,4 +52,4 @@ run initFlags = do
     putStrLn $ "Creating new project from repository: " ++ repository
     writeFiles =<< showFileList =<< process initFlags <$> readTemplates repository
   where
-    repository = initFlags ! "repository"
+    repository = fromJust $ lookup "repository" initFlags

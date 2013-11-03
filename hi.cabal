@@ -67,7 +67,6 @@ library
   build-depends:
         base       == 4.*
       , bytestring
-      , containers
       , directory
       , filepath
       , parsec
@@ -88,7 +87,6 @@ executable hi
   build-depends:
         base       == 4.*
       , bytestring
-      , containers
       , directory
       , filepath
       , parsec
@@ -113,7 +111,6 @@ test-suite spec
         base
       , HUnit
       , bytestring
-      , containers
       , directory
       , filepath
       , hspec       >= 1.7.2
