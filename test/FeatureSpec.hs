@@ -1,17 +1,24 @@
 module FeatureSpec ( spec ) where
 
+import           Hi                  (process)
+import           Hi.Template         (readTemplates)
+import           Hi.Version          (version)
+
 import           Control.Applicative
-import           Control.Exception          (bracket_)
-import           Data.List                  (intercalate)
-import           Data.Time.Calendar         (toGregorian)
-import           Data.Time.Clock            (getCurrentTime, utctDay)
-import           Hi.Version                 (version)
-import           System.Directory           (createDirectoryIfMissing,
-                                             doesDirectoryExist, doesFileExist,
-                                             getCurrentDirectory,
-                                             removeDirectoryRecursive,
-                                             setCurrentDirectory)
-import           System.Process             (readProcess, readProcessWithExitCode, system)
+import           Control.Exception   (bracket_)
+import           Data.List           (intercalate)
+import           Data.Map            ((!))
+import qualified Data.Map            as M
+import           Data.Maybe          (fromJust)
+import           Data.Time.Calendar  (toGregorian)
+import           Data.Time.Clock     (getCurrentTime, utctDay)
+import           System.Directory    (createDirectoryIfMissing,
+                                      doesDirectoryExist, doesFileExist,
+                                      getCurrentDirectory,
+                                      removeDirectoryRecursive,
+                                      setCurrentDirectory)
+import           System.Process      (readProcess, readProcessWithExitCode,
+                                      system)
 import           Test.Hspec
 
 spec :: Spec
@@ -34,6 +41,25 @@ spec = do
       it "should show error message" $ do
         (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-m", "Foo"] []
         r `shouldContain` "\n (Run with no arguments to see usage)"
+
+    describe "LICENSE" $ do
+      it "should include author " $ do
+        templates <- readDefaultTemplates
+        let files = process options templates
+        (fromJust $ lookup "LICENSE" files) `shouldContain` (options ! "author")
+
+options :: M.Map String String
+options = M.fromList [ ("packageName" ,"testapp")
+                     , ("moduleName"  ,"System.Awesome.Library")
+                     , ("author"      ,"Fujimura Daisuke")
+                     , ("email"       ,"me@fujimuradaisuke.com")
+                     , ("fileName"    ,".hirc")
+                     , ("year"        ,"2013")
+                     , ("repository"  ,"file://somewhere")
+                     ]
+readDefaultTemplates = do
+   pwd <- getCurrentDirectory
+   readTemplates $ "file://" ++ pwd ++ "/template"
 
 packageName, moduleName, author, email, fileName :: String
 packageName = "testapp"

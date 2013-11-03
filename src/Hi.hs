@@ -2,6 +2,7 @@
 module Hi
   (
     run
+  , process
   ) where
 
 import           Hi.FilePath         (rewritePath)

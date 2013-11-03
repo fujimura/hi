@@ -115,9 +115,11 @@ test-suite spec
       , bytestring
       , containers
       , directory
+      , filepath
       , hspec       >= 1.7.2
       , parsec
       , process
+      , split
       , template    == 0.2.*
       , temporary
       , text
