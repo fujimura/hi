@@ -4,7 +4,6 @@ module Hi
     run
   ) where
 
-import           Hi.Context          (context)
 import           Hi.FilePath         (rewritePath)
 import           Hi.Template         (readTemplates)
 import           Hi.Types
@@ -14,7 +13,7 @@ import           Data.List           (isSuffixOf)
 import           Data.Map            ((!))
 import qualified Data.Text           as T
 import qualified Data.Text.Lazy      as LT
-import           Data.Text.Template  (substitute)
+import           Data.Text.Template  (Context, substitute)
 import           System.Directory    (createDirectoryIfMissing)
 import           System.FilePath     (dropFileName)
 
@@ -32,6 +31,9 @@ process initFlags files = map go $ filter isTemplate files
     isTemplate (path,_) = ".template" `isSuffixOf` path
     go (path, content)  = (rewritePath initFlags path, substitute' content)
     substitute' t       = LT.unpack $ substitute (T.pack t) (context initFlags)
+
+context :: InitFlags -> Context
+context flags x = T.pack (flags !  T.unpack x)
 
 showFileList :: Files -> IO Files
 showFileList files = do

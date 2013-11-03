@@ -53,7 +53,6 @@ library
   exposed-modules:
       Hi
       Hi.Config
-      Hi.Context
       Hi.Directory
       Hi.FilePath
       Hi.Flag

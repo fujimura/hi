@@ -83,10 +83,10 @@ getMode = do
 
 parseArgs :: [String] -> [Arg]
 parseArgs argv =
-   case getOpt Permute options argv of
-      ([],_,errs) -> error $ concat errs ++ usageInfo header options
-      (o,_,[]   ) -> o
-      (_,_,errs ) -> error $ concat errs ++ usageInfo header options
+  case getOpt Permute options argv of
+    ([],_,errs) -> error $ concat errs ++ usageInfo header options
+    (o,_,[]   ) -> o
+    (_,_,errs ) -> error $ concat errs ++ usageInfo header options
   where
     header = "Usage: hi [OPTION...]"
 
