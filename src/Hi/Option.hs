@@ -11,6 +11,7 @@ import           Hi.Flag               (extractInitFlags)
 import           Hi.Types
 
 import           Control.Applicative
+import           Data.List             (intercalate)
 import           Data.Maybe            (fromMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
@@ -36,15 +37,17 @@ options =
 -- | Returns 'InitFlags'.
 getInitFlags :: IO InitFlags
 getInitFlags = do
-    result <- go =<< getMode
+    result <- go
     case result of
-      Left  errors -> undefined
-      Right x -> return $ x
+      Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
+      Right x      -> return $ x
   where
-    go mode = case mode of
-      Run                        -> runWithConfigurationFile
-      RunWithNoConfigurationFile -> runWithNoConfigurationFile
-      _                          -> error "Unexpected run mode"
+    go = do
+      mode <- getMode
+      case mode of
+        Run                        -> runWithConfigurationFile
+        RunWithNoConfigurationFile -> runWithNoConfigurationFile
+        _                          -> error "Unexpected run mode"
     runWithNoConfigurationFile = getInitFlags' =<< getArgs
     runWithConfigurationFile   = do
         xs <- parseArgs <$> getArgs
