@@ -48,14 +48,19 @@ getInitFlags = do
         Run                        -> runWithConfigurationFile
         RunWithNoConfigurationFile -> runWithNoConfigurationFile
         _                          -> error "Unexpected run mode"
-    runWithNoConfigurationFile = getInitFlags' =<< getArgs
+
+    runWithNoConfigurationFile = do
+        xs <- parseArgs <$> getArgs
+        y  <- getCurrentYear
+        return $ extractInitFlags (xs ++ [y] ++ [(Val "repository" defaultRepo)])
+
     runWithConfigurationFile   = do
         xs <- parseArgs <$> getArgs
         y  <- getCurrentYear
         ys <- do
             mfile <- readFileMaybe =<< getConfigFileName
             return $ fromMaybe [] (parseConfig <$> mfile)
-        return $ extractInitFlags (xs ++ ys ++ [y])
+        return $ extractInitFlags (xs ++ ys ++ [y] ++ [(Val "repository" defaultRepo)])
 
 -- | Return file contents in Maybe String or Nothing.
 --
@@ -97,6 +102,9 @@ defaultConfigFilePath = do
 
 defaultConfigFileName :: FilePath
 defaultConfigFileName = ".hirc"
+
+defaultRepo :: String
+defaultRepo = "git://github.com/fujimura/hi-hspec.git"
 
 getConfigFileName :: IO FilePath
 getConfigFileName = do

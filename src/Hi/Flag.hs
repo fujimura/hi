@@ -27,6 +27,3 @@ extractInitFlags args = validateAll [(l, v) | (Val l v) <- args]
     hasKey k values = case lookup k values of
                         Just _  -> Nothing
                         Nothing -> Just $ "Could not find option: " ++ k
-
-defaultRepo :: String
-defaultRepo = "git://github.com/fujimura/hi-hspec.git"
