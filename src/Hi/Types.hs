@@ -3,7 +3,6 @@
 module Hi.Types
     (
       Flag
-    , InitFlags'(..)
     , InitFlags
     , Label
     , Arg(..)
@@ -21,15 +20,6 @@ type Flag = String
 type InitFlags = M.Map String String
 
 type Error = String
-
-data InitFlags' =
-    InitFlags' { packageName :: !Flag
-              , moduleName   :: !Flag
-              , author       :: !Flag
-              , email        :: !Flag
-              , repository   :: !Flag
-              , year         :: !Flag
-              } deriving(Eq, Show)
 
 type Label = String
 
