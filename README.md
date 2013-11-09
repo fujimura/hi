@@ -80,7 +80,6 @@ hi: Usage: hi [OPTION...]
   -e EMAIL         --email=EMAIL                    Email address of the maintainer
   -r REPOSITORY    --repository=REPOSITORY          Template repository(optional)
   -v               --version                        Show version number
-                   --no-configuration-file          Run without configuration file
                    --configuration-file=CONFIGFILE  Run with configuration file
 ```
 

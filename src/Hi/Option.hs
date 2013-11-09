@@ -30,18 +30,14 @@ options =
     , Option ['e'] ["email"]       (ReqArg (Val "email") "EMAIL")  "Email address of the maintainer"
     , Option ['r'] ["repository"]  (ReqArg (Val "repository") "REPOSITORY")  "Template repository(optional)"
     , Option ['v'] ["version"]     (NoArg Version) "Show version number"
-    , Option []    ["no-configuration-file"] (NoArg NoConfigurationFile) "Run without configuration file"
     , Option []    ["configuration-file"]    (ReqArg (Val "configFile") "CONFIGFILE") "Run with configuration file"
     ]
 
 -- | Returns 'InitFlags'.
--- | Returns 'InitFlags'.
-getInitFlags :: Mode -> IO InitFlags
-getInitFlags mode = handleError <$> extractInitFlags =<< case mode of
-        Run                        -> (parseArgs <$> getArgs) >>= addYear >>= addRepo >>= addDefaultRepo
-        RunWithNoConfigurationFile -> (parseArgs <$> getArgs) >>= addYear >>= addDefaultRepo
-        _                          -> error "Unexpected run mode"
+getInitFlags :: IO InitFlags
+getInitFlags = handleError <$> extractInitFlags =<< go
   where
+    go = (parseArgs <$> getArgs) >>= addYear >>= addRepo >>= addDefaultRepo
     addYear :: [Arg] -> IO [Arg]
     addYear vals = do
         y  <- getCurrentYear
@@ -75,7 +71,6 @@ getMode = go . parseArgs <$> getArgs
   where
     go []                      = Run
     go (Version:_)             = ShowVersion
-    go (NoConfigurationFile:_) = RunWithNoConfigurationFile
     go (_:xs)                  = go xs
 
 parseArgs :: [String] -> [Arg]

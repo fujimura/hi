@@ -10,4 +10,4 @@ main = do
     mode <- getMode
     case mode of
       ShowVersion -> putStrLn version
-      _           -> run =<< getInitFlags mode
+      _           -> run =<< getInitFlags

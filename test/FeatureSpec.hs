@@ -21,9 +21,6 @@ spec = do
     describe "with command line options" $
       around setupWithCommandLineOptions features
 
-    describe "with command line options, without configuration file" $
-      around setupWithNoConfigurationFile features
-
     describe "with configuration file" $
       around setupWithConfigurationFile features
 
@@ -144,23 +141,6 @@ setupWithConfigurationFile action = do
     concatLines :: [String] -> String
     concatLines = intercalate "\n"
 
-setupWithNoConfigurationFile :: IO () -> IO ()
-setupWithNoConfigurationFile action = do
-    pwd <- getCurrentDirectory
-
-    inTestDirectory $ do
-        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -p ", packageName
-                             , " -m ", moduleName
-                             , " -a ", quote author
-                             , " -e ", quote email
-                             , " -r file://" ++ pwd ++ "/template"
-                             -- .hirc doesn't exist because here is a new
-                             -- temporary directory
-                             , " --configuration-file " ++ ".hirc"
-                             ]
-        action
-
 setupWithCommandLineOptions :: IO () -> IO ()
 setupWithCommandLineOptions action = do
     pwd <- getCurrentDirectory
@@ -172,7 +152,6 @@ setupWithCommandLineOptions action = do
                              , " -a ", quote author
                              , " -e ", quote email
                              , " -r file://" ++ pwd ++ "/template"
-                             , " --no-configuration-file"
                              ]
         action
 
