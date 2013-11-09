@@ -158,9 +158,7 @@ setupWithCommandLineOptions action = do
 inTestDirectory :: IO () -> IO ()
 inTestDirectory action = do
     pwd <- getCurrentDirectory
-    let go    = do
-            createDirectoryIfMissing True testDirectory
-            setCurrentDirectory testDirectory
+    let go    = createDirectoryIfMissing True testDirectory >> setCurrentDirectory testDirectory
         flush = removeDirectoryRecursive testDirectory
         back  = setCurrentDirectory pwd
     bracket_ go (back >> flush) action

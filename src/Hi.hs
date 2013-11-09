@@ -1,4 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
 module Hi
   (
     run
@@ -22,16 +21,14 @@ writeFiles :: Files -> IO ()
 writeFiles = mapM_ (uncurry write)
   where
     write :: FilePath -> String -> IO ()
-    write path content = do
-      createDirectoryIfMissing True $ dropFileName path
-      writeFile path content
+    write path content = createDirectoryIfMissing True (dropFileName path) >> writeFile path content
 
 process :: InitFlags -> Files -> Files
-process initFlags files = map go $ filter isTemplate files
+process initFlags files = map go $ filter (isTemplate . fst) files
   where
-    isTemplate (path,_) = ".template" `isSuffixOf` path
-    go (path, content)  = (rewritePath initFlags path, substitute' content)
-    substitute' t       = LT.unpack $ substitute (T.pack t) (context initFlags)
+    isTemplate path    = ".template" `isSuffixOf` path
+    go (path, content) = (rewritePath initFlags path, substitute' content)
+    substitute' text   = LT.unpack $ substitute (T.pack text) (context initFlags)
 
 context :: InitFlags -> Context
 context flags x = T.pack (fromJust $ lookup (T.unpack x) flags)

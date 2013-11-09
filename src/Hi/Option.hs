@@ -24,20 +24,25 @@ import           System.FilePath       (joinPath)
 -- | Available options.
 options :: [OptDescr Arg]
 options =
-    [ Option ['p'] ["package-name"](ReqArg (Val "packageName") "package-name")  "Name of package"
-    , Option ['m'] ["module-name"] (ReqArg (Val "moduleName") "Module.Name")  "Name of Module"
-    , Option ['a'] ["author"]      (ReqArg (Val "author") "NAME")  "Name of the project's author"
-    , Option ['e'] ["email"]       (ReqArg (Val "email") "EMAIL")  "Email address of the maintainer"
-    , Option ['r'] ["repository"]  (ReqArg (Val "repository") "REPOSITORY")  "Template repository(optional)"
-    , Option ['v'] ["version"]     (NoArg Version) "Show version number"
-    , Option []    ["configuration-file"]    (ReqArg (Val "configFile") "CONFIGFILE") "Run with configuration file"
+    [ Option ['p'] ["package-name"]       (ReqArg (Val "packageName") "package-name") "Name of package"
+    , Option ['m'] ["module-name"]        (ReqArg (Val "moduleName" ) "Module.Name" ) "Name of Module"
+    , Option ['a'] ["author"]             (ReqArg (Val "author"     ) "NAME"        ) "Name of the project's author"
+    , Option ['e'] ["email"]              (ReqArg (Val "email"      ) "EMAIL"       ) "Email address of the maintainer"
+    , Option ['r'] ["repository"]         (ReqArg (Val "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
+    , Option []    ["configuration-file"] (ReqArg (Val "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
+    , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
     ]
 
 -- | Returns 'InitFlags'.
 getInitFlags :: IO InitFlags
-getInitFlags = handleError <$> extractInitFlags =<< go
+getInitFlags = handleError
+               <$> extractInitFlags
+               =<< addDefaultRepo
+               =<< addRepo
+               =<< addYear
+               =<< parseArgs
+               <$> getArgs
   where
-    go = (parseArgs <$> getArgs) >>= addYear >>= addRepo >>= addDefaultRepo
     addYear :: [Arg] -> IO [Arg]
     addYear vals = do
         y  <- getCurrentYear
@@ -51,7 +56,7 @@ getInitFlags = handleError <$> extractInitFlags =<< go
         return $ vals ++ repo
 
     addDefaultRepo :: [Arg] -> IO [Arg]
-    addDefaultRepo vals = return $ vals ++ [(Val "repository" defaultRepo)]
+    addDefaultRepo vals = return $ vals ++ [Val "repository" defaultRepo]
 
     handleError :: Either [String] InitFlags -> IO InitFlags
     handleError result = case result of
@@ -92,8 +97,7 @@ defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"
 
 getConfigFileName :: IO FilePath
-getConfigFileName = do
-    go =<< parseArgs <$> getArgs
+getConfigFileName = go =<< parseArgs <$> getArgs
   where
     go []                       = defaultConfigFilePath
     go ((Val "configFile" p):_) = return p
