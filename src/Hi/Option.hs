@@ -35,32 +35,32 @@ options =
     ]
 
 -- | Returns 'InitFlags'.
-getInitFlags :: IO InitFlags
-getInitFlags = do
-    result <- go
-    case result of
-      Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
-      Right x      -> return $ x
-  where
-    go = do
-      mode <- getMode
-      case mode of
-        Run                        -> runWithConfigurationFile
-        RunWithNoConfigurationFile -> runWithNoConfigurationFile
+-- | Returns 'InitFlags'.
+getInitFlags :: Mode -> IO InitFlags
+getInitFlags mode = handleError <$> extractInitFlags =<< case mode of
+        Run                        -> (parseArgs <$> getArgs) >>= addYear >>= addRepo >>= addDefaultRepo
+        RunWithNoConfigurationFile -> (parseArgs <$> getArgs) >>= addYear >>= addDefaultRepo
         _                          -> error "Unexpected run mode"
-
-    runWithNoConfigurationFile = do
-        xs <- parseArgs <$> getArgs
+  where
+    addYear :: [Arg] -> IO [Arg]
+    addYear vals = do
         y  <- getCurrentYear
-        return $ extractInitFlags (xs ++ [y] ++ [(Val "repository" defaultRepo)])
+        return $ vals ++ [y]
 
-    runWithConfigurationFile   = do
-        xs <- parseArgs <$> getArgs
-        y  <- getCurrentYear
-        ys <- do
+    addRepo :: [Arg] -> IO [Arg]
+    addRepo vals = do
+        repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
             return $ fromMaybe [] (parseConfig <$> mfile)
-        return $ extractInitFlags (xs ++ ys ++ [y] ++ [(Val "repository" defaultRepo)])
+        return $ vals ++ repo
+
+    addDefaultRepo :: [Arg] -> IO [Arg]
+    addDefaultRepo vals = return $ vals ++ [(Val "repository" defaultRepo)]
+
+    handleError :: Either [String] InitFlags -> IO InitFlags
+    handleError result = case result of
+        Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
+        Right x      -> return x
 
 -- | Return file contents in Maybe String or Nothing.
 --
@@ -69,17 +69,9 @@ readFileMaybe f = do
     e <- doesFileExist f
     if e then Just <$> readFile f else return Nothing
 
--- | Returns `InitFlags` from given args, attaching year if it's missing in
--- args
-getInitFlags' :: [String] -> IO (Either [Error] InitFlags)
-getInitFlags' args = do
-    y <- getCurrentYear
-    return $ extractInitFlags $ (parseArgs $ args) ++ [y]
-
 -- | Returns 'Mode'.
 getMode :: IO Mode
-getMode = do
-    go . parseArgs <$> getArgs
+getMode = go . parseArgs <$> getArgs
   where
     go []                      = Run
     go (Version:_)             = ShowVersion
@@ -117,4 +109,4 @@ getConfigFileName = do
 getCurrentYear :: IO Arg
 getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-    return $ (Val "year" $ show y)
+    return (Val "year" $ show y)

@@ -23,7 +23,7 @@ rewritePath flags =
 -- @
 -- toDir "Foo.bar" # => "Foo/Bar"
 -- @
-toDir :: String -> String
+toDir :: String -> FilePath
 toDir = joinPath . splitOn "."
 
 replace :: Eq a => [a] -> [a] -> [a] -> [a]
