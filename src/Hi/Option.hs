@@ -67,11 +67,9 @@ readFileMaybe f = do
 
 -- | Returns 'Mode'.
 getMode :: IO Mode
-getMode = go . parseArgs <$> getArgs
-  where
-    go []                      = Run
-    go (Version:_)             = ShowVersion
-    go (_:xs)                  = go xs
+getMode = do
+    args <- parseArgs <$> getArgs
+    return $ if Version `elem` args then ShowVersion else Run
 
 parseArgs :: [String] -> [Arg]
 parseArgs argv =
