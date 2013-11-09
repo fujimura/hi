@@ -106,7 +106,6 @@ Available variables:
 - `$moduleName` : name of module, like 'Hi'
 - `$author` : name of author, like 'Fujimura Daisuke'
 - `$email` : email address of maintainer, like 'me@fujimuradaisuke.com'
-- `$year` : created year
 
 'package-name' and 'ModuleName' in filepath will be replaced with given variable.
 
