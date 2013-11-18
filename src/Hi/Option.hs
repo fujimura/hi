@@ -38,7 +38,7 @@ getInitFlags :: IO InitFlags
 getInitFlags = handleError
                <$> extractInitFlags
                =<< addDefaultRepo
-               =<< addRepo
+               =<< addArgsFromConfigFile
                =<< addYear
                =<< parseArgs
                <$> getArgs
@@ -48,8 +48,8 @@ getInitFlags = handleError
         y  <- getCurrentYear
         return $ vals ++ [y]
 
-    addRepo :: [Arg] -> IO [Arg]
-    addRepo vals = do
+    addArgsFromConfigFile :: [Arg] -> IO [Arg]
+    addArgsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
             return $ fromMaybe [] (parseConfig <$> mfile)
