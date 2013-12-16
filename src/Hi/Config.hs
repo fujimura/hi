@@ -10,6 +10,15 @@ import           Hi.Types
 import           Text.Parsec
 import           Text.Parsec.String
 
+-- | Parse config file and return 'Arg's.
+parseConfig :: String -> [Arg]
+parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
+      Left  l  -> error $ show l
+      Right xs -> map (uncurry Val) xs
+
+configFile :: Parser [(String, String)]
+configFile = catMaybes <$> many line <* eof
+
 sep :: Parser Char
 sep = char ':'
 
@@ -36,11 +45,3 @@ line = do
         v <- many (noneOf "\n")
         eol
         return (n, v)
-
-configFile :: Parser [(String, String)]
-configFile = catMaybes <$> many line <* eof
-
-parseConfig :: String -> [Arg]
-parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
-      Left  l  -> error $ show l
-      Right xs -> map (uncurry Val) xs

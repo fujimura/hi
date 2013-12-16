@@ -11,7 +11,8 @@ import           Data.List.Split      (splitOn)
 import           System.Exit          (ExitCode)
 import           System.Process       (system, readProcess)
 
-readTemplates :: String -> IO Files
+-- | Read templates in given 'FilePath'
+readTemplates :: FilePath -> IO Files
 readTemplates repo =
     inTemporaryDirectory "hi" $ do
         -- TODO Handle error

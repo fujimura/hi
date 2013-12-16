@@ -8,6 +8,7 @@ module Hi.Flag
 import           Data.Maybe (mapMaybe)
 import           Hi.Types
 
+-- | Extract 'InitFlags' from given 'Arg's.
 extractInitFlags :: [Arg] -> Either [Error] InitFlags
 extractInitFlags args = validateAll [(l, v) | (Val l v) <- args]
   where
