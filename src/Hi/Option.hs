@@ -79,11 +79,22 @@ getMode = do
 parseArgs :: [String] -> [Arg]
 parseArgs argv =
   case getOpt Permute options argv of
-    ([],_,errs) -> error $ concat errs ++ usageInfo header options
+    ([],_,errs) -> error $ concat errs ++ usage
     (o,_,[]   ) -> o
-    (_,_,errs ) -> error $ concat errs ++ usageInfo header options
+    (_,_,errs ) -> error $ concat errs ++ usage
+
+usage :: String
+usage = usageInfo header options ++ footer
   where
-    header = "Usage: hi [OPTION...]"
+    header = "Usage: hi [OPTION...]\n" ++
+             "Generate a haskell project based on a template from github.\n"
+    footer = "\n" ++
+             "If repository is not provided, it defaults to the repository at\n" ++
+             "https://github.com/fujimura/hi-hspec.\n" ++
+             "\n" ++
+             "Example:\n" ++
+             "    hi --package-name 'foo-bar' --module-name 'Foo.Bar' " ++
+             "--author 'you' --email 'you@gmail.com'"
 
 defaultConfigFilePath :: IO FilePath
 defaultConfigFilePath = do
