@@ -21,6 +21,7 @@ extractInitFlags args = validateAll [(l, v) | (Val l v) <- args]
                   , hasKey "moduleName"
                   , hasKey "author"
                   , hasKey "email"
+                  , hasKey "directoryName"
                   , hasKey "repository"
                   , hasKey "year"
                   ]
