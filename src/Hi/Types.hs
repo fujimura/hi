@@ -22,7 +22,7 @@ type Error = String
 type Label = String
 
 -- | Arguments.
-data Arg = Version | Val Label String deriving(Eq, Show)
+data Arg = Version | Help | Val Label String deriving(Eq, Show)
 
 -- | Run mode.
-data Mode = ShowVersion | Run deriving(Eq, Show)
+data Mode = ShowVersion | ShowHelp | Run deriving(Eq, Show)

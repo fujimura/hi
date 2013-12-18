@@ -4,6 +4,7 @@ module Hi.Option
     (
       getInitFlags
     , getMode
+    , usage
     ) where
 
 import           Hi.Config             (parseConfig)
@@ -31,6 +32,7 @@ options =
     , Option ['r'] ["repository"]         (ReqArg (Val "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
     , Option []    ["configuration-file"] (ReqArg (Val "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
+    , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
 
 -- | Returns 'InitFlags'.
@@ -74,7 +76,11 @@ readFileMaybe f = do
 getMode :: IO Mode
 getMode = do
     args <- parseArgs <$> getArgs
-    return $ if Version `elem` args then ShowVersion else Run
+    return $ modeFor args
+  where
+    modeFor args | Help `elem` args    = ShowHelp
+                 | Version `elem` args = ShowVersion
+                 | otherwise           = Run
 
 parseArgs :: [String] -> [Arg]
 parseArgs argv =
