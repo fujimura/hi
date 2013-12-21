@@ -96,7 +96,7 @@ usage = usageInfo header options ++ footer
              "Generate a haskell project based on a template from github.\n"
     footer = "\n" ++
              "If repository is not provided, it defaults to the repository at\n" ++
-             "https://github.com/fujimura/hi-hspec.\n" ++
+             defaultRepo ++ ".\n" ++
              "\n" ++
              "Example:\n" ++
              "    hi --package-name 'foo-bar' --module-name 'Foo.Bar' " ++
