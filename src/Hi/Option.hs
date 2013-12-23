@@ -25,20 +25,22 @@ import           System.FilePath       (joinPath)
 -- | Available options.
 options :: [OptDescr Arg]
 options =
-    [ Option ['p'] ["package-name"]       (ReqArg (Val "packageName") "package-name") "Name of package"
-    , Option ['m'] ["module-name"]        (ReqArg (Val "moduleName" ) "Module.Name" ) "Name of Module"
-    , Option ['a'] ["author"]             (ReqArg (Val "author"     ) "NAME"        ) "Name of the project's author"
-    , Option ['e'] ["email"]              (ReqArg (Val "email"      ) "EMAIL"       ) "Email address of the maintainer"
-    , Option ['r'] ["repository"]         (ReqArg (Val "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
-    , Option []    ["configuration-file"] (ReqArg (Val "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
-    , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
-    , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
+    [ Option ['p'] ["package-name"]       (ReqArg (Val "packageName"   ) "package-name"   ) "Name of package"
+    , Option ['m'] ["module-name"]        (ReqArg (Val "moduleName"    ) "Module.Name"    ) "Name of Module"
+    , Option ['a'] ["author"]             (ReqArg (Val "author"        ) "NAME"           ) "Name of the project's author"
+    , Option ['e'] ["email"]              (ReqArg (Val "email"         ) "EMAIL"          ) "Email address of the maintainer"
+    , Option ['d'] ["directory-name"]     (ReqArg (Val "directoryName" ) "directoryname"  ) "Top-level directory name ( optional ) "
+    , Option ['r'] ["repository"]         (ReqArg (Val "repository"    ) "REPOSITORY"     ) "Template repository      ( optional ) "
+    , Option []    ["configuration-file"] (ReqArg (Val "configFile"    ) "CONFIGFILE"     ) "Run with configuration file"
+    , Option ['v'] ["version"]            (NoArg  Version)                                  "Show version number"
+    , Option ['h'] ["help"]               (NoArg  Help)                                     "Display this help and exit"
     ]
 
 -- | Returns 'InitFlags'.
 getInitFlags :: IO InitFlags
 getInitFlags = handleError
                <$> extractInitFlags
+               =<< (return . addDefaultDirectoryName)
                =<< addDefaultRepo
                =<< addArgsFromConfigFile
                =<< addYear
@@ -59,6 +61,12 @@ getInitFlags = handleError
 
     addDefaultRepo :: [Arg] -> IO [Arg]
     addDefaultRepo vals = return $ vals ++ [Val "repository" defaultRepo]
+
+    addDefaultDirectoryName :: [Arg] -> [Arg]
+    addDefaultDirectoryName [] = []
+    addDefaultDirectoryName vals@((Val "packageName" packageName):_) =
+        vals ++ [Val "directoryName" packageName]
+    addDefaultDirectoryName (v:vals) = v : addDefaultDirectoryName vals
 
     handleError :: Either [String] InitFlags -> IO InitFlags
     handleError result = case result of
