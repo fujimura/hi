@@ -18,7 +18,7 @@ import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
 import           System.Directory      (doesFileExist, getHomeDirectory)
-import           System.Environment    (getArgs)
+import qualified System.Environment
 import           System.FilePath       (joinPath)
 
 
@@ -43,7 +43,7 @@ getInitFlags = handleError
                =<< addOptionsFromConfigFile
                =<< addYear
                =<< parseOptions
-               <$> getArgs
+               <$> System.Environment.getArgs
   where
     addYear :: [Option] -> IO [Option]
     addYear vals = do
@@ -75,7 +75,7 @@ readFileMaybe f = do
 -- | Returns 'Mode'.
 getMode :: IO Mode
 getMode = do
-    args <- parseOptions <$> getArgs
+    args <- parseOptions <$> System.Environment.getArgs
     return $ modeFor args
   where
     modeFor args | Help `elem` args    = ShowHelp
@@ -114,7 +114,7 @@ defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"
 
 getConfigFileName :: IO FilePath
-getConfigFileName = go =<< parseOptions <$> getArgs
+getConfigFileName = go =<< parseOptions <$> System.Environment.getArgs
   where
     go []                       = defaultConfigFilePath
     go ((Arg "configFile" p):_) = return p
