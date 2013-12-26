@@ -5,7 +5,7 @@ module Hi.Types
       Flag
     , InitFlags
     , Label
-    , Arg(..)
+    , Option(..)
     , Mode(..)
     , Files
     , Error
@@ -21,8 +21,8 @@ type Error = String
 
 type Label = String
 
--- | Arguments.
-data Arg = Version | Help | Val Label String deriving(Eq, Show)
+-- | Options
+data Option = Version | Help | Val Label String deriving(Eq, Show)
 
 -- | Run mode.
 data Mode = ShowVersion | ShowHelp | Run deriving(Eq, Show)

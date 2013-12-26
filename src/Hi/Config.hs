@@ -10,8 +10,8 @@ import           Hi.Types
 import           Text.Parsec
 import           Text.Parsec.String
 
--- | Parse config file and return 'Arg's.
-parseConfig :: String -> [Arg]
+-- | Parse config file and return 'Option's.
+parseConfig :: String -> [Option]
 parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
       Left  l  -> error $ show l
       Right xs -> map (uncurry Val) xs

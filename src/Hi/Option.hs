@@ -23,7 +23,7 @@ import           System.FilePath       (joinPath)
 
 
 -- | Available options.
-options :: [OptDescr Arg]
+options :: [OptDescr Option]
 options =
     [ Option ['p'] ["package-name"]       (ReqArg (Val "packageName") "package-name") "Name of package"
     , Option ['m'] ["module-name"]        (ReqArg (Val "moduleName" ) "Module.Name" ) "Name of Module"
@@ -40,24 +40,24 @@ getInitFlags :: IO InitFlags
 getInitFlags = handleError
                <$> extractInitFlags
                =<< addDefaultRepo
-               =<< addArgsFromConfigFile
+               =<< addOptionsFromConfigFile
                =<< addYear
-               =<< parseArgs
+               =<< parseOptions
                <$> getArgs
   where
-    addYear :: [Arg] -> IO [Arg]
+    addYear :: [Option] -> IO [Option]
     addYear vals = do
         y  <- getCurrentYear
         return $ vals ++ [y]
 
-    addArgsFromConfigFile :: [Arg] -> IO [Arg]
-    addArgsFromConfigFile vals = do
+    addOptionsFromConfigFile :: [Option] -> IO [Option]
+    addOptionsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
             return $ fromMaybe [] (parseConfig <$> mfile)
         return $ vals ++ repo
 
-    addDefaultRepo :: [Arg] -> IO [Arg]
+    addDefaultRepo :: [Option] -> IO [Option]
     addDefaultRepo vals = return $ vals ++ [Val "repository" defaultRepo]
 
     handleError :: Either [String] InitFlags -> IO InitFlags
@@ -75,15 +75,15 @@ readFileMaybe f = do
 -- | Returns 'Mode'.
 getMode :: IO Mode
 getMode = do
-    args <- parseArgs <$> getArgs
+    args <- parseOptions <$> getArgs
     return $ modeFor args
   where
     modeFor args | Help `elem` args    = ShowHelp
                  | Version `elem` args = ShowVersion
                  | otherwise           = Run
 
-parseArgs :: [String] -> [Arg]
-parseArgs argv =
+parseOptions :: [String] -> [Option]
+parseOptions argv =
   case getOpt Permute options argv of
     ([],_,errs) -> error $ concat errs ++ usage
     (o,_,[]   ) -> o
@@ -114,13 +114,13 @@ defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"
 
 getConfigFileName :: IO FilePath
-getConfigFileName = go =<< parseArgs <$> getArgs
+getConfigFileName = go =<< parseOptions <$> getArgs
   where
     go []                       = defaultConfigFilePath
     go ((Val "configFile" p):_) = return p
     go (_:xs)                   = go xs
 
-getCurrentYear :: IO Arg
+getCurrentYear :: IO Option
 getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
     return (Val "year" $ show y)
