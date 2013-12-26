@@ -8,12 +8,12 @@ module Hi.Option
     ) where
 
 import           Hi.Config             (parseConfig)
-import           Hi.Flag               (validateOptions)
 import           Hi.Types
+import           Hi.Utils
 
 import           Control.Applicative
 import           Data.List             (intercalate)
-import           Data.Maybe            (fromMaybe)
+import           Data.Maybe            (fromMaybe, mapMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
@@ -124,3 +124,23 @@ getCurrentYear :: IO Option
 getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
     return (Arg "year" $ show y)
+
+-- | Validate given options
+validateOptions :: [Option] -> Either [Error] [Option]
+validateOptions values = case mapMaybe ($ values) validations of
+                       []      -> Right values
+                       errors  -> Left errors
+
+validations ::[[Option] -> Maybe String]
+validations = [ hasKey "packageName"
+              , hasKey "moduleName"
+              , hasKey "author"
+              , hasKey "email"
+              , hasKey "repository"
+              , hasKey "year"
+              ]
+
+hasKey :: String -> [Option] -> Maybe String
+hasKey k options = case lookupArg k options of
+                      Just _  -> Nothing
+                      Nothing -> Just $ "Could not find option: " ++ k
