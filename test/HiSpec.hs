@@ -1,13 +1,18 @@
 module HiSpec ( spec ) where
 
 import           Hi            (process)
+import           Hi.Types
+import           Hi.Utils
 
 import           Control.Monad
 import           Data.Maybe    (fromJust, isJust)
 import           Test.Hspec
 
-options :: [(String,String)]
-options = [ ("packageName" ,"testapp")
+toOption :: (String, String) -> Option
+toOption = uncurry Arg
+
+options :: [Option]
+options = map toOption [ ("packageName" ,"testapp")
           , ("moduleName"  ,"System.Awesome.Library")
           , ("author"      ,"Fujimura Daisuke")
           , ("email"       ,"me@fujimuradaisuke.com")
@@ -23,9 +28,9 @@ spec =
         context ("Option \"" ++ option ++ "\" was given and it's in the template") $
           it "should be replaced with the value" $
             let files = process options [("dummy.template", "Foo $" ++ option ++ " bar, \n")] in
-            (fromJust $ lookup "dummy" files) `shouldContain` (fromJust $ lookup option options)
+            (fromJust $ lookup "dummy" files) `shouldContain` (fromJust $ lookupArg option options)
 
       context "ModuleName was given in file path" $
         it "should be replaced with given value, replacing period with path separator" $
-          let files = process [("moduleName", "Bar")] [("foo/ModuleName/File.hs.template", "module Foo\n")] in
+          let files = process (map toOption [("moduleName", "Bar")]) [("foo/ModuleName/File.hs.template", "module Foo\n")] in
           lookup "foo/Bar/File.hs" files `shouldSatisfy` isJust

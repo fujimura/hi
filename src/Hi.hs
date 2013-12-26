@@ -7,6 +7,7 @@ module Hi
 import           Hi.FilePath         (rewritePath)
 import           Hi.Template         (readTemplates)
 import           Hi.Types
+import           Hi.Utils
 
 import           Control.Applicative
 import           Data.List           (isSuffixOf)
@@ -18,12 +19,12 @@ import           System.Directory    (createDirectoryIfMissing)
 import           System.FilePath     (dropFileName)
 
 -- | Run 'hi'.
-run :: InitFlags -> IO ()
-run initFlags = do
+run :: [Option] -> IO ()
+run options = do
     putStrLn $ "Creating new project from repository: " ++ repository
-    writeFiles =<< showFileList =<< process initFlags <$> readTemplates repository
+    writeFiles =<< showFileList =<< process options <$> readTemplates repository
   where
-    repository = fromJust $ lookup "repository" initFlags
+    repository = fromJust $ lookupArg "repository" options
 
 -- |Write given 'Files' to filesystem.
 writeFiles :: Files -> IO ()
@@ -48,13 +49,13 @@ showFileList files = do
 -- 1. rewrite path
 --
 -- 2. substitute arguments
-process :: InitFlags -> Files -> Files
-process initFlags files = map go $ filter (isTemplate . fst) files
+process :: [Option] -> Files -> Files
+process options files = map go $ filter (isTemplate . fst) files
   where
     isTemplate path    = ".template" `isSuffixOf` path
-    go (path, content) = (rewritePath initFlags path, substitute' content)
-    substitute' text   = LT.unpack $ substitute (T.pack text) (context initFlags)
+    go (path, content) = (rewritePath options path, substitute' content)
+    substitute' text   = LT.unpack $ substitute (T.pack text) (context options)
 
--- | Return 'Context' obtained by given 'InitFlags'
-context :: InitFlags -> Context
-context flags x = T.pack (fromJust $ lookup (T.unpack x) flags)
+-- | Return 'Context' obtained by given 'Options'
+context :: [Option] -> Context
+context options x = T.pack (fromJust $ lookup (T.unpack x) [(k,v) | (Arg k v) <- options])

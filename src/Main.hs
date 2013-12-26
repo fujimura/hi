@@ -1,7 +1,7 @@
 module Main where
 
 import           Hi         (run)
-import           Hi.Option  (getInitFlags, getMode, usage)
+import           Hi.Option  (getOptions, getMode, usage)
 import           Hi.Types
 import           Hi.Version (version)
 
@@ -11,4 +11,4 @@ main = do
     case mode of
       ShowHelp -> putStrLn usage
       ShowVersion -> putStrLn version
-      _           -> run =<< getInitFlags
+      _           -> run =<< getOptions

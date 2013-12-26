@@ -2,65 +2,65 @@
 
 module Hi.Option
     (
-      getInitFlags
+      getOptions
     , getMode
     , usage
     ) where
 
 import           Hi.Config             (parseConfig)
-import           Hi.Flag               (extractInitFlags)
 import           Hi.Types
+import           Hi.Utils
 
 import           Control.Applicative
 import           Data.List             (intercalate)
-import           Data.Maybe            (fromMaybe)
+import           Data.Maybe            (fromMaybe, mapMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
 import           System.Directory      (doesFileExist, getHomeDirectory)
-import           System.Environment    (getArgs)
+import qualified System.Environment
 import           System.FilePath       (joinPath)
 
 
 -- | Available options.
-options :: [OptDescr Arg]
+options :: [OptDescr Option]
 options =
-    [ Option ['p'] ["package-name"]       (ReqArg (Val "packageName") "package-name") "Name of package"
-    , Option ['m'] ["module-name"]        (ReqArg (Val "moduleName" ) "Module.Name" ) "Name of Module"
-    , Option ['a'] ["author"]             (ReqArg (Val "author"     ) "NAME"        ) "Name of the project's author"
-    , Option ['e'] ["email"]              (ReqArg (Val "email"      ) "EMAIL"       ) "Email address of the maintainer"
-    , Option ['r'] ["repository"]         (ReqArg (Val "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
-    , Option []    ["configuration-file"] (ReqArg (Val "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
+    [ Option ['p'] ["package-name"]       (ReqArg (Arg "packageName") "package-name") "Name of package"
+    , Option ['m'] ["module-name"]        (ReqArg (Arg "moduleName" ) "Module.Name" ) "Name of Module"
+    , Option ['a'] ["author"]             (ReqArg (Arg "author"     ) "NAME"        ) "Name of the project's author"
+    , Option ['e'] ["email"]              (ReqArg (Arg "email"      ) "EMAIL"       ) "Email address of the maintainer"
+    , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
+    , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
 
--- | Returns 'InitFlags'.
-getInitFlags :: IO InitFlags
-getInitFlags = handleError
-               <$> extractInitFlags
+-- | Returns 'Options'.
+getOptions :: IO [Option]
+getOptions = handleError
+               <$> validateOptions
                =<< addDefaultRepo
-               =<< addArgsFromConfigFile
+               =<< addOptionsFromConfigFile
                =<< addYear
-               =<< parseArgs
-               <$> getArgs
+               =<< parseOptions
+               <$> System.Environment.getArgs
   where
-    addYear :: [Arg] -> IO [Arg]
+    addYear :: [Option] -> IO [Option]
     addYear vals = do
         y  <- getCurrentYear
         return $ vals ++ [y]
 
-    addArgsFromConfigFile :: [Arg] -> IO [Arg]
-    addArgsFromConfigFile vals = do
+    addOptionsFromConfigFile :: [Option] -> IO [Option]
+    addOptionsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
             return $ fromMaybe [] (parseConfig <$> mfile)
         return $ vals ++ repo
 
-    addDefaultRepo :: [Arg] -> IO [Arg]
-    addDefaultRepo vals = return $ vals ++ [Val "repository" defaultRepo]
+    addDefaultRepo :: [Option] -> IO [Option]
+    addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
 
-    handleError :: Either [String] InitFlags -> IO InitFlags
+    handleError :: Either [String] [Option] -> IO [Option]
     handleError result = case result of
         Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
         Right x      -> return x
@@ -75,15 +75,15 @@ readFileMaybe f = do
 -- | Returns 'Mode'.
 getMode :: IO Mode
 getMode = do
-    args <- parseArgs <$> getArgs
+    args <- parseOptions <$> System.Environment.getArgs
     return $ modeFor args
   where
     modeFor args | Help `elem` args    = ShowHelp
                  | Version `elem` args = ShowVersion
                  | otherwise           = Run
 
-parseArgs :: [String] -> [Arg]
-parseArgs argv =
+parseOptions :: [String] -> [Option]
+parseOptions argv =
   case getOpt Permute options argv of
     ([],_,errs) -> error $ concat errs ++ usage
     (o,_,[]   ) -> o
@@ -114,13 +114,33 @@ defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"
 
 getConfigFileName :: IO FilePath
-getConfigFileName = go =<< parseArgs <$> getArgs
+getConfigFileName = go =<< parseOptions <$> System.Environment.getArgs
   where
     go []                       = defaultConfigFilePath
-    go ((Val "configFile" p):_) = return p
+    go ((Arg "configFile" p):_) = return p
     go (_:xs)                   = go xs
 
-getCurrentYear :: IO Arg
+getCurrentYear :: IO Option
 getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-    return (Val "year" $ show y)
+    return (Arg "year" $ show y)
+
+-- | Validate given options
+validateOptions :: [Option] -> Either [Error] [Option]
+validateOptions values = case mapMaybe ($ values) validations of
+                       []      -> Right values
+                       errors  -> Left errors
+
+validations ::[[Option] -> Maybe String]
+validations = [ hasKey "packageName"
+              , hasKey "moduleName"
+              , hasKey "author"
+              , hasKey "email"
+              , hasKey "repository"
+              , hasKey "year"
+              ]
+
+hasKey :: String -> [Option] -> Maybe String
+hasKey k options = case lookupArg k options of
+                      Just _  -> Nothing
+                      Nothing -> Just $ "Could not find option: " ++ k

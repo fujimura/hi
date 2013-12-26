@@ -1,11 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hi.Types
-    (
-      Flag
-    , InitFlags
-    , Label
-    , Arg(..)
+    ( Label
+    , Option(..)
     , Mode(..)
     , Files
     , Error
@@ -13,16 +10,12 @@ module Hi.Types
 
 type Files = [(FilePath, String)]
 
-type Flag = String
-
-type InitFlags = [(String, String)]
-
 type Error = String
 
 type Label = String
 
--- | Arguments.
-data Arg = Version | Help | Val Label String deriving(Eq, Show)
+-- | Options
+data Option = Version | Help | Arg Label String deriving(Eq, Show)
 
 -- | Run mode.
 data Mode = ShowVersion | ShowHelp | Run deriving(Eq, Show)

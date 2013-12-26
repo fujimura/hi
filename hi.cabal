@@ -55,10 +55,10 @@ library
       Hi.Config
       Hi.Directory
       Hi.FilePath
-      Hi.Flag
       Hi.Option
       Hi.Template
       Hi.Types
+      Hi.Utils
       Hi.Version
   ghc-options:
       -Wall
