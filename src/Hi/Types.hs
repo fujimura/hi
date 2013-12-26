@@ -1,9 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hi.Types
-    (
-      Flag
-    , InitFlags
+    ( InitFlags
     , Label
     , Option(..)
     , Mode(..)
@@ -12,8 +10,6 @@ module Hi.Types
     ) where
 
 type Files = [(FilePath, String)]
-
-type Flag = String
 
 type InitFlags = [(String, String)]
 
