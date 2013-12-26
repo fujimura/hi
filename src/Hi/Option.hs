@@ -32,6 +32,7 @@ options =
     , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
     , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
+    , Option []    ["initialize-git-repository"] (NoArg  InitializeGitRepository)     "Initialize with git repository"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
 
