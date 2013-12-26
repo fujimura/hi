@@ -21,18 +21,18 @@ spec = do
     describe "with command line options" $
       around setupWithCommandLineOptions features
 
-    {-describe "with configuration file" $-}
-      {-around setupWithConfigurationFile features-}
+    describe "with configuration file" $
+      around setupWithConfigurationFile features
 
-    {-describe "-v" $ do-}
-      {-it "should show version number" $ do-}
-        {-r <- readProcess "./dist/build/hi/hi" ["-v"] []-}
-        {-r `shouldBe` version ++ "\n"-}
+    describe "-v" $ do
+      it "should show version number" $ do
+        r <- readProcess "./dist/build/hi/hi" ["-v"] []
+        r `shouldBe` version ++ "\n"
 
-    {-describe "with incomplete command line options" $ do-}
-      {-it "should show error message" $ do-}
-        {-(_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-m", "Foo"] []-}
-        {-r `shouldContain` "\n (Run with no arguments to see usage)"-}
+    describe "with incomplete command line options" $ do
+      it "should show error message" $ do
+        (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-m", "Foo"] []
+        r `shouldContain` "\n (Run with no arguments to see usage)"
 
 packageName, moduleName, author, email, fileName :: String
 packageName = "testapp"
