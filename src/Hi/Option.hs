@@ -25,12 +25,12 @@ import           System.FilePath       (joinPath)
 -- | Available options.
 options :: [OptDescr Option]
 options =
-    [ Option ['p'] ["package-name"]       (ReqArg (Val "packageName") "package-name") "Name of package"
-    , Option ['m'] ["module-name"]        (ReqArg (Val "moduleName" ) "Module.Name" ) "Name of Module"
-    , Option ['a'] ["author"]             (ReqArg (Val "author"     ) "NAME"        ) "Name of the project's author"
-    , Option ['e'] ["email"]              (ReqArg (Val "email"      ) "EMAIL"       ) "Email address of the maintainer"
-    , Option ['r'] ["repository"]         (ReqArg (Val "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
-    , Option []    ["configuration-file"] (ReqArg (Val "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
+    [ Option ['p'] ["package-name"]       (ReqArg (Arg "packageName") "package-name") "Name of package"
+    , Option ['m'] ["module-name"]        (ReqArg (Arg "moduleName" ) "Module.Name" ) "Name of Module"
+    , Option ['a'] ["author"]             (ReqArg (Arg "author"     ) "NAME"        ) "Name of the project's author"
+    , Option ['e'] ["email"]              (ReqArg (Arg "email"      ) "EMAIL"       ) "Email address of the maintainer"
+    , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
+    , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
@@ -58,7 +58,7 @@ getInitFlags = handleError
         return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]
-    addDefaultRepo vals = return $ vals ++ [Val "repository" defaultRepo]
+    addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
 
     handleError :: Either [String] InitFlags -> IO InitFlags
     handleError result = case result of
@@ -117,10 +117,10 @@ getConfigFileName :: IO FilePath
 getConfigFileName = go =<< parseOptions <$> getArgs
   where
     go []                       = defaultConfigFilePath
-    go ((Val "configFile" p):_) = return p
+    go ((Arg "configFile" p):_) = return p
     go (_:xs)                   = go xs
 
 getCurrentYear :: IO Option
 getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-    return (Val "year" $ show y)
+    return (Arg "year" $ show y)

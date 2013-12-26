@@ -14,7 +14,7 @@ import           Text.Parsec.String
 parseConfig :: String -> [Option]
 parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
       Left  l  -> error $ show l
-      Right xs -> map (uncurry Val) xs
+      Right xs -> map (uncurry Arg) xs
 
 configFile :: Parser [(String, String)]
 configFile = catMaybes <$> many line <* eof

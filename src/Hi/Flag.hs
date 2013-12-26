@@ -10,7 +10,7 @@ import           Hi.Types
 
 -- | Extract 'InitFlags' from given 'Option's.
 extractInitFlags :: [Option] -> Either [Error] InitFlags
-extractInitFlags args = validateAll [(l, v) | (Val l v) <- args]
+extractInitFlags args = validateAll [(l, v) | (Arg l v) <- args]
   where
     validateAll :: InitFlags -> Either [Error] InitFlags
     validateAll values = case mapMaybe ($ values) validations of
