@@ -59,6 +59,7 @@ library
       Hi.Option
       Hi.Template
       Hi.Types
+      Hi.Utils
       Hi.Version
   ghc-options:
       -Wall

@@ -1,8 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hi.Types
-    ( Options
-    , Label
+    ( Label
     , Option(..)
     , Mode(..)
     , Files
@@ -10,8 +9,6 @@ module Hi.Types
     ) where
 
 type Files = [(FilePath, String)]
-
-type Options = [(String, String)]
 
 type Error = String
 

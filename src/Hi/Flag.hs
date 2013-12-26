@@ -2,29 +2,28 @@
 
 module Hi.Flag
     (
-      extractOptions
+      validateOptions
     ) where
 
 import           Data.Maybe (mapMaybe)
 import           Hi.Types
+import           Hi.Utils
 
 -- | Extract 'Options' from given 'Option's.
-extractOptions :: [Option] -> Either [Error] Options
-extractOptions args = validateAll [(l, v) | (Arg l v) <- args]
-  where
-    validateAll :: Options -> Either [Error] Options
-    validateAll values = case mapMaybe ($ values) validations of
-                           []      -> Right values
-                           errors  -> Left errors
-    validations ::[Options -> Maybe String]
-    validations = [ hasKey "packageName"
-                  , hasKey "moduleName"
-                  , hasKey "author"
-                  , hasKey "email"
-                  , hasKey "repository"
-                  , hasKey "year"
-                  ]
-    hasKey :: String -> Options -> Maybe String
-    hasKey k values = case lookup k values of
-                        Just _  -> Nothing
-                        Nothing -> Just $ "Could not find option: " ++ k
+validateOptions :: [Option] -> Either [Error] [Option]
+validateOptions values = case mapMaybe ($ values) validations of
+                       []      -> Right values
+                       errors  -> Left errors
+validations ::[[Option] -> Maybe String]
+validations = [ hasKey "packageName"
+              , hasKey "moduleName"
+              , hasKey "author"
+              , hasKey "email"
+              , hasKey "repository"
+              , hasKey "year"
+              ]
+
+hasKey :: String -> [Option] -> Maybe String
+hasKey k options = case lookupArg k options of
+                      Just _  -> Nothing
+                      Nothing -> Just $ "Could not find option: " ++ k

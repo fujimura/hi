@@ -8,7 +8,7 @@ module Hi.Option
     ) where
 
 import           Hi.Config             (parseConfig)
-import           Hi.Flag               (extractOptions)
+import           Hi.Flag               (validateOptions)
 import           Hi.Types
 
 import           Control.Applicative
@@ -36,9 +36,9 @@ options =
     ]
 
 -- | Returns 'Options'.
-getOptions :: IO Options
+getOptions :: IO [Option]
 getOptions = handleError
-               <$> extractOptions
+               <$> validateOptions
                =<< addDefaultRepo
                =<< addOptionsFromConfigFile
                =<< addYear
@@ -60,7 +60,7 @@ getOptions = handleError
     addDefaultRepo :: [Option] -> IO [Option]
     addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
 
-    handleError :: Either [String] Options -> IO Options
+    handleError :: Either [String] [Option] -> IO [Option]
     handleError result = case result of
         Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
         Right x      -> return x
