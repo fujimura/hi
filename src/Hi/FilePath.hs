@@ -12,7 +12,7 @@ import           Data.Maybe      (fromJust)
 import           System.FilePath (joinPath)
 
 -- | Convert given path to the destination path, with given options.
-rewritePath :: InitFlags -> FilePath -> FilePath
+rewritePath :: Options -> FilePath -> FilePath
 rewritePath flags =
     rename1 . rename2 . untemplate
   where

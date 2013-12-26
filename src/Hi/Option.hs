@@ -2,13 +2,13 @@
 
 module Hi.Option
     (
-      getInitFlags
+      getOptions
     , getMode
     , usage
     ) where
 
 import           Hi.Config             (parseConfig)
-import           Hi.Flag               (extractInitFlags)
+import           Hi.Flag               (extractOptions)
 import           Hi.Types
 
 import           Control.Applicative
@@ -35,10 +35,10 @@ options =
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
 
--- | Returns 'InitFlags'.
-getInitFlags :: IO InitFlags
-getInitFlags = handleError
-               <$> extractInitFlags
+-- | Returns 'Options'.
+getOptions :: IO Options
+getOptions = handleError
+               <$> extractOptions
                =<< addDefaultRepo
                =<< addOptionsFromConfigFile
                =<< addYear
@@ -60,7 +60,7 @@ getInitFlags = handleError
     addDefaultRepo :: [Option] -> IO [Option]
     addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
 
-    handleError :: Either [String] InitFlags -> IO InitFlags
+    handleError :: Either [String] Options -> IO Options
     handleError result = case result of
         Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
         Right x      -> return x

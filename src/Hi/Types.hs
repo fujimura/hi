@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hi.Types
-    ( InitFlags
+    ( Options
     , Label
     , Option(..)
     , Mode(..)
@@ -11,7 +11,7 @@ module Hi.Types
 
 type Files = [(FilePath, String)]
 
-type InitFlags = [(String, String)]
+type Options = [(String, String)]
 
 type Error = String
 

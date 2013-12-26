@@ -2,21 +2,21 @@
 
 module Hi.Flag
     (
-      extractInitFlags
+      extractOptions
     ) where
 
 import           Data.Maybe (mapMaybe)
 import           Hi.Types
 
--- | Extract 'InitFlags' from given 'Option's.
-extractInitFlags :: [Option] -> Either [Error] InitFlags
-extractInitFlags args = validateAll [(l, v) | (Arg l v) <- args]
+-- | Extract 'Options' from given 'Option's.
+extractOptions :: [Option] -> Either [Error] Options
+extractOptions args = validateAll [(l, v) | (Arg l v) <- args]
   where
-    validateAll :: InitFlags -> Either [Error] InitFlags
+    validateAll :: Options -> Either [Error] Options
     validateAll values = case mapMaybe ($ values) validations of
                            []      -> Right values
                            errors  -> Left errors
-    validations ::[InitFlags -> Maybe String]
+    validations ::[Options -> Maybe String]
     validations = [ hasKey "packageName"
                   , hasKey "moduleName"
                   , hasKey "author"
@@ -24,7 +24,7 @@ extractInitFlags args = validateAll [(l, v) | (Arg l v) <- args]
                   , hasKey "repository"
                   , hasKey "year"
                   ]
-    hasKey :: String -> InitFlags -> Maybe String
+    hasKey :: String -> Options -> Maybe String
     hasKey k values = case lookup k values of
                         Just _  -> Nothing
                         Nothing -> Just $ "Could not find option: " ++ k

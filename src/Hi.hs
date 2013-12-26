@@ -18,7 +18,7 @@ import           System.Directory    (createDirectoryIfMissing)
 import           System.FilePath     (dropFileName)
 
 -- | Run 'hi'.
-run :: InitFlags -> IO ()
+run :: Options -> IO ()
 run initFlags = do
     putStrLn $ "Creating new project from repository: " ++ repository
     writeFiles =<< showFileList =<< process initFlags <$> readTemplates repository
@@ -48,13 +48,13 @@ showFileList files = do
 -- 1. rewrite path
 --
 -- 2. substitute arguments
-process :: InitFlags -> Files -> Files
+process :: Options -> Files -> Files
 process initFlags files = map go $ filter (isTemplate . fst) files
   where
     isTemplate path    = ".template" `isSuffixOf` path
     go (path, content) = (rewritePath initFlags path, substitute' content)
     substitute' text   = LT.unpack $ substitute (T.pack text) (context initFlags)
 
--- | Return 'Context' obtained by given 'InitFlags'
-context :: InitFlags -> Context
+-- | Return 'Context' obtained by given 'Options'
+context :: Options -> Context
 context flags x = T.pack (fromJust $ lookup (T.unpack x) flags)
