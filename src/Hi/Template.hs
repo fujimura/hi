@@ -15,7 +15,7 @@ readTemplates :: FilePath -> IO Files
 readTemplates repo =
     inTemporaryDirectory "hi" $ do
         -- TODO Handle error
-        _ <- Git.clone repo
+        _ <- Git.clone $ Git.expandUrl repo
         paths <- Git.lsFiles
         contents <- mapM readFile paths
         return $ zip paths contents
