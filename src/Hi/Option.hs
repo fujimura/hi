@@ -37,16 +37,16 @@ options =
     ]
 
 toOption :: (String, String) -> Maybe Option
-toOption (key, value) = case key `lookupOption` options of
-                          Just (Option _ _ a _) -> toOption' a value
-                          Nothing               -> error $ "Invalid options \"" ++ key ++ "\" was specified"
+toOption (key, value) = maybe err ok $ key `lookupOption` options
   where
+    err = error $ "Invalid options \"" ++ key ++ "\" was specified"
+    ok (Option _ _ argDescr _) = toOption' argDescr value
     lookupOption :: String -> [OptDescr Option] -> Maybe (OptDescr Option)
     lookupOption k opts = k `lookup` map (\x@(Option _ (longOpt:_) _ _) -> (longOpt,x)) opts
     toOption' :: ArgDescr Option -> String -> Maybe Option
-    toOption' (NoArg InitializeGitRepository) "True" = Just InitializeGitRepository
-    toOption' (NoArg InitializeGitRepository) _      = Nothing
-    toOption' (ReqArg f _) val                  = Just $ f val
+    toOption' (NoArg opt) "True" = Just opt
+    toOption' (NoArg _) _        = Nothing
+    toOption' (ReqArg f _) val   = Just $ f val
 
 -- | Returns 'Options'.
 getOptions :: IO [Option]
@@ -67,7 +67,7 @@ getOptions = handleError
     addOptionsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
-            return $ catMaybes <$> fmap toOption $ fromMaybe [] (parseConfig <$> mfile)
+            return $ mapMaybe toOption $ fromMaybe [] (parseConfig <$> mfile)
         return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]
