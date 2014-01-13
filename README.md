@@ -15,7 +15,16 @@ With command line option:
 
 ```
 $ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
-"
+Creating new project from repository: git://github.com/fujimura/hi-hspec.git
+    create  foo-bar-baz/.gitignore
+    create  foo-bar-baz/LICENSE
+    create  foo-bar-baz/README.md
+    create  foo-bar-baz/foo-bar-baz.cabal
+    create  foo-bar-baz/src/Foo/Bar/Baz.hs
+    create  foo-bar-baz/src/Foo/Bar/Baz/Internal.hs
+    create  foo-bar-baz/test/Foo/Bar/BazSpec.hs
+    create  foo-bar-baz/test/Spec.hs
+
 $ tree .
 .
 ├── LICENSE
@@ -74,19 +83,31 @@ $ tree .
 
 ```
 hi: Usage: hi [OPTION...]
+Generate a haskell project based on a template from github.
+
   -p package-name  --package-name=package-name      Name of package
   -m Module.Name   --module-name=Module.Name        Name of Module
   -a NAME          --author=NAME                    Name of the project's author
   -e EMAIL         --email=EMAIL                    Email address of the maintainer
-  -r REPOSITORY    --repository=REPOSITORY          Template repository(optional)
-  -v               --version                        Show version number
+  -r REPOSITORY    --repository=REPOSITORY          Template repository    ( optional )
                    --configuration-file=CONFIGFILE  Run with configuration file
+  -v               --version                        Show version number
+                   --initialize-git-repository      Initialize with git repository
+  -h               --help                           Display this help and exit
+
+If repository is not provided, it defaults to the repository at
+git://github.com/fujimura/hi-hspec.git.
+
+Example:
+    hi --package-name 'foo-bar' --module-name 'Foo.Bar' --author 'you' --email 'you@gmail.com'
 ```
 
-## Installation
+## Config file format
 
 ```
-$ cabal install hi
+author: John Doe
+email: john@example.com
+initialize-git-repository: True # True or False
 ```
 
 ## Available templates

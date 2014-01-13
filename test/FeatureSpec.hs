@@ -1,6 +1,7 @@
 module FeatureSpec ( spec ) where
 
 import           Hi.Version          (version)
+import           Hi.Directory        (inDirectory)
 
 import           Control.Applicative
 import           Control.Exception   (bracket_)
@@ -33,6 +34,12 @@ spec = do
       it "should show error message" $ do
         (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-m", "Foo"] []
         r `shouldContain` "\n (Run with no arguments to see usage)"
+
+    describe "with --initialize-git-repository" $ do
+      around (setupWithCommandLineOptions' [" --initialize-git-repository "]) $ do
+        it "should initialize it as git repository and make first commit" $ do
+          inDirectory "./testapp" $ do
+            readProcess "git" ["log", "-1", "--pretty=%s"] [] `shouldReturn` "Initial commit\n"
 
 packageName, moduleName, author, email, fileName :: String
 packageName = "testapp"
@@ -128,15 +135,15 @@ setupWithConfigurationFile action = do
 
     inTestDirectory $ do
         writeFile fileName $ concatLines
-            [ "packageName: " ++ packageName
-            , "moduleName: "  ++ moduleName
-            , "author: "      ++ author
-            , "email: "       ++ email
-            , "repository: "  ++ "file://" ++ pwd ++ "/template"
+            [ "author: " ++ author
+            , "email: " ++ email
             ]
         pwd' <- getCurrentDirectory
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " -p ", packageName
+                             , " -m ", moduleName
                              , " --configuration-file ", pwd' ++ "/" ++ fileName
+                             , " -r file://" ++ pwd ++ "/template"
                              ]
         action
   where
@@ -144,7 +151,10 @@ setupWithConfigurationFile action = do
     concatLines = intercalate "\n"
 
 setupWithCommandLineOptions :: IO () -> IO ()
-setupWithCommandLineOptions action = do
+setupWithCommandLineOptions = setupWithCommandLineOptions' []
+
+setupWithCommandLineOptions' :: [String] -> IO () -> IO ()
+setupWithCommandLineOptions' opts action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
@@ -154,7 +164,7 @@ setupWithCommandLineOptions action = do
                              , " -a ", quote author
                              , " -e ", quote email
                              , " -r file://" ++ pwd ++ "/template"
-                             ]
+                             ] ++ concat opts
         action
 
 inTestDirectory :: IO () -> IO ()

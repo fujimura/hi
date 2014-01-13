@@ -4,6 +4,7 @@ module Hi.Option
     (
       getOptions
     , getMode
+    , options
     , usage
     ) where
 
@@ -13,14 +14,13 @@ import           Hi.Utils
 
 import           Control.Applicative
 import           Data.List             (intercalate)
-import           Data.Maybe            (fromMaybe, mapMaybe)
+import           Data.Maybe            (catMaybes, fromMaybe, mapMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
 import           System.Directory      (doesFileExist, getHomeDirectory)
 import qualified System.Environment
 import           System.FilePath       (joinPath)
-
 
 -- | Available options.
 options :: [OptDescr Option]
@@ -32,8 +32,21 @@ options =
     , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
     , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
+    , Option []    ["initialize-git-repository"] (NoArg InitializeGitRepository)      "Initialize with git repository"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
+
+toOption :: (String, String) -> Maybe Option
+toOption (key, value) = maybe err ok $ key `lookupOption` options
+  where
+    err = error $ "Invalid options \"" ++ key ++ "\" was specified"
+    ok (Option _ _ argDescr _) = toOption' argDescr value
+    lookupOption :: String -> [OptDescr Option] -> Maybe (OptDescr Option)
+    lookupOption k opts = k `lookup` map (\x@(Option _ (longOpt:_) _ _) -> (longOpt,x)) opts
+    toOption' :: ArgDescr Option -> String -> Maybe Option
+    toOption' (NoArg opt) "True" = Just opt
+    toOption' (NoArg _) _        = Nothing
+    toOption' (ReqArg f _) val   = Just $ f val
 
 -- | Returns 'Options'.
 getOptions :: IO [Option]
@@ -54,7 +67,7 @@ getOptions = handleError
     addOptionsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
-            return $ fromMaybe [] (parseConfig <$> mfile)
+            return $ mapMaybe toOption $ fromMaybe [] (parseConfig <$> mfile)
         return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]
