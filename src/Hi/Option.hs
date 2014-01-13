@@ -26,11 +26,11 @@ import           System.FilePath       (joinPath)
 -- | Available options.
 options :: [OptDescr Option]
 options =
-    [ Option ['p'] ["package-name"]       (ReqArg (Arg "packageName") "package-name") "Name of package"
-    , Option ['m'] ["module-name"]        (ReqArg (Arg "moduleName" ) "Module.Name" ) "Name of Module"
+    [ Option ['m'] ["module-name"]        (ReqArg (Arg "moduleName" ) "Module.Name" ) "Name of Module"
+    , Option ['p'] ["package-name"]       (ReqArg (Arg "packageName") "package-name") "Name of package        ( optional )"
     , Option ['a'] ["author"]             (ReqArg (Arg "author"     ) "NAME"        ) "Name of the project's author"
     , Option ['e'] ["email"]              (ReqArg (Arg "email"      ) "EMAIL"       ) "Email address of the maintainer"
-    , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
+    , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional )"
     , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
     , Option []    ["initialize-git-repository"] (NoArg InitializeGitRepository)      "Initialize with git repository"
@@ -132,7 +132,7 @@ usage = usageInfo header options ++ footer
              defaultRepo ++ ".\n" ++
              "\n" ++
              "Example:\n" ++
-             "    hi --package-name 'foo-bar' --module-name 'Foo.Bar' " ++
+             "    hi --module-name 'Foo.Bar' " ++
              "--author 'you' --email 'you@gmail.com'"
 
 defaultConfigFilePath :: IO FilePath
