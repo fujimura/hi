@@ -6,6 +6,7 @@ module Hi
 
 import           Hi.Directory        (inDirectory)
 import           Hi.FilePath         (rewritePath)
+import qualified Hi.Git              as Git
 import           Hi.Template         (readTemplates)
 import           Hi.Types
 import           Hi.Utils
@@ -24,7 +25,7 @@ import           System.Process      (system)
 -- | Run 'hi'.
 run :: [Option] -> IO ()
 run options = do
-    putStrLn $ "Creating new project from repository: " ++ repository
+    putStrLn $ "Creating new project from repository: " ++ Git.expandUrl repository
     writeFiles =<< showFileList =<< process options <$> readTemplates repository
     postProcess options
   where
