@@ -117,8 +117,6 @@ features = do
 
   describe "Main spec" $ do
     it "should be made" $  do
-      system "tree testapp"
-
       doesFileExist "testapp/test/System/Awesome/LibrarySpec.hs" `shouldReturn` True
 
     it "should include proper content" $  do
