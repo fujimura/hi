@@ -135,15 +135,15 @@ setupWithConfigurationFile action = do
 
     inTestDirectory $ do
         writeFile fileName $ concatLines
-            [ "packageName: " ++ packageName
-            , "moduleName: "  ++ moduleName
-            , "author: "      ++ author
-            , "email: "       ++ email
-            , "repository: "  ++ "file://" ++ pwd ++ "/template"
+            [ "author: " ++ author
+            , "email: " ++ email
             ]
         pwd' <- getCurrentDirectory
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
+                             , " -p ", packageName
+                             , " -m ", moduleName
                              , " --configuration-file ", pwd' ++ "/" ++ fileName
+                             , " -r file://" ++ pwd ++ "/template"
                              ]
         action
   where
