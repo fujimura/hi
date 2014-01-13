@@ -108,7 +108,7 @@ Example:
 author: John Doe
 email: john@example.com
 initialize-git-repository: True # True or False
-``
+```
 
 ## Available templates
 
