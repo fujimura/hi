@@ -14,14 +14,13 @@ import           Hi.Utils
 
 import           Control.Applicative
 import           Data.List             (intercalate)
-import           Data.Maybe            (fromMaybe, mapMaybe)
+import           Data.Maybe            (catMaybes, fromMaybe, mapMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
 import           System.Directory      (doesFileExist, getHomeDirectory)
 import qualified System.Environment
 import           System.FilePath       (joinPath)
-
 
 -- | Available options.
 options :: [OptDescr Option]
@@ -33,21 +32,21 @@ options =
     , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional ) "
     , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
-    , Option []    ["initialize-git-repository"] (NoArg  InitializeGitRepository)     "Initialize with git repository"
+    , Option []    ["initialize-git-repository"] (NoArg InitializeGitRepository)      "Initialize with git repository"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
 
-toOption :: (String, String) -> Option
+toOption :: (String, String) -> Maybe Option
 toOption (key, value) = case key `lookupOption` options of
                           Just (Option _ _ a _) -> toOption' a value
                           Nothing               -> error $ "Invalid options \"" ++ key ++ "\" was specified"
   where
     lookupOption :: String -> [OptDescr Option] -> Maybe (OptDescr Option)
     lookupOption k opts = k `lookup` map (\x@(Option _ (longOpt:_) _ _) -> (longOpt,x)) opts
-    toOption' :: ArgDescr Option -> String -> Option
-    -- TODO Specify False with `False`
-    toOption' (NoArg InitializeGitRepository) _ = InitializeGitRepository
-    toOption' (ReqArg f _) val                  = f val
+    toOption' :: ArgDescr Option -> String -> Maybe Option
+    toOption' (NoArg InitializeGitRepository) "True" = Just InitializeGitRepository
+    toOption' (NoArg InitializeGitRepository) _      = Nothing
+    toOption' (ReqArg f _) val                  = Just $ f val
 
 -- | Returns 'Options'.
 getOptions :: IO [Option]
@@ -68,7 +67,7 @@ getOptions = handleError
     addOptionsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
-            return $ fmap toOption $ fromMaybe [] (parseConfig <$> mfile)
+            return $ catMaybes <$> fmap toOption $ fromMaybe [] (parseConfig <$> mfile)
         return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]
