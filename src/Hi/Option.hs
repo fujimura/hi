@@ -4,6 +4,7 @@ module Hi.Option
     (
       getOptions
     , getMode
+    , options
     , usage
     ) where
 
@@ -36,6 +37,18 @@ options =
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
     ]
 
+toOption :: (String, String) -> Option
+toOption (key, value) = case key `lookupOption` options of
+                          Just (Option _ _ a _) -> toOption' a value
+                          Nothing               -> error $ "Invalid options \"" ++ key ++ "\" was specified"
+  where
+    lookupOption :: String -> [OptDescr Option] -> Maybe (OptDescr Option)
+    lookupOption k opts = k `lookup` map (\x@(Option _ (longOpt:_) _ _) -> (longOpt,x)) opts
+    toOption' :: ArgDescr Option -> String -> Option
+    -- TODO Specify False with `False`
+    toOption' (NoArg InitializeGitRepository) _ = InitializeGitRepository
+    toOption' (ReqArg f _) val                  = f val
+
 -- | Returns 'Options'.
 getOptions :: IO [Option]
 getOptions = handleError
@@ -55,7 +68,7 @@ getOptions = handleError
     addOptionsFromConfigFile vals = do
         repo <- do
             mfile <- readFileMaybe =<< getConfigFileName
-            return $ fromMaybe [] (parseConfig <$> mfile)
+            return $ fmap toOption $ fromMaybe [] (parseConfig <$> mfile)
         return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]

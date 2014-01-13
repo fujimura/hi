@@ -11,10 +11,10 @@ import           Text.Parsec
 import           Text.Parsec.String
 
 -- | Parse config file and return 'Option's.
-parseConfig :: String -> [Option]
+parseConfig :: String -> [(String, String)]
 parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
       Left  l  -> error $ show l
-      Right xs -> map (uncurry Arg) xs
+      Right xs -> xs
 
 configFile :: Parser [(String, String)]
 configFile = catMaybes <$> many line <* eof
@@ -23,7 +23,7 @@ sep :: Parser Char
 sep = char ':'
 
 name :: Parser String
-name = many (oneOf $ ['a'..'z'] ++ ['A'..'Z'])
+name = many (oneOf $ ['a'..'z'] ++ ['A'..'Z'] ++ ['-'])
 
 eol :: Parser Char
 eol = newline <|> (eof >> return '\n')
