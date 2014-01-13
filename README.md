@@ -6,12 +6,11 @@ Generate scaffold for a Haskell project
 ## Overview
 
 This application generates a scaffold for Haskell project from a Git repository.
-[hi-hspec](https://github.com/fujimura/hi-hspec) will be used as a default template.
+The template can be specified by Git repository. [hi-hspec](https://github.com/fujimura/hi-hspec) will be used as a default template.
 
+## Usage
 
-## Example
-
-With command line option:
+### Basic Example
 
 ```
 $ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
@@ -46,6 +45,8 @@ $ tree .
 8 directories, 7 files
 ```
 
+### Configuration file
+
 If you have a configuration file like:
 
 ```
@@ -79,9 +80,25 @@ $ tree .
 8 directories, 7 files
 ```
 
-## Usage
+### Specifying template
+
+Specifying repository in GitHub has a shorthand like this:
 
 ```
+$ ./dist/build/Hi/hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --repository gh:fujimura/hi-flat
+Creating new project from repository: git@github.com:fujimura/hi-flat.git
+    create  foo-bar-baz/.gitignore
+    create  foo-bar-baz/LICENSE
+    create  foo-bar-baz/Main.hs
+    create  foo-bar-baz/Foo/Bar/Baz.hs
+    create  foo-bar-baz/README.md
+    create  foo-bar-baz/foo-bar-baz.cabal
+```
+
+## Options
+
+```
+$ hi --help
 hi: Usage: hi [OPTION...]
 Generate a haskell project based on a template from github.
 
@@ -110,13 +127,17 @@ email: john@example.com
 initialize-git-repository: True # True or False
 ```
 
-## Available templates
+## Templates
+
+### Available templates at this moment
 
 - [hi-hspec](https://github.com/fujimura/hi-hspec) : Sources in `src`, tests in `test` by [Hspec](https://github.com/hspec/hspec) .
 
 - [hi-flat](https://github.com/fujimura/hi-flat) : Everything is in root directory, like `cabal init`.
 
-## Making your own project template
+Please let me know if you have your own template. I'll add it here.
+
+### How to make your own template
 
 [Template](http://hackage.haskell.org/package/template) is used for templating.
 
