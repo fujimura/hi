@@ -19,8 +19,9 @@ import           Test.Hspec
 
 spec :: Spec
 spec = do
-    describe "with command line options" $
-      around setupWithCommandLineOptions features
+    describe "with command line options" $ do
+      let cmd = setupWithCommandLineOptions [ " -p ", packageName , " -m ", moduleName ]
+      around cmd features
 
     describe "with configuration file" $
       around setupWithConfigurationFile features
@@ -32,11 +33,23 @@ spec = do
 
     describe "with incomplete command line options" $ do
       it "should show error message" $ do
-        (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-m", "Foo"] []
+        (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-p", "foo"] []
         r `shouldContain` "\n (Run with no arguments to see usage)"
 
+    describe "Package name was omitted and module name was given" $ do
+      let cmd = setupWithCommandLineOptions [" -m", "Data.SomethingWeird"]
+
+      around cmd $ do
+      it "should use underscorized and hyphenized moudule name as package namee" $ do
+        doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
+
     describe "with --initialize-git-repository" $ do
-      around (setupWithCommandLineOptions' [" --initialize-git-repository "]) $ do
+      let cmd = setupWithCommandLineOptions [ " --initialize-git-repository "
+                                              , " -p "
+                                              , packageName
+                                              , " -m "
+                                              , moduleName ]
+      around cmd $ do
         it "should initialize it as git repository and make first commit" $ do
           inDirectory "./testapp" $ do
             readProcess "git" ["log", "-1", "--pretty=%s"] [] `shouldReturn` "Initial commit\n"
@@ -148,17 +161,12 @@ setupWithConfigurationFile action = do
     concatLines :: [String] -> String
     concatLines = intercalate "\n"
 
-setupWithCommandLineOptions :: IO () -> IO ()
-setupWithCommandLineOptions = setupWithCommandLineOptions' []
-
-setupWithCommandLineOptions' :: [String] -> IO () -> IO ()
-setupWithCommandLineOptions' opts action = do
+setupWithCommandLineOptions :: [String] -> IO () -> IO ()
+setupWithCommandLineOptions opts action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -p ", packageName
-                             , " -m ", moduleName
                              , " -a ", quote author
                              , " -e ", quote email
                              , " -r file://" ++ pwd ++ "/template"
