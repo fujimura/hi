@@ -1,1 +1,4 @@
 language: haskell
+before_script: 
+  - git config --global user.email "john@example.com"
+  - git config --global user.name "John Doe"
