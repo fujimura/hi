@@ -13,7 +13,7 @@ The template can be specified by Git repository. [hi-hspec](https://github.com/f
 ### Basic Example
 
 ```
-$ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
+$ hi --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
 Creating new project from repository: git://github.com/fujimura/hi-hspec.git
     create  foo-bar-baz/.gitignore
     create  foo-bar-baz/LICENSE
@@ -58,7 +58,7 @@ email: me@fujimuradaisuke.com
 Then options in the configuration file can be omitted:
 
 ```
-$ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz"
+$ hi --module-name "Foo.Bar.Baz"
 $ tree .
 .
 ├── LICENSE
@@ -85,7 +85,7 @@ $ tree .
 Specifying repository in GitHub has a shorthand like this:
 
 ```
-$ ./dist/build/Hi/hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --repository gh:fujimura/hi-flat
+$ ./dist/build/Hi/hi --module-name "Foo.Bar.Baz" --repository gh:fujimura/hi-flat
 Creating new project from repository: git@github.com:fujimura/hi-flat.git
     create  foo-bar-baz/.gitignore
     create  foo-bar-baz/LICENSE
@@ -102,8 +102,8 @@ $ hi --help
 hi: Usage: hi [OPTION...]
 Generate a haskell project based on a template from github.
 
-  -p package-name  --package-name=package-name      Name of package
   -m Module.Name   --module-name=Module.Name        Name of Module
+  -p package-name  --package-name=package-name      Name of package        ( optional )
   -a NAME          --author=NAME                    Name of the project's author
   -e EMAIL         --email=EMAIL                    Email address of the maintainer
   -r REPOSITORY    --repository=REPOSITORY          Template repository    ( optional )
@@ -116,7 +116,7 @@ If repository is not provided, it defaults to the repository at
 git://github.com/fujimura/hi-hspec.git.
 
 Example:
-    hi --package-name 'foo-bar' --module-name 'Foo.Bar' --author 'you' --email 'you@gmail.com'
+    hi --module-name 'Foo.Bar' --author 'you' --email 'you@gmail.com'
 ```
 
 ## Config file format
