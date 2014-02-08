@@ -1,5 +1,9 @@
 # Releases
 
+## 0.0.8
+
+- File in the template which doesn't end with `.template` will be copied without argument substution (Thanks @Zane-XY-W)
+
 ## 0.0.7
 
 - `--no-configuration-file` option was removed.
