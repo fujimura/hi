@@ -55,11 +55,13 @@ showFileList files = do
 --
 -- 2. substitute arguments
 process :: [Option] -> Files -> Files
-process options files = map go $ filter (isTemplate . fst) files
+process options = map go
   where
-    isTemplate path    = ".template" `isSuffixOf` path
-    go (path, content) = (rewritePath options path, substitute' content)
-    substitute' text   = LT.unpack $ substitute (T.pack text) (context options)
+    go (path, content) = if ".template" `isSuffixOf` path
+                           then (rewritePath' path, substitute' content)
+                           else (rewritePath' path, content)
+    rewritePath'     = rewritePath options
+    substitute' text = LT.unpack $ substitute (T.pack text) (context options)
 
 -- | Return 'Context' obtained by given 'Options'
 context :: [Option] -> Context
