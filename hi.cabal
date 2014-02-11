@@ -115,6 +115,7 @@ test-suite spec
       , directory
       , filepath
       , hspec       >= 1.7.2
+      , silently
       , parsec
       , process
       , split

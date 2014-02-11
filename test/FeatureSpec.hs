@@ -15,10 +15,11 @@ import           System.Directory    (createDirectoryIfMissing,
                                       setCurrentDirectory)
 import           System.Process      (readProcess, readProcessWithExitCode,
                                       system)
+import           System.IO.Silently
 import           Test.Hspec
 
 spec :: Spec
-spec = do
+spec = around silence $ do
     describe "with command line options" $ do
       let cmd = setupWithCommandLineOptions [ " -p ", packageName , " -m ", moduleName ]
       around cmd features
