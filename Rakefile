@@ -24,13 +24,17 @@ task :test do
   sh "cabal test"
 end
 
-task :doc => %w|doc:build doc:open|
+desc "Build"
+task :build do
+  sh "cabal install #{build_flags} --only-dependencies"
+  sh "cabal configure"
+  sh "cabal build"
+end
+
+task :doc => %w|doc:haddock doc:open|
 namespace :doc do
   desc "Generate haddock documentation"
-  task :build do
-    sh "cabal install #{build_flags} --only-dependencies"
-    sh "cabal configure"
-    sh "cabal build"
+  task :haddock => :build do
     sh "cabal haddock"
   end
   desc "Open document"
