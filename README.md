@@ -1,4 +1,4 @@
-hi [![Build Status](https://travis-ci.org/fujimura/hi.png?branch=master)](https://travis-ci.org/fujimura/hi)
+hi [![Build Status](https://travis-ci.org/fujimura/hi.png?branch=master)](https://travis-ci.org/fujimura/hi)[![Coverage Status](https://coveralls.io/repos/fujimura/hi/badge.png)](https://coveralls.io/r/fujimura/hi)
 ===========
 
 Generate scaffold for a Haskell project
