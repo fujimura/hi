@@ -74,7 +74,7 @@ library
       , process
       , split
       , template   == 0.2.*
-      , temporary
+      , temporary   < 1.2.0.2
       , text
       , time
 
