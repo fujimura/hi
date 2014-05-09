@@ -75,7 +75,7 @@ library
       , split
       , template   == 0.2.*
       , temporary-rc  == 1.2.0.3
-      , text
+      , text       > 1.0
       , time
 
 executable hi
@@ -95,7 +95,7 @@ executable hi
       , split
       , template   == 0.2.*
       , temporary-rc  == 1.2.0.3
-      , text
+      , text       > 1.0
       , time
 
 test-suite spec
@@ -120,7 +120,7 @@ test-suite spec
       , split
       , template    == 0.2.*
       , temporary-rc   == 1.2.0.3
-      , text
+      , text       > 1.0
       , time
 
 source-repository head
