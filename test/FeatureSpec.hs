@@ -23,6 +23,10 @@ spec = do
       let cmd = setupWithCommandLineOptions [ " -p ", packageName , " -m ", moduleName ]
       around cmd features
 
+    describe "with custom git config" $ do
+      let cmd = setupWithLocalGitConfig [ " -p ", packageName , " -m ", moduleName ]
+      around cmd features
+
     describe "-v" $ do
       it "should show version number" $ do
         r <- readProcess "./dist/build/hi/hi" ["-v"] []
@@ -144,6 +148,19 @@ setupWithCommandLineOptions opts action = do
         _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
                              , " -a ", quote author
                              , " -e ", quote email
+                             , " -r file://" ++ pwd ++ "/template"
+                             ] ++ concat opts
+        action
+
+setupWithLocalGitConfig :: [String] -> IO () -> IO ()
+setupWithLocalGitConfig opts action = do
+    pwd <- getCurrentDirectory
+
+    inTestDirectory $ do
+        _ <- system $ "git init"
+        _ <- system $ "git config user.name" ++ " " ++ quote author
+        _ <- system $ "git config user.email" ++ " " ++ quote email
+        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
                              , " -r file://" ++ pwd ++ "/template"
                              ] ++ concat opts
         action

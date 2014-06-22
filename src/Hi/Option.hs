@@ -14,12 +14,14 @@ import           Hi.Utils
 import           Control.Applicative
 import           Data.Char             (isUpper, toLower)
 import           Data.List             (intercalate)
-import           Data.Maybe            (mapMaybe)
+import           Data.Maybe            (catMaybes, fromMaybe, mapMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
-import           System.Directory      (doesFileExist )
+import           System.Directory      (doesFileExist)
 import qualified System.Environment
+import           System.FilePath       (joinPath)
+import           System.Process        (readProcess)
 
 -- | Available options.
 options :: [OptDescr Option]
@@ -52,6 +54,7 @@ getOptions = handleError
                <$> validateOptions
                =<< addDefaultRepo
                =<< addPackageNameIfMissing
+               =<< addOptionsFromGitConfig
                =<< addYear
                =<< parseOptions
                <$> System.Environment.getArgs
@@ -60,6 +63,16 @@ getOptions = handleError
     addYear vals = do
         y  <- getCurrentYear
         return $ vals ++ [y]
+
+    addOptionsFromGitConfig :: [Option] -> IO [Option]
+    addOptionsFromGitConfig vals = do
+        author <- buildArg "author" . removeNewline <$> readProcess "git" ["config", "user.name"] []
+        email  <- buildArg "email" . removeNewline <$> readProcess "git" ["config", "user.email"] []
+        return $ vals ++ catMaybes [author, email]
+      where
+        buildArg _    ""  = Nothing
+        buildArg name val = Just $ Arg name val
+        removeNewline = reverse . dropWhile (=='\n') . reverse
 
     addDefaultRepo :: [Option] -> IO [Option]
     addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
