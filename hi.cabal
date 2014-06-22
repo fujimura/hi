@@ -52,7 +52,6 @@ description:
 library
   exposed-modules:
       Hi
-      Hi.Config
       Hi.Directory
       Hi.FilePath
       Hi.Git

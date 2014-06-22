@@ -8,20 +8,18 @@ module Hi.Option
     , usage
     ) where
 
-import           Hi.Config             (parseConfig)
 import           Hi.Types
 import           Hi.Utils
 
 import           Control.Applicative
 import           Data.Char             (isUpper, toLower)
 import           Data.List             (intercalate)
-import           Data.Maybe            (fromMaybe, mapMaybe)
+import           Data.Maybe            (mapMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
 import           System.Console.GetOpt
-import           System.Directory      (doesFileExist, getHomeDirectory)
+import           System.Directory      (doesFileExist )
 import qualified System.Environment
-import           System.FilePath       (joinPath)
 
 -- | Available options.
 options :: [OptDescr Option]
@@ -31,7 +29,6 @@ options =
     , Option ['a'] ["author"]             (ReqArg (Arg "author"     ) "NAME"        ) "Name of the project's author"
     , Option ['e'] ["email"]              (ReqArg (Arg "email"      ) "EMAIL"       ) "Email address of the maintainer"
     , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional )"
-    , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
     , Option []    ["initialize-git-repository"] (NoArg InitializeGitRepository)      "Initialize with git repository"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
@@ -55,7 +52,6 @@ getOptions = handleError
                <$> validateOptions
                =<< addDefaultRepo
                =<< addPackageNameIfMissing
-               =<< addOptionsFromConfigFile
                =<< addYear
                =<< parseOptions
                <$> System.Environment.getArgs
@@ -64,13 +60,6 @@ getOptions = handleError
     addYear vals = do
         y  <- getCurrentYear
         return $ vals ++ [y]
-
-    addOptionsFromConfigFile :: [Option] -> IO [Option]
-    addOptionsFromConfigFile vals = do
-        repo <- do
-            mfile <- readFileMaybe =<< getConfigFileName
-            return $ mapMaybe toOption $ fromMaybe [] (parseConfig <$> mfile)
-        return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]
     addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
@@ -97,13 +86,6 @@ getOptions = handleError
     handleError result = case result of
         Left  errors -> error $ (intercalate "\n" errors) ++ "\n (Run with no arguments to see usage)"
         Right x      -> return x
-
--- | Return file contents in Maybe String or Nothing.
---
-readFileMaybe :: FilePath -> IO (Maybe String)
-readFileMaybe f = do
-    e <- doesFileExist f
-    if e then Just <$> readFile f else return Nothing
 
 -- | Returns 'Mode'.
 getMode :: IO Mode
@@ -135,23 +117,8 @@ usage = usageInfo header options ++ footer
              "    hi --module-name 'Foo.Bar' " ++
              "--author 'you' --email 'you@gmail.com'"
 
-defaultConfigFilePath :: IO FilePath
-defaultConfigFilePath = do
-    h <- getHomeDirectory
-    return $ joinPath [h, defaultConfigFileName]
-
-defaultConfigFileName :: FilePath
-defaultConfigFileName = ".hirc"
-
 defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"
-
-getConfigFileName :: IO FilePath
-getConfigFileName = go =<< parseOptions <$> System.Environment.getArgs
-  where
-    go []                       = defaultConfigFilePath
-    go ((Arg "configFile" p):_) = return p
-    go (_:xs)                   = go xs
 
 getCurrentYear :: IO Option
 getCurrentYear  = do

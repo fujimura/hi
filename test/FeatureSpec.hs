@@ -23,9 +23,6 @@ spec = do
       let cmd = setupWithCommandLineOptions [ " -p ", packageName , " -m ", moduleName ]
       around cmd features
 
-    describe "with configuration file" $
-      around setupWithConfigurationFile features
-
     describe "-v" $ do
       it "should show version number" $ do
         r <- readProcess "./dist/build/hi/hi" ["-v"] []
@@ -54,12 +51,11 @@ spec = do
           inDirectory "./testapp" $ do
             readProcess "git" ["log", "-1", "--pretty=%s"] [] `shouldReturn` "Initial commit\n"
 
-packageName, moduleName, author, email, fileName :: String
+packageName, moduleName, author, email :: String
 packageName = "testapp"
 moduleName  = "System.Awesome.Library"
 author      = "Fujimura Daisuke"
 email       = "me@fujimuradaisuke.com"
-fileName    = ".hirc"
 
 features :: Spec
 features = do
@@ -139,27 +135,6 @@ features = do
   describe ".gitignore" $ do
     it "should be made" $  do
       doesFileExist "testapp/.gitignore" `shouldReturn` True
-
-setupWithConfigurationFile :: IO () -> IO ()
-setupWithConfigurationFile action = do
-    pwd <- getCurrentDirectory
-
-    inTestDirectory $ do
-        writeFile fileName $ concatLines
-            [ "author: " ++ author
-            , "email: " ++ email
-            ]
-        pwd' <- getCurrentDirectory
-        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -p ", packageName
-                             , " -m ", moduleName
-                             , " --configuration-file ", pwd' ++ "/" ++ fileName
-                             , " -r file://" ++ pwd ++ "/template"
-                             ]
-        action
-  where
-    concatLines :: [String] -> String
-    concatLines = intercalate "\n"
 
 setupWithCommandLineOptions :: [String] -> IO () -> IO ()
 setupWithCommandLineOptions opts action = do

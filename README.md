@@ -45,41 +45,6 @@ $ tree .
 8 directories, 7 files
 ```
 
-### Configuration file
-
-If you have a configuration file like:
-
-```
-$ cat ~/.hirc
-author: Fujimura Daisuke
-email: me@fujimuradaisuke.com
-```
-
-Then options in the configuration file can be omitted:
-
-```
-$ hi --module-name "Foo.Bar.Baz"
-$ tree .
-.
-├── LICENSE
-├── README.md
-├── foo-bar-baz.cabal
-├── src
-│   └── Foo
-│       └── Bar
-│           ├── Baz
-│           │   └── Internal.hs
-│           └── Baz.hs
-└── test
-    ├── Foo
-    │   └── Bar
-    │       ├── Baz
-    │       └── BazSpec.hs
-    └── Spec.hs
-
-8 directories, 7 files
-```
-
 ### Specifying template
 
 Specifying repository in GitHub has a shorthand like this:
@@ -107,7 +72,6 @@ Generate a haskell project based on a template from github.
   -a NAME          --author=NAME                    Name of the project's author
   -e EMAIL         --email=EMAIL                    Email address of the maintainer
   -r REPOSITORY    --repository=REPOSITORY          Template repository    ( optional )
-                   --configuration-file=CONFIGFILE  Run with configuration file
   -v               --version                        Show version number
                    --initialize-git-repository      Initialize with git repository
   -h               --help                           Display this help and exit
@@ -117,14 +81,6 @@ git://github.com/fujimura/hi-hspec.git.
 
 Example:
     hi --module-name 'Foo.Bar' --author 'you' --email 'you@gmail.com'
-```
-
-## Config file format
-
-```
-author: John Doe
-email: john@example.com
-initialize-git-repository: True # True or False
 ```
 
 ## Templates
