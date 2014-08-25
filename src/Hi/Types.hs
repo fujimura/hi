@@ -4,11 +4,16 @@ module Hi.Types
     ( Label
     , Option(..)
     , Mode(..)
+    , File(..)
     , Files
     , Error
     ) where
 
-type Files = [(FilePath, String)]
+import Data.ByteString (ByteString)
+
+data File = TemplateFile { getFilePath :: FilePath, getFileContents :: ByteString } | RegularFile { getFilePath :: FilePath, getFileContents :: ByteString }
+
+type Files = [File]
 
 type Error = String
 

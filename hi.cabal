@@ -66,16 +66,16 @@ library
   hs-source-dirs:
       src
   build-depends:
-        base       == 4.*
+        base          == 4.*
       , bytestring
       , directory
       , filepath
       , parsec
       , process
       , split
-      , template   == 0.2.*
-      , temporary  >= 1.2.0.3
-      , text       > 1.0
+      , template      == 0.2.*
+      , temporary-rc  >= 1.2.0.3
+      , text          > 1.0
       , time
 
 executable hi

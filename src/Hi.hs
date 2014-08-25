@@ -4,23 +4,25 @@ module Hi
   , process
   ) where
 
-import           Hi.Directory        (inDirectory)
-import           Hi.FilePath         (rewritePath)
-import qualified Hi.Git              as Git
-import           Hi.Template         (readTemplates)
+import           Hi.Directory             (inDirectory)
+import           Hi.FilePath              (rewritePath)
+import qualified Hi.Git                   as Git
+import           Hi.Template              (readTemplates)
 import           Hi.Types
 import           Hi.Utils
 
 import           Control.Applicative
 import           Control.Monad
-import           Data.List           (isSuffixOf)
-import           Data.Maybe          (fromJust)
-import qualified Data.Text           as T
-import qualified Data.Text.Lazy      as LT
-import           Data.Text.Template  (Context, substitute)
-import           System.Directory    (createDirectoryIfMissing)
-import           System.FilePath     (dropFileName)
-import           System.Process      (system)
+import qualified Data.ByteString          as BS (writeFile, concat)
+import qualified Data.ByteString.Lazy     as LBS (toChunks)
+import           Data.Maybe               (fromJust)
+import qualified Data.Text                as T (pack, unpack)
+import           Data.Text.Encoding       (decodeUtf8)
+import           Data.Text.Lazy.Encoding  (encodeUtf8)
+import           Data.Text.Template       (Context, substitute)
+import           System.Directory         (createDirectoryIfMissing)
+import           System.FilePath          (dropFileName)
+import           System.Process           (system)
 
 -- | Run 'hi'.
 run :: [Option] -> IO ()
@@ -33,15 +35,18 @@ run options = do
 
 -- |Write given 'Files' to filesystem.
 writeFiles :: Files -> IO ()
-writeFiles = mapM_ (uncurry write)
-  where
-    write :: FilePath -> String -> IO ()
-    write path content = createDirectoryIfMissing True (dropFileName path) >> writeFile path content
+writeFiles = mapM_ write
+
+write :: File -> IO ()
+write f = let path = getFilePath f
+              contents = getFileContents f
+          in createDirectoryIfMissing True (dropFileName path) >>
+               BS.writeFile path contents
 
 -- | Show 'Files' to stdout.
 showFileList :: Files -> IO Files
 showFileList files = do
-    mapM_ (showFile . fst) files
+    mapM_ (showFile . getFilePath) files
     return files
   where
     showFile :: FilePath -> IO ()
@@ -57,11 +62,11 @@ showFileList files = do
 process :: [Option] -> Files -> Files
 process options = map go
   where
-    go (path, content) = if ".template" `isSuffixOf` path
-                           then (rewritePath' path, substitute' content)
-                           else (rewritePath' path, content)
+    go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
+    go (RegularFile  path content) = RegularFile  (rewritePath' path) content
     rewritePath'     = rewritePath options
-    substitute' text = LT.unpack $ substitute (T.pack text) (context options)
+    substitute' text = BS.concat . LBS.toChunks . encodeUtf8 $
+                        substitute (decodeUtf8 text) (context options)
 
 -- | Return 'Context' obtained by given 'Options'
 context :: [Option] -> Context
