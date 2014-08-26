@@ -186,3 +186,5 @@ testDirectory = "test_project"
 
 quote :: String -> String
 quote s = "\"" ++ s ++ "\""
+
+{-# ANN module "HLint: Redundant do" #-}

@@ -5,9 +5,6 @@ module Hi.Git
     , expandUrl
     ) where
 
-import           Hi.Types
-import           Hi.Utils
-
 import           Control.Applicative
 import           Data.List           (isPrefixOf)
 import           System.Exit         (ExitCode)
