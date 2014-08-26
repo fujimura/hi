@@ -1,6 +1,10 @@
 # Releases
 
-## 0.0.8.1
+## 0.0.8.2
+
+- Only convert template files to text to allow non-textual files to be included in a template repo #38 (Thanks @timmytofu)
+
+## 0.0.8.2
 
 - Fix dependencies
 
