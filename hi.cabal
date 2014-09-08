@@ -66,10 +66,11 @@ library
       src
   build-depends:
         base          == 4.*
+      , ansi-wl-pprint
       , bytestring
       , directory
       , filepath
-      , optparse-applicative
+      , optparse-applicative >= 0.10.0
       , parsec
       , process
       , split
@@ -87,10 +88,11 @@ executable hi
       src
   build-depends:
         base       == 4.*
+      , ansi-wl-pprint
       , bytestring
       , directory
       , filepath
-      , optparse-applicative
+      , optparse-applicative >= 0.10.0
       , parsec
       , process
       , split
@@ -111,13 +113,14 @@ test-suite spec
     , test
   build-depends:
         base
+      , ansi-wl-pprint
       , HUnit
       , bytestring
       , directory
       , doctest
       , filepath
       , hspec       >= 1.7.2
-      , optparse-applicative
+      , optparse-applicative >= 0.10.0
       , parsec
       , process
       , split
