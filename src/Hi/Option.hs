@@ -7,6 +7,7 @@ module Hi.Option
     , buildOption
     ) where
 
+import qualified Hi.Git                as Git
 import           Hi.Option.Commandline (CommandLineOption)
 import qualified Hi.Option.Commandline as CommandLineOption
 import           Hi.Types
@@ -16,7 +17,6 @@ import           Data.Char             (isUpper, toLower)
 import           Data.Maybe            (fromMaybe)
 import           Data.Time.Calendar    (toGregorian)
 import           Data.Time.Clock       (getCurrentTime, utctDay)
-import           System.Process        (readProcess)
 
 buildOption :: CommandLineOption -> IO Option
 buildOption copt = do
@@ -47,9 +47,8 @@ buildOption copt = do
     hyphenize' (x:xs) | isUpper x = '-':toLower x:hyphenize' xs
                       |  x == '.' = '-':hyphenize' xs
                       | otherwise = x:hyphenize' xs
-    guessAuthor = removeNewline <$> readProcess "git" ["config", "user.name"] []
-    guessEmail = removeNewline <$> readProcess "git" ["config", "user.email"] []
-    removeNewline = reverse . dropWhile (=='\n') . reverse
+    guessAuthor = Git.config "user.name"
+    guessEmail = Git.config "user.email"
     getCurrentYear  = do
         (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
         return $ show y
