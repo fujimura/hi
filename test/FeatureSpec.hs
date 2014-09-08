@@ -32,11 +32,6 @@ spec = do
         r <- readProcess "./dist/build/hi/hi" ["-v"] []
         r `shouldBe` version ++ "\n"
 
-    describe "with incomplete command line options" $ do
-      it "should show error message" $ do
-        (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-p", "foo"] []
-        r `shouldContain` "\n (Run with no arguments to see usage)"
-
     describe "Package name was omitted and module name was given" $ do
       let cmd = setupWithCommandLineOptions [" -m", "Data.SomethingWeird"]
 
