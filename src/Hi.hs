@@ -1,3 +1,4 @@
+{-# LANGUAGE NamedFieldPuns, RecordWildCards #-}
 module Hi
   (
     run
@@ -9,7 +10,6 @@ import           Hi.FilePath              (rewritePath)
 import qualified Hi.Git                   as Git
 import           Hi.Template              (readTemplates)
 import           Hi.Types
-import           Hi.Utils
 
 import           Control.Applicative
 import           Control.Monad
@@ -25,13 +25,11 @@ import           System.FilePath          (dropFileName)
 import           System.Process           (system)
 
 -- | Run 'hi'.
-run :: [Option] -> IO ()
-run options = do
+run :: Option -> IO ()
+run option@(Option {repository}) = do
     putStrLn $ "Creating new project from repository: " ++ Git.expandUrl repository
-    writeFiles =<< showFileList =<< process options <$> readTemplates repository
-    postProcess options
-  where
-    repository = fromJust $ lookupArg "repository" options
+    writeFiles =<< showFileList =<< process option <$> readTemplates repository
+    postProcess option
 
 -- |Write given 'Files' to filesystem.
 writeFiles :: Files -> IO ()
@@ -59,23 +57,30 @@ showFileList files = do
 -- 1. rewrite path
 --
 -- 2. substitute arguments
-process :: [Option] -> Files -> Files
-process options = map go
+process :: Option -> Files -> Files
+process Option {..} = map go
   where
     go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
     go (RegularFile  path content) = RegularFile  (rewritePath' path) content
-    rewritePath'     = rewritePath options
+    rewritePath'     = rewritePath packageName moduleName
     substitute' text = BS.concat . LBS.toChunks . encodeUtf8 $
                         substitute (decodeUtf8 text) (context options)
+    options          = [("packageName", packageName)
+                       ,("moduleName", moduleName)
+                       ,("author", author)
+                       ,("email", email)
+                       ,("year", year)
+                       ,("repository", repository)
+                       ]
 
 -- | Return 'Context' obtained by given 'Options'
-context :: [Option] -> Context
-context options x = T.pack (fromJust $ lookup (T.unpack x) [(k,v) | (Arg k v) <- options])
+context :: [(String, String)] -> Context
+context opts x = T.pack . fromJust $ lookup (T.unpack x) opts
 
-postProcess :: [Option] -> IO ()
-postProcess options = do
-    when (InitializeGitRepository `elem` options) $
+postProcess :: Option -> IO ()
+postProcess Option {initializeGitRepository, packageName} = do
+    when initializeGitRepository $
       -- TODO This wont' work unless template has `package-name` as root dir.
-      inDirectory (fromJust $ lookupArg "packageName" options) $
+      inDirectory packageName $
         void $ system "git init && git add . && git commit -m \"Initial commit\""
     return ()

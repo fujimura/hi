@@ -56,9 +56,9 @@ library
       Hi.FilePath
       Hi.Git
       Hi.Option
+      Hi.Option.Commandline
       Hi.Template
       Hi.Types
-      Hi.Utils
       Hi.Version
   ghc-options:
       -Wall
@@ -69,6 +69,7 @@ library
       , bytestring
       , directory
       , filepath
+      , optparse-applicative
       , parsec
       , process
       , split
@@ -89,6 +90,7 @@ executable hi
       , bytestring
       , directory
       , filepath
+      , optparse-applicative
       , parsec
       , process
       , split
@@ -115,6 +117,7 @@ test-suite spec
       , doctest
       , filepath
       , hspec       >= 1.7.2
+      , optparse-applicative
       , parsec
       , process
       , split

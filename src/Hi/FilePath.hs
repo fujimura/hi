@@ -5,7 +5,6 @@ module Hi.FilePath
 
 import           Hi.Template     (untemplate)
 import           Hi.Types
-import           Hi.Utils
 
 import           Data.List
 import           Data.List.Split (splitOn)
@@ -13,12 +12,12 @@ import           Data.Maybe      (fromJust)
 import           System.FilePath (joinPath)
 
 -- | Convert given path to the destination path, with given options.
-rewritePath :: [Option] -> FilePath -> FilePath
-rewritePath options =
+rewritePath :: String -> String -> FilePath -> FilePath
+rewritePath packageName moduleName =
     rename1 . rename2 . untemplate
   where
-    rename1 = replace "package-name" $ fromJust $ lookupArg "packageName" options
-    rename2 = replace "ModuleName" $ toDir . fromJust $ lookupArg "moduleName" options
+    rename1 = replace "package-name" packageName
+    rename2 = replace "ModuleName" $ toDir moduleName
 
 -- | Convert module name to path
 -- @
