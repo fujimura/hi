@@ -1,10 +1,13 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module FeatureSpec ( spec ) where
 
-import           Hi.Version          (version)
+import           Cli                 as Cli
 import           Hi.Directory        (inDirectory)
+import           Hi.Version          (version)
 
 import           Control.Applicative
-import           Control.Exception   (bracket_)
+import           Control.Exception   (bracket_, catch, throwIO)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
 import           System.Directory    (createDirectoryIfMissing,
@@ -12,41 +15,46 @@ import           System.Directory    (createDirectoryIfMissing,
                                       getCurrentDirectory,
                                       removeDirectoryRecursive,
                                       setCurrentDirectory)
+import           System.Exit         (ExitCode (..))
+import           System.IO.Silently  (capture)
 import           System.Process      (readProcess, system)
 import           Test.Hspec
 
 spec :: Spec
 spec = do
     describe "with command line options" $ do
-      let cmd = setupWithCommandLineOptions [ " -p ", packageName , " -m ", moduleName ]
+      let cmd = runWithCommandLineOptions [ "-p", packageName , "-m", moduleName ]
       around cmd features
 
     describe "with custom git config" $ do
-      let cmd = setupWithLocalGitConfig [ " -p ", packageName , " -m ", moduleName ]
+      let cmd = runWithLocalGitConfig [ "-p", packageName , "-m", moduleName ]
       around cmd features
 
-    describe "-v" $ do
-      it "should show version number" $ do
-        r <- readProcess "./dist/build/hi/hi" ["-v"] []
-        r `shouldBe` version ++ "\n"
-
     describe "Package name was omitted and module name was given" $ do
-      let cmd = setupWithCommandLineOptions [" -m", "Data.SomethingWeird"]
+      let cmd = runWithCommandLineOptions ["-m", "Data.SomethingWeird"]
 
       around cmd $ do
-      it "should use underscorized and hyphenized moudule name as package namee" $ do
-        doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
+        it "should use underscorized and hyphenized moudule name as package namee" $ do
+          doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
 
     describe "with --initialize-git-repository" $ do
-      let cmd = setupWithCommandLineOptions [ " --initialize-git-repository "
-                                              , " -p "
+      let cmd = runWithCommandLineOptions [ "--initialize-git-repository"
+                                              , "-p"
                                               , packageName
-                                              , " -m "
+                                              , "-m"
                                               , moduleName ]
       around cmd $ do
         it "should initialize it as git repository and make first commit" $ do
           inDirectory "./testapp" $ do
             readProcess "git" ["log", "-1", "--pretty=%s"] [] `shouldReturn` "Initial commit\n"
+
+    describe "-v" $ do
+      it "should show version number" $ do
+        let handle ExitSuccess   = return ()
+            handle e             = throwIO e
+
+        (res,_) <- capture $ Cli.runWithArgs ["-v"] `catch` handle
+        res `shouldBe` version ++ "\n"
 
 packageName, moduleName, author, email :: String
 packageName = "testapp"
@@ -133,29 +141,29 @@ features = do
     it "should be made" $  do
       doesFileExist "testapp/.gitignore" `shouldReturn` True
 
-setupWithCommandLineOptions :: [String] -> IO () -> IO ()
-setupWithCommandLineOptions opts action = do
+runWithCommandLineOptions :: [String] -> IO () -> IO ()
+runWithCommandLineOptions opts action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
-        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -a ", quote author
-                             , " -e ", quote email
-                             , " -r file://" ++ pwd ++ "/template"
-                             ] ++ concat opts
-        action
+      Cli.runWithArgs $ opts ++ [ "-a", quote author
+                                , "-e", quote email
+                                , "-r file://" ++ pwd ++ "/template"
+                                ]
+      action
 
-setupWithLocalGitConfig :: [String] -> IO () -> IO ()
-setupWithLocalGitConfig opts action = do
+runWithLocalGitConfig :: [String] -> IO () -> IO ()
+runWithLocalGitConfig opts action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
         _ <- system $ "git config user.email" ++ " " ++ quote email
-        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -r file://" ++ pwd ++ "/template"
-                             ] ++ concat opts
+        Cli.runWithArgs $ opts ++ [ "-a", quote author
+                                  , "-e", quote email
+                                  , "-r file://" ++ pwd ++ "/template"
+                                  ]
         action
 
 inTestDirectory :: IO () -> IO ()

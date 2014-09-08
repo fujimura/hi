@@ -81,7 +81,7 @@ library
 
 executable hi
   main-is:
-      Main.hs
+      Cli.hs
   ghc-options:
       -Wall
   hs-source-dirs:
@@ -123,6 +123,7 @@ test-suite spec
       , optparse-applicative >= 0.10.0
       , parsec
       , process
+      , silently
       , split
       , template    == 0.2.*
       , temporary   == 1.2.0.3
