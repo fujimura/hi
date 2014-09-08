@@ -4,6 +4,8 @@ module Cli
   ) where
 
 import qualified Hi
+import           Hi.CommandLineOption         (CommandLineOption,
+                                               commandLineOption)
 import           Hi.Option                    (buildOption, defaultRepo)
 import qualified Hi.Version                   as Version
 

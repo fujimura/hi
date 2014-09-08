@@ -56,7 +56,7 @@ library
       Hi.FilePath
       Hi.Git
       Hi.Option
-      Hi.Option.Commandline
+      Hi.CommandLineOption
       Hi.Template
       Hi.Types
       Hi.Version

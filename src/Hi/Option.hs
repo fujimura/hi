@@ -7,16 +7,16 @@ module Hi.Option
     , buildOption
     ) where
 
-import qualified Hi.Git                as Git
-import           Hi.Option.Commandline (CommandLineOption)
-import qualified Hi.Option.Commandline as CommandLineOption
+import           Hi.CommandLineOption (CommandLineOption)
+import qualified Hi.CommandLineOption as CommandLineOption
+import qualified Hi.Git               as Git
 import           Hi.Types
 
 import           Control.Applicative
-import           Data.Char             (isUpper, toLower)
-import           Data.Maybe            (fromMaybe)
-import           Data.Time.Calendar    (toGregorian)
-import           Data.Time.Clock       (getCurrentTime, utctDay)
+import           Data.Char            (isUpper, toLower)
+import           Data.Maybe           (fromMaybe)
+import           Data.Time.Calendar   (toGregorian)
+import           Data.Time.Clock      (getCurrentTime, utctDay)
 
 buildOption :: CommandLineOption -> IO Option
 buildOption copt = do

@@ -1,4 +1,4 @@
-module Hi.Option.Commandline
+module Hi.CommandLineOption
   ( CommandLineOption(..)
   , commandLineOption
   ) where
