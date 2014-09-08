@@ -5,7 +5,6 @@ import           Hi.Directory        (inDirectory)
 
 import           Control.Applicative
 import           Control.Exception   (bracket_)
-import           Data.List           (intercalate)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
 import           System.Directory    (createDirectoryIfMissing,
@@ -13,8 +12,7 @@ import           System.Directory    (createDirectoryIfMissing,
                                       getCurrentDirectory,
                                       removeDirectoryRecursive,
                                       setCurrentDirectory)
-import           System.Process      (readProcess, readProcessWithExitCode,
-                                      system)
+import           System.Process      (readProcess, system)
 import           Test.Hspec
 
 spec :: Spec

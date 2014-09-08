@@ -4,11 +4,9 @@ module Hi.FilePath
     ) where
 
 import           Hi.Template     (untemplate)
-import           Hi.Types
 
 import           Data.List
 import           Data.List.Split (splitOn)
-import           Data.Maybe      (fromJust)
 import           System.FilePath (joinPath)
 
 -- | Convert given path to the destination path, with given options.
