@@ -16,7 +16,8 @@ import           System.Directory    (createDirectoryIfMissing,
                                       removeDirectoryRecursive,
                                       setCurrentDirectory)
 import           System.Exit         (ExitCode (..))
-import           System.IO.Silently  (capture)
+import           System.IO           (stdout)
+import           System.IO.Silently  (capture, hSilence)
 import           System.Process      (readProcess, system)
 import           Test.Hspec
 
@@ -145,7 +146,7 @@ runWithCommandLineOptions :: [String] -> IO () -> IO ()
 runWithCommandLineOptions opts action = do
     pwd <- getCurrentDirectory
 
-    inTestDirectory $ do
+    inTestDirectory $ hSilence [stdout] $ do
       Cli.run $ opts ++ [ "-a", quote author
                         , "-e", quote email
                         , "-r file://" ++ pwd ++ "/template"
@@ -156,7 +157,7 @@ runWithLocalGitConfig :: [String] -> IO () -> IO ()
 runWithLocalGitConfig opts action = do
     pwd <- getCurrentDirectory
 
-    inTestDirectory $ do
+    inTestDirectory $ hSilence [stdout] $ do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
         _ <- system $ "git config user.email" ++ " " ++ quote email
