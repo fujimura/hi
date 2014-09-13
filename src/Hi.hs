@@ -21,7 +21,7 @@ import           Data.Text.Encoding       (decodeUtf8)
 import           Data.Text.Lazy.Encoding  (encodeUtf8)
 import           Data.Text.Template       (Context, substitute)
 import           System.Directory         (createDirectoryIfMissing)
-import           System.FilePath          (dropFileName)
+import           System.FilePath          (dropFileName, joinPath, splitPath)
 import           System.Process           (system)
 
 -- | Run 'hi'.
@@ -62,7 +62,7 @@ process Option {..} = map go
   where
     go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
     go (RegularFile  path content) = RegularFile  (rewritePath' path) content
-    rewritePath'     = rewritePath packageName moduleName
+    rewritePath' path = joinPath $ packageName:(splitPath $ rewritePath packageName moduleName path)
     substitute' text = BS.concat . LBS.toChunks . encodeUtf8 $
                         substitute (decodeUtf8 text) (context options)
     options          = [("packageName", packageName)

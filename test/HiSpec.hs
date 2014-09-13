@@ -34,29 +34,29 @@ spec =
       context "Option `packageName` was given and it's in the template" $
         it "should be replaced with the value" $
           let files = process options [TemplateFile "dummy.template" "Foo $packageName bar, \n"] in
-          fromJust (lookupContent "dummy" files) `shouldContain` packageName options
+          fromJust (lookupContent "testapp/dummy" files) `shouldContain` packageName options
 
       context "Option `moduleName` was given and it's in the template" $
         it "should be replaced with the value" $
           let files = process options [TemplateFile "dummy.template" "Foo $moduleName bar, \n"] in
-          fromJust (lookupContent "dummy" files) `shouldContain` moduleName options
+          fromJust (lookupContent "testapp/dummy" files) `shouldContain` moduleName options
 
       context "Option `author` was given and it's in the template" $
         it "should be replaced with the value" $
           let files = process options [TemplateFile "dummy.template" "Foo $author bar, \n"] in
-          fromJust (lookupContent "dummy" files) `shouldContain` author options
+          fromJust (lookupContent "testapp/dummy" files) `shouldContain` author options
 
       context "Option `email` was given and it's in the template" $
         it "should be replaced with the value" $
           let files = process options [TemplateFile "dummy.template" "Foo $email bar, \n"] in
-          fromJust (lookupContent "dummy" files) `shouldContain` email options
+          fromJust (lookupContent "testapp/dummy" files) `shouldContain` email options
 
       context "`ModuleName` was given and `moduleName` is in the file path" $
         it "should be replaced with given value, replacing period with path separator" $
           let files = process (options { moduleName = "Bar"}) [TemplateFile "foo/ModuleName/File.hs.template" "module Foo\n"] in
-          lookupContent "foo/Bar/File.hs" files `shouldSatisfy` isJust
+          lookupContent "testapp/foo/Bar/File.hs" files `shouldSatisfy` isJust
 
       describe "file without .template" $
         it "should be copied without substitution" $
           let files = process (options {moduleName = "Bar"}) [RegularFile "ModuleName/Foofile" "foo: $bar\n"] in
-          lookupContent "Bar/Foofile" files `shouldBe` Just "foo: $bar\n"
+          lookupContent "testapp/Bar/Foofile" files `shouldBe` Just "foo: $bar\n"
