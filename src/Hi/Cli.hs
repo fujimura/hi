@@ -6,6 +6,7 @@ import qualified Hi
 import           Hi.CommandLineOption         (CommandLineOption,
                                                commandLineOption)
 import           Hi.Option                    (buildOption, defaultRepo)
+import           Hi.Types
 import qualified Hi.Version                   as Version
 
 import           Data.Monoid                  (mempty)
@@ -14,7 +15,10 @@ import qualified Text.PrettyPrint.ANSI.Leijen as PP
 
 run :: [String] -> IO ()
 run []   = showHelpText (prefs idm) opts
-run args = (handleParseResult $ execParserPure (prefs idm) opts args) >>= buildOption >>= Hi.run
+run args = parseArgs args >>= Hi.run
+
+parseArgs :: [String] -> IO Option
+parseArgs args = (handleParseResult $ execParserPure (prefs idm) opts args) >>= buildOption
 
 opts :: ParserInfo CommandLineOption
 opts = info (helper <*> (version <*> commandLineOption))
