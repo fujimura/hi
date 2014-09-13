@@ -52,6 +52,7 @@ description:
 library
   exposed-modules:
       Hi
+      Hi.Cli
       Hi.Directory
       Hi.FilePath
       Hi.Git
@@ -81,7 +82,7 @@ library
 
 executable hi
   main-is:
-      Cli.hs
+      Main.hs
   ghc-options:
       -Wall
   hs-source-dirs:

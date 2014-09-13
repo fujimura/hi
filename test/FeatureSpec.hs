@@ -2,7 +2,7 @@
 
 module FeatureSpec ( spec ) where
 
-import           Cli                 as Cli
+import qualified Hi.Cli              as Cli
 import           Hi.Directory        (inDirectory)
 import           Hi.Version          (version)
 
@@ -39,10 +39,10 @@ spec = do
 
     describe "with --initialize-git-repository" $ do
       let cmd = runWithCommandLineOptions [ "--initialize-git-repository"
-                                              , "-p"
-                                              , packageName
-                                              , "-m"
-                                              , moduleName ]
+                                          , "-p"
+                                          , packageName
+                                          , "-m"
+                                          , moduleName ]
       around cmd $ do
         it "should initialize it as git repository and make first commit" $ do
           inDirectory "./testapp" $ do
@@ -53,7 +53,7 @@ spec = do
         let handle ExitSuccess   = return ()
             handle e             = throwIO e
 
-        (res,_) <- capture $ Cli.runWithArgs ["-v"] `catch` handle
+        (res,_) <- capture $ Cli.run ["-v"] `catch` handle
         res `shouldBe` version ++ "\n"
 
 packageName, moduleName, author, email :: String
@@ -146,10 +146,10 @@ runWithCommandLineOptions opts action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
-      Cli.runWithArgs $ opts ++ [ "-a", quote author
-                                , "-e", quote email
-                                , "-r file://" ++ pwd ++ "/template"
-                                ]
+      Cli.run $ opts ++ [ "-a", quote author
+                        , "-e", quote email
+                        , "-r file://" ++ pwd ++ "/template"
+                        ]
       action
 
 runWithLocalGitConfig :: [String] -> IO () -> IO ()
@@ -160,10 +160,10 @@ runWithLocalGitConfig opts action = do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
         _ <- system $ "git config user.email" ++ " " ++ quote email
-        Cli.runWithArgs $ opts ++ [ "-a", quote author
-                                  , "-e", quote email
-                                  , "-r file://" ++ pwd ++ "/template"
-                                  ]
+        Cli.run $ opts ++ [ "-a", quote author
+                          , "-e", quote email
+                          , "-r file://" ++ pwd ++ "/template"
+                          ]
         action
 
 inTestDirectory :: IO () -> IO ()

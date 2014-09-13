@@ -1,6 +1,5 @@
-module Cli
-  ( main
-  , runWithArgs
+module Hi.Cli
+  ( run
   ) where
 
 import qualified Hi
@@ -11,15 +10,11 @@ import qualified Hi.Version                   as Version
 
 import           Data.Monoid                  (mempty)
 import           Options.Applicative
-import           System.Environment           (getArgs)
 import qualified Text.PrettyPrint.ANSI.Leijen as PP
 
-main :: IO ()
-main = getArgs >>= runWithArgs
-
-runWithArgs :: [String] -> IO ()
-runWithArgs []   = showHelpText (prefs idm) opts
-runWithArgs args = (handleParseResult $ execParserPure (prefs idm) opts args) >>= buildOption >>= Hi.run
+run :: [String] -> IO ()
+run []   = showHelpText (prefs idm) opts
+run args = (handleParseResult $ execParserPure (prefs idm) opts args) >>= buildOption >>= Hi.run
 
 opts :: ParserInfo CommandLineOption
 opts = info (helper <*> (version <*> commandLineOption))
