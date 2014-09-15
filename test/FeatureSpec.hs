@@ -144,8 +144,6 @@ features = do
 
 runWithCommandLineOptions :: [String] -> IO () -> IO ()
 runWithCommandLineOptions opts action = do
-    pwd <- getCurrentDirectory
-
     inTestDirectory $ hSilence [stdout] $ do
       Cli.run $ opts ++ [ "-a", quote author
                         , "-e", quote email
@@ -155,8 +153,6 @@ runWithCommandLineOptions opts action = do
 
 runWithLocalGitConfig :: [String] -> IO () -> IO ()
 runWithLocalGitConfig opts action = do
-    pwd <- getCurrentDirectory
-
     inTestDirectory $ hSilence [stdout] $ do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
