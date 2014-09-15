@@ -11,12 +11,12 @@ import           Test.Hspec
 
 options :: Option
 options = Option { initializeGitRepository = True
-                  , packageName = "testapp"
-                  , moduleName = "System.Awesome.Library"
-                  , author     = "Fujimura Daisuke"
-                  , email      = "me@fujimuradaisuke.com"
-                  , repository = "file://somewhere"
-                  , year       = "2014"
+                  , packageName    = "testapp"
+                  , moduleName     = "System.Awesome.Library"
+                  , author         = "Fujimura Daisuke"
+                  , email          = "me@fujimuradaisuke.com"
+                  , templateSource = FromRepo "file://somewhere"
+                  , year           = "2014"
                   }
 
 lookupContent :: FilePath -> Files -> Maybe String

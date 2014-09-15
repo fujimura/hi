@@ -27,12 +27,12 @@ buildOption copt = do
     author <- guessAuthor
     email <- guessEmail
     return  Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
-                    , moduleName    = cModuleName
-                    , packageName   = fromMaybe packageName $ CommandLineOption.packageName copt
-                    , author        = fromMaybe author $ CommandLineOption.author copt
-                    , email         = fromMaybe email $ CommandLineOption.email copt
-                    , repository    = fromMaybe defaultRepo $ CommandLineOption.repository copt
-                    , year          = year
+                    , moduleName     = cModuleName
+                    , packageName    = fromMaybe packageName $ CommandLineOption.packageName copt
+                    , author         = fromMaybe author $ CommandLineOption.author copt
+                    , email          = fromMaybe email $ CommandLineOption.email copt
+                    , templateSource = fromMaybe BuiltInHSpec $ FromRepo <$> CommandLineOption.repository copt
+                    , year           = year
                     }
   where
     cModuleName = CommandLineOption.moduleName copt

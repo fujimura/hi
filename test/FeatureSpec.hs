@@ -147,7 +147,6 @@ runWithCommandLineOptions opts action = do
     inTestDirectory $ hSilence [stdout] $ do
       Cli.run $ opts ++ [ "-a", quote author
                         , "-e", quote email
-                        , "-r file://" ++ pwd ++ "/template"
                         ]
       action
 
@@ -159,7 +158,6 @@ runWithLocalGitConfig opts action = do
         _ <- system $ "git config user.email" ++ " " ++ quote email
         Cli.run $ opts ++ [ "-a", quote author
                           , "-e", quote email
-                          , "-r file://" ++ pwd ++ "/template"
                           ]
         action
 

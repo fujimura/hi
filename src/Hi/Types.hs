@@ -4,11 +4,14 @@ module Hi.Types
     ( Option(..)
     , File(..)
     , Files
+    , TemplateSource (..)
     ) where
 
 import Data.ByteString (ByteString)
 
-data File = TemplateFile { getFilePath :: FilePath, getFileContents :: ByteString } | RegularFile { getFilePath :: FilePath, getFileContents :: ByteString }
+data File = TemplateFile { getFilePath :: FilePath, getFileContents :: ByteString } | RegularFile { getFilePath :: FilePath, getFileContents :: ByteString } deriving (Show)
+
+data TemplateSource = FromRepo String | BuiltInHSpec | BuiltInFlat deriving (Eq,Ord,Show)
 
 type Files = [File]
 
@@ -19,5 +22,5 @@ data Option = Option
              , author :: String
              , email :: String
              , year :: String
-             , repository :: String
+             , templateSource :: TemplateSource
              } deriving (Eq,Ord,Show)

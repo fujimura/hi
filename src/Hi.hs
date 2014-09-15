@@ -21,15 +21,19 @@ import           Data.Text.Encoding       (decodeUtf8)
 import           Data.Text.Lazy.Encoding  (encodeUtf8)
 import           Data.Text.Template       (Context, substitute)
 import           System.Directory         (createDirectoryIfMissing)
-import           System.FilePath          (dropFileName, joinPath, splitPath)
+import           System.FilePath          (dropFileName, joinPath, splitPath, normalise)
 import           System.Process           (system)
 
 -- | Run 'hi'.
 run :: Option -> IO ()
-run option@(Option {repository}) = do
-    putStrLn $ "Creating new project from repository: " ++ Git.expandUrl repository
-    writeFiles =<< showFileList =<< process option <$> readTemplates repository
+run option@(Option {templateSource}) = do
+    putStrLn $ "Creating new project with " ++ sourceName templateSource
+    writeFiles =<< showFileList =<< process option <$> readTemplates templateSource
     postProcess option
+  where
+    sourceName (FromRepo repository) = "git repository:" ++ Git.expandUrl repository
+    sourceName BuiltInHSpec          = "built in template: HSpec"
+    sourceName BuiltInFlat           = "built in template: Flat"
 
 -- |Write given 'Files' to filesystem.
 writeFiles :: Files -> IO ()
@@ -44,7 +48,7 @@ write f = let path = getFilePath f
 -- | Show 'Files' to stdout.
 showFileList :: Files -> IO Files
 showFileList files = do
-    mapM_ (showFile . getFilePath) files
+    mapM_ (showFile . normalise. getFilePath) files
     return files
   where
     showFile :: FilePath -> IO ()
@@ -70,7 +74,6 @@ process Option {..} = map go
                        ,("author", author)
                        ,("email", email)
                        ,("year", year)
-                       ,("repository", repository)
                        ]
 
 -- | Return 'Context' obtained by given 'Options'
