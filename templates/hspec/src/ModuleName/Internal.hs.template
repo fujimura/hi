@@ -1,0 +1,3 @@
+module $moduleName.Internal
+    (
+    ) where
