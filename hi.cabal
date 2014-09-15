@@ -9,6 +9,27 @@ category:            Distribution
 build-type:          Simple
 cabal-version:       >=1.8
 homepage:            https://github.com/fujimura/hi
+data-files:
+    templates/flat/.gitignore.template
+    templates/flat/LICENSE.template
+    templates/flat/Main.hs.template
+    templates/flat/ModuleName.hs.template
+    templates/flat/README.md.template
+    templates/flat/package-name.cabal.template
+    templates/flat/package-name/LICENSE.template
+    templates/flat/package-name/Main.hs.template
+    templates/flat/package-name/ModuleName.hs.template
+    templates/flat/package-name/README.md.template
+    templates/flat/package-name/package-name.cabal.template
+    templates/hspec/.gitignore.template
+    templates/hspec/LICENSE.template
+    templates/hspec/README.md
+    templates/hspec/README.md.template
+    templates/hspec/package-name.cabal.template
+    templates/hspec/src/ModuleName.hs.template
+    templates/hspec/src/ModuleName/Internal.hs.template
+    templates/hspec/test/ModuleNameSpec.hs.template
+    templates/hspec/test/Spec.hs.template
 description:
     This application generates a scaffold for Haskell project from a Git repository.
 
@@ -65,6 +86,8 @@ library
       -Wall
   hs-source-dirs:
       src
+  other-modules:
+      Paths_hi
   build-depends:
         base          == 4.*
       , ansi-wl-pprint
