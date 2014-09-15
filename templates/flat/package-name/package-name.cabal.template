@@ -1,0 +1,20 @@
+Name:                   $packageName
+Version:                0.0.0
+Author:                 $author<$email>
+Maintainer:             $author<$email>
+License:                BSD3
+License-File:           LICENSE
+-- Synopsis:               
+-- Description:            
+Cabal-Version:          >= 1.10
+Build-Type:             Simple
+
+Executable $packageName
+  Main-Is:              Main.hs
+  Default-Language:     Haskell2010
+  GHC-Options:          -Wall
+  Build-Depends:        base >= 4 && < 5
+
+Source-Repository head
+  Type:                 git
+--  Location:             
