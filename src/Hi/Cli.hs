@@ -7,11 +7,13 @@ import           Hi.CommandLineOption         (CommandLineOption,
                                                commandLineOption)
 import           Hi.Option                    (buildOption, defaultRepo)
 import           Hi.Types
-import qualified Hi.Version                   as Version
 
 import           Data.Monoid                  (mempty)
+import           Data.Version                 (showVersion)
 import           Options.Applicative
 import qualified Text.PrettyPrint.ANSI.Leijen as PP
+
+import qualified Paths_hi                     (version)
 
 run :: [String] -> IO ()
 run []   = showHelpText (prefs idm) opts
@@ -36,7 +38,7 @@ footerText = unlines [ ""
                      ]
 
 version :: Parser (a -> a)
-version = infoOption Version.version
+version = infoOption (showVersion Paths_hi.version)
   (  short 'v'
   <> long "version"
   <> help "Print version information" )
