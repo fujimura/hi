@@ -81,7 +81,6 @@ library
       Hi.CommandLineOption
       Hi.Template
       Hi.Types
-      Hi.Version
   ghc-options:
       -Wall
   hs-source-dirs:

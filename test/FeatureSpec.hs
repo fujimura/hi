@@ -4,12 +4,12 @@ module FeatureSpec ( spec ) where
 
 import qualified Hi.Cli              as Cli
 import           Hi.Directory        (inDirectory)
-import           Hi.Version          (version)
 
 import           Control.Applicative
 import           Control.Exception   (bracket_, catch, throwIO)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
+import           Data.Version        (showVersion)
 import           System.Directory    (createDirectoryIfMissing,
                                       doesDirectoryExist, doesFileExist,
                                       getCurrentDirectory,
@@ -20,6 +20,8 @@ import           System.IO           (stdout)
 import           System.IO.Silently  (capture, hSilence)
 import           System.Process      (readProcess, system)
 import           Test.Hspec
+
+import           Paths_hi            (version)
 
 spec :: Spec
 spec = do
@@ -55,7 +57,7 @@ spec = do
             handle e             = throwIO e
 
         (res,_) <- capture $ Cli.run ["-v"] `catch` handle
-        res `shouldBe` version ++ "\n"
+        res `shouldBe` (showVersion version) ++ "\n"
 
 packageName, moduleName, author, email :: String
 packageName = "testapp"
