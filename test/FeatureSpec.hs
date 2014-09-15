@@ -158,9 +158,7 @@ runWithLocalGitConfig opts action = do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
         _ <- system $ "git config user.email" ++ " " ++ quote email
-        Cli.run $ opts ++ [ "-a", quote author
-                          , "-e", quote email
-                          ]
+        Cli.run opts
         action
 
 inTestDirectory :: IO () -> IO ()
