@@ -1,13 +1,19 @@
 language: haskell
 
+before_install:
+  - cabal sandbox init
+  - cabal install hpc-coveralls -j --bindir=$HOME/.cabal/bin/
+  - cabal sandbox delete
+  - cabal sandbox init
+
 before_script:
   - git config --global user.email "john@example.com"
   - git config --global user.name "John Doe"
 
-before_install:
-  - cabal install hpc-coveralls
 script:
   - cabal configure --enable-tests --enable-library-coverage && cabal build
-  - run-cabal-test --show-details=always
+  - run-cabal-test spec --show-details=always
+  - cabal test doctests
+
 after_script:
   - hpc-coveralls spec --exclude-dir=test
