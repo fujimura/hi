@@ -31,7 +31,7 @@ buildOption copt = do
                     , packageName    = fromMaybe packageName $ CommandLineOption.packageName copt
                     , author         = fromMaybe author $ CommandLineOption.author copt
                     , email          = fromMaybe email $ CommandLineOption.email copt
-                    , templateSource = fromMaybe BuiltInHSpec $ FromRepo <$> CommandLineOption.repository copt
+                    , templateSource = guessTemplate
                     , year           = year
                     }
   where
@@ -52,6 +52,10 @@ buildOption copt = do
     getCurrentYear  = do
         (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
         return $ show y
+    guessTemplate = case CommandLineOption.template copt of
+                      Just "hspec" -> BuiltInHSpec
+                      Just "flat"  -> BuiltInFlat
+                      _            -> fromMaybe BuiltInHSpec $ FromRepo <$> CommandLineOption.repository copt
 
 defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"

@@ -40,6 +40,13 @@ spec = do
         it "should use underscorized and hyphenized moudule name as package namee" $ do
           doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
 
+    describe "Specifying flat template" $ do
+      let cmd = runWithCommandLineOptions ["-m", "Foo.Bar.Baz", "-t", "flat"]
+
+      around cmd $ do
+        it "should generate from flat template" $ do
+          doesFileExist "foo-bar-baz/Foo/Bar/Baz.hs" `shouldReturn` True
+
     describe "with --initialize-git-repository" $ do
       let cmd = runWithCommandLineOptions [ "--initialize-git-repository"
                                           , "-p"

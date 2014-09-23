@@ -10,6 +10,7 @@ data CommandLineOption = CommandLineOption
                        , packageName             :: Maybe String
                        , author                  :: Maybe String
                        , email                   :: Maybe String
+                       , template                :: Maybe String
                        , repository              :: Maybe String
                        , initializeGitRepository :: Maybe Bool
                        } deriving (Eq, Ord, Show)
@@ -20,5 +21,6 @@ commandLineOption = CommandLineOption
    <*> optional ( strOption ( short 'p' <> long "packageName" <> metavar "package-name" <> help "Name of package" ))
    <*> optional ( strOption ( short 'a' <> long "author"      <> metavar "NAME"         <> help "Name of the project's author" ))
    <*> optional ( strOption ( short 'e' <> long "email"       <> metavar "EMAIL"        <> help "Email address of the maintainer" ))
+   <*> optional ( strOption ( short 't' <> long "template"    <> metavar "hspec/flat"   <> help "Template to be used" ))
    <*> optional ( strOption ( short 'r' <> long "repository"  <> metavar "REPOSITORY"   <> help "Template repository" ))
    <*> optional ( switch    ( long "initialize-git-repository" <> help "Initialize with git repository"))
