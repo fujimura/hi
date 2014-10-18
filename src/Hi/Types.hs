@@ -19,8 +19,8 @@ type Files = [File]
 
 type Error = String
 
-data Label = Repository | PackageName | ModuleName | Author | Email | Year | ConfigFile | FileName
-  deriving (Eq, Show)
+data Label = Repository | PackageName | ModuleName | Author | Email | Year | ConfigFile
+  deriving (Eq, Show, Enum, Bounded)
 
 labelToTemplateKey :: Label -> String
 labelToTemplateKey label = case show label of

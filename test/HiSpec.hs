@@ -22,7 +22,7 @@ options = map toOption [ (PackageName ,"testapp")
           , (ModuleName  ,"System.Awesome.Library")
           , (Author      ,"Fujimura Daisuke")
           , (Email       ,"me@fujimuradaisuke.com")
-          , (FileName    ,".hirc")
+          , (ConfigFile  ,".hirc")
           , (Year        ,"2013")
           , (Repository  ,"file://somewhere")
           ]
@@ -39,7 +39,7 @@ stringifyContents = unpack . getFileContents
 spec :: Spec
 spec =
     describe "Hi.process" $ do
-      forM_ [PackageName, ModuleName, Author, Email, Year] $ \(option) ->
+      forM_ [minBound .. maxBound] $ \(option) ->
         context ("Option `" ++ labelToTemplateKey option ++ "` was given and it's in the template") $
           it "should be replaced with the value" $
             let fileContents = pack $ "Foo $" ++ labelToTemplateKey option ++ " bar, \n"
