@@ -6,15 +6,13 @@ module Hi.Git
     ) where
 
 import           Control.Applicative
-import           Data.List           (isPrefixOf)
 import           System.Exit         (ExitCode)
 import           System.Process      (readProcess, system)
 
 expandUrl :: String -> String
-expandUrl url = if "gh:" `isPrefixOf` url
-                  then expand url
-                  else url
-  where expand (_:_:_:xs) = "git@github.com:" ++ xs ++ ".git"
+expandUrl url = case url of
+  'g':'h':':':repo -> "git@github.com:" ++ repo ++ ".git"
+  _ -> url
 
 -- | Clone given repository to current directory
 clone :: String -> IO ExitCode

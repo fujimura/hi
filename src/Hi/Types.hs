@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hi.Types
-    ( Label
+    ( Label(..)
+    , labelToTemplateKey
     , Option(..)
     , Mode(..)
     , File(..)
@@ -9,7 +10,8 @@ module Hi.Types
     , Error
     ) where
 
-import Data.ByteString (ByteString)
+import           Data.Char
+import           Data.ByteString (ByteString)
 
 data File = TemplateFile { getFilePath :: FilePath, getFileContents :: ByteString } | RegularFile { getFilePath :: FilePath, getFileContents :: ByteString }
 
@@ -17,10 +19,17 @@ type Files = [File]
 
 type Error = String
 
-type Label = String
+data Label = Repository | PackageName | ModuleName | Author | Email | Year | ConfigFile
+  deriving (Eq, Show, Enum, Bounded)
+
+labelToTemplateKey :: Label -> String
+labelToTemplateKey label = case show label of
+  x : xs -> toLower x : xs
+  "" -> ""
 
 -- | Options
-data Option = Version | Help | InitializeGitRepository | Arg Label String deriving(Eq, Show)
+data Option = Version | Help | InitializeGitRepository | Arg Label String
+  deriving(Eq, Show)
 
 -- | Run mode.
 data Mode = ShowVersion | ShowHelp | Run deriving(Eq, Show)

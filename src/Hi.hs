@@ -16,7 +16,7 @@ import           Control.Monad
 import qualified Data.ByteString          as BS (writeFile, concat)
 import qualified Data.ByteString.Lazy     as LBS (toChunks)
 import           Data.Maybe               (fromJust)
-import qualified Data.Text                as T (pack, unpack)
+import qualified Data.Text                as T
 import           Data.Text.Encoding       (decodeUtf8)
 import           Data.Text.Lazy.Encoding  (encodeUtf8)
 import           Data.Text.Template       (Context, substitute)
@@ -31,7 +31,7 @@ run options = do
     writeFiles =<< showFileList =<< process options <$> readTemplates repository
     postProcess options
   where
-    repository = fromJust $ lookupArg "repository" options
+    repository = fromJust $ lookupArg Repository options
 
 -- |Write given 'Files' to filesystem.
 writeFiles :: Files -> IO ()
@@ -70,12 +70,12 @@ process options = map go
 
 -- | Return 'Context' obtained by given 'Options'
 context :: [Option] -> Context
-context options x = T.pack (fromJust $ lookup (T.unpack x) [(k,v) | (Arg k v) <- options])
+context options x = T.pack (fromJust $ lookup x [(T.pack $ labelToTemplateKey k, v) | (Arg k v) <- options])
 
 postProcess :: [Option] -> IO ()
 postProcess options = do
     when (InitializeGitRepository `elem` options) $
       -- TODO This wont' work unless template has `package-name` as root dir.
-      inDirectory (fromJust $ lookupArg "packageName" options) $
+      inDirectory (fromJust $ lookupArg PackageName options) $
         void $ system "git init && git add . && git commit -m \"Initial commit\""
     return ()

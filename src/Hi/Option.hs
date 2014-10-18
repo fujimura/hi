@@ -26,12 +26,12 @@ import           System.FilePath       (joinPath)
 -- | Available options.
 options :: [OptDescr Option]
 options =
-    [ Option ['m'] ["module-name"]        (ReqArg (Arg "moduleName" ) "Module.Name" ) "Name of Module"
-    , Option ['p'] ["package-name"]       (ReqArg (Arg "packageName") "package-name") "Name of package        ( optional )"
-    , Option ['a'] ["author"]             (ReqArg (Arg "author"     ) "NAME"        ) "Name of the project's author"
-    , Option ['e'] ["email"]              (ReqArg (Arg "email"      ) "EMAIL"       ) "Email address of the maintainer"
-    , Option ['r'] ["repository"]         (ReqArg (Arg "repository" ) "REPOSITORY"  ) "Template repository    ( optional )"
-    , Option []    ["configuration-file"] (ReqArg (Arg "configFile" ) "CONFIGFILE"  ) "Run with configuration file"
+    [ Option ['m'] ["module-name"]        (ReqArg (Arg ModuleName ) "Module.Name" ) "Name of Module"
+    , Option ['p'] ["package-name"]       (ReqArg (Arg PackageName) "package-name") "Name of package        ( optional )"
+    , Option ['a'] ["author"]             (ReqArg (Arg Author     ) "NAME"        ) "Name of the project's author"
+    , Option ['e'] ["email"]              (ReqArg (Arg Email      ) "EMAIL"       ) "Email address of the maintainer"
+    , Option ['r'] ["repository"]         (ReqArg (Arg Repository ) "REPOSITORY"  ) "Template repository    ( optional )"
+    , Option []    ["configuration-file"] (ReqArg (Arg ConfigFile ) "CONFIGFILE"  ) "Run with configuration file"
     , Option ['v'] ["version"]            (NoArg  Version)                            "Show version number"
     , Option []    ["initialize-git-repository"] (NoArg InitializeGitRepository)      "Initialize with git repository"
     , Option ['h'] ["help"]               (NoArg  Help)                               "Display this help and exit"
@@ -40,14 +40,19 @@ options =
 toOption :: (String, String) -> Maybe Option
 toOption (key, value) = maybe err ok $ key `lookupOption` options
   where
-    err = error $ "Invalid options \"" ++ key ++ "\" was specified"
+    err = error ("Invalid option " ++ show key ++ " in configuration file!")
+
+    ok :: OptDescr Option -> Maybe Option
     ok (Option _ _ argDescr _) = toOption' argDescr value
+
     lookupOption :: String -> [OptDescr Option] -> Maybe (OptDescr Option)
     lookupOption k opts = k `lookup` map (\x@(Option _ (longOpt:_) _ _) -> (longOpt,x)) opts
+
     toOption' :: ArgDescr Option -> String -> Maybe Option
     toOption' (NoArg opt) "True" = Just opt
     toOption' (NoArg _) _        = Nothing
     toOption' (ReqArg f _) val   = Just $ f val
+    toOption' (OptArg _ _) _     = err
 
 -- | Returns 'Options'.
 getOptions :: IO [Option]
@@ -73,12 +78,12 @@ getOptions = handleError
         return $ vals ++ repo
 
     addDefaultRepo :: [Option] -> IO [Option]
-    addDefaultRepo vals = return $ vals ++ [Arg "repository" defaultRepo]
+    addDefaultRepo vals = return $ vals ++ [Arg Repository defaultRepo]
 
     addPackageNameIfMissing :: [Option] -> IO [Option]
     addPackageNameIfMissing vals =
-        return $ case ("packageName" `lookupArg` vals, "moduleName" `lookupArg` vals) of
-          (Nothing, Just m)  -> vals ++ [Arg "packageName" $ (removeDup . hyphenize) m]
+        return $ case (PackageName `lookupArg` vals, ModuleName `lookupArg` vals) of
+          (Nothing, Just m)  -> vals ++ [Arg PackageName $ (removeDup . hyphenize) m]
           _                  -> vals
       where
         removeDup []           = []
@@ -150,13 +155,13 @@ getConfigFileName :: IO FilePath
 getConfigFileName = go =<< parseOptions <$> System.Environment.getArgs
   where
     go []                       = defaultConfigFilePath
-    go ((Arg "configFile" p):_) = return p
+    go ((Arg ConfigFile p):_) = return p
     go (_:xs)                   = go xs
 
 getCurrentYear :: IO Option
 getCurrentYear  = do
     (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
-    return (Arg "year" $ show y)
+    return (Arg Year $ show y)
 
 -- | Validate given options
 validateOptions :: [Option] -> Either [Error] [Option]
@@ -165,15 +170,15 @@ validateOptions values = case mapMaybe ($ values) validations of
                        errors  -> Left errors
 
 validations ::[[Option] -> Maybe String]
-validations = [ hasKey "packageName"
-              , hasKey "moduleName"
-              , hasKey "author"
-              , hasKey "email"
-              , hasKey "repository"
-              , hasKey "year"
+validations = [ hasKey PackageName
+              , hasKey ModuleName
+              , hasKey Author
+              , hasKey Email
+              , hasKey Repository
+              , hasKey Year
               ]
 
-hasKey :: String -> [Option] -> Maybe String
-hasKey k options = case lookupArg k options of
+hasKey :: Label -> [Option] -> Maybe String
+hasKey k opts = case lookupArg k opts of
                       Just _  -> Nothing
-                      Nothing -> Just $ "Could not find option: " ++ k
+                      Nothing -> Just $ "Could not find option: " ++ labelToTemplateKey k

@@ -1,11 +1,1 @@
-import           Control.Applicative
-import           Control.Arrow        ((&&&))
-import           Control.Monad
-import           Data.List
-import           Data.List.Split      (splitOn)
-import qualified Data.Text            as T
-import           Data.Text.Template   (Context)
-import           System.Directory     (createDirectoryIfMissing)
-import           System.Environment
-import           System.FilePath      (joinPath, splitPath)
-import           System.FilePath.Glob (glob)
+:set -isrc -itest
