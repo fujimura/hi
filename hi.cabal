@@ -113,7 +113,6 @@ test-suite spec
       , HUnit
       , bytestring
       , directory
-      , doctest
       , filepath
       , hspec       >= 1.7.2
       , parsec
@@ -123,19 +122,6 @@ test-suite spec
       , temporary   == 1.2.0.3
       , text       > 1.0
       , time
-
-test-suite doctests
-  type:
-      exitcode-stdio-1.0
-  ghc-options:
-      -threaded
-  hs-source-dirs:
-      src
-    , test
-  main-is:
-      doctests.hs
-  build-depends:
-      base, doctest >= 0.8, process
 
 source-repository head
   type:     git

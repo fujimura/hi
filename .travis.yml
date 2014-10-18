@@ -9,5 +9,6 @@ before_install:
 script:
   - cabal configure --enable-tests --enable-library-coverage && cabal build
   - run-cabal-test --show-details=always
+  - cabal install doctest && doctest $(git ls-files src)
 after_script:
   - hpc-coveralls spec --exclude-dir=test
