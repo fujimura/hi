@@ -81,6 +81,8 @@ library
 executable hi
   main-is:
       Main.hs
+  other-modules:
+      Run
   ghc-options:
       -Wall
   hs-source-dirs:

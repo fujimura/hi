@@ -1,5 +1,6 @@
 module FeatureSpec ( main, spec ) where
 
+import           Run
 import           Hi.Version          (version)
 import           Hi.Directory        (inDirectory)
 
@@ -8,13 +9,13 @@ import           Control.Exception   (bracket_)
 import           Data.List           (intercalate)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
+import           System.Environment
 import           System.Directory    (createDirectoryIfMissing,
                                       doesDirectoryExist, doesFileExist,
                                       getCurrentDirectory,
                                       removeDirectoryRecursive,
                                       setCurrentDirectory)
-import           System.Process      (readProcess, readProcessWithExitCode,
-                                      system)
+import           System.Process      (readProcess)
 import           System.IO.Silently
 import           Test.Hspec
 
@@ -24,7 +25,7 @@ main = hspec spec
 spec :: Spec
 spec = around silence $ do
     describe "with command line options" $ do
-      let cmd = setupWithCommandLineOptions [ " -p ", packageName , " -m ", moduleName ]
+      let cmd = setupWithCommandLineOptions ["-p", packageName , "-m", moduleName]
       around cmd features
 
     describe "with configuration file" $
@@ -32,26 +33,30 @@ spec = around silence $ do
 
     describe "-v" $ do
       it "should show version number" $ do
-        r <- readProcess "./dist/build/hi/hi" ["-v"] []
+        r <- capture_ $ withArgs ["-v"] hi
         r `shouldBe` version ++ "\n"
 
     describe "with incomplete command line options" $ do
       it "should show error message" $ do
-        (_,_,r) <- readProcessWithExitCode "./dist/build/hi/hi" ["-p", "foo"] []
-        r `shouldContain` "\n (Run with no arguments to see usage)"
+        withArgs ["-p", "foo", "--configuration-file="] hi `shouldThrow` (errorCall . concat) [
+            "Could not find option: moduleName\n"
+          , "Could not find option: author\n"
+          , "Could not find option: email\n"
+          , " (Run with no arguments to see usage)"
+          ]
 
     describe "Package name was omitted and module name was given" $ do
-      let cmd = setupWithCommandLineOptions [" -m", "Data.SomethingWeird"]
+      let cmd = setupWithCommandLineOptions ["-m", "Data.SomethingWeird"]
 
       around cmd $ do
       it "should use underscorized and hyphenized moudule name as package namee" $ do
         doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
 
     describe "with --initialize-git-repository" $ do
-      let cmd = setupWithCommandLineOptions [ " --initialize-git-repository "
-                                              , " -p "
+      let cmd = setupWithCommandLineOptions [   "--initialize-git-repository"
+                                              , "-p"
                                               , packageName
-                                              , " -m "
+                                              , "-m"
                                               , moduleName ]
       around cmd $ do
         it "should initialize it as git repository and make first commit" $ do
@@ -154,12 +159,13 @@ setupWithConfigurationFile action = do
             , "email: " ++ email
             ]
         pwd' <- getCurrentDirectory
-        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -p ", packageName
-                             , " -m ", moduleName
-                             , " --configuration-file ", pwd' ++ "/" ++ fileName
-                             , " -r file://" ++ pwd ++ "/template"
-                             ]
+        let args = [
+                "-p", packageName
+              , "-m", moduleName
+              , "--configuration-file", pwd' ++ "/" ++ fileName
+              , "-r file://" ++ pwd ++ "/template"
+              ]
+        withArgs args hi
         action
   where
     concatLines :: [String] -> String
@@ -170,11 +176,12 @@ setupWithCommandLineOptions opts action = do
     pwd <- getCurrentDirectory
 
     inTestDirectory $ do
-        _ <- system $ concat [ pwd ++ "/dist/build/hi/hi"
-                             , " -a ", quote author
-                             , " -e ", quote email
-                             , " -r file://" ++ pwd ++ "/template"
-                             ] ++ concat opts
+        let args = [
+                "-a", quote author
+              , "-e", quote email
+              , "-r",  "file://" ++ pwd ++ "/template"
+              ] ++ opts
+        withArgs args hi
         action
 
 inTestDirectory :: IO () -> IO ()
