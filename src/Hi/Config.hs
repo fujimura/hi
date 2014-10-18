@@ -6,7 +6,6 @@ module Hi.Config
 
 import           Control.Applicative   ((<$>), (<*))
 import           Data.Maybe            (catMaybes)
-import           Hi.Types
 import           Text.Parsec
 import           Text.Parsec.String
 

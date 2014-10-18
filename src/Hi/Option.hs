@@ -41,13 +41,18 @@ toOption :: (String, String) -> Maybe Option
 toOption (key, value) = maybe err ok $ key `lookupOption` options
   where
     err = error $ "Invalid options \"" ++ key ++ "\" was specified"
+
+    ok :: OptDescr Option -> Maybe Option
     ok (Option _ _ argDescr _) = toOption' argDescr value
+
     lookupOption :: String -> [OptDescr Option] -> Maybe (OptDescr Option)
     lookupOption k opts = k `lookup` map (\x@(Option _ (longOpt:_) _ _) -> (longOpt,x)) opts
+
     toOption' :: ArgDescr Option -> String -> Maybe Option
     toOption' (NoArg opt) "True" = Just opt
     toOption' (NoArg _) _        = Nothing
     toOption' (ReqArg f _) val   = Just $ f val
+    toOption' (OptArg _ _) _     = err
 
 -- | Returns 'Options'.
 getOptions :: IO [Option]
@@ -174,6 +179,6 @@ validations = [ hasKey "packageName"
               ]
 
 hasKey :: String -> [Option] -> Maybe String
-hasKey k options = case lookupArg k options of
+hasKey k opts = case lookupArg k opts of
                       Just _  -> Nothing
                       Nothing -> Just $ "Could not find option: " ++ k
