@@ -1,8 +1,11 @@
-module Hi.GitSpec ( spec ) where
+module Hi.GitSpec ( main, spec ) where
 
 import           Hi.Git
 
 import           Test.Hspec
+
+main :: IO ()
+main = hspec spec
 
 spec :: Spec
 spec = do

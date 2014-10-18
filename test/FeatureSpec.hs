@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module FeatureSpec ( spec ) where
+module FeatureSpec ( main, spec ) where
 
 import qualified Hi.Cli              as Cli
 import           Hi.Directory        (inDirectory)
@@ -22,6 +22,9 @@ import           System.Process      (readProcess, system)
 import           Test.Hspec
 
 import           Paths_hi            (version)
+
+main :: IO ()
+main = hspec spec
 
 spec :: Spec
 spec = do

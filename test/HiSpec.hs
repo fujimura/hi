@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module HiSpec ( spec ) where
+module HiSpec ( main, spec ) where
 
 import           Hi                    (process)
 import           Hi.Types
@@ -8,6 +8,9 @@ import           Hi.Types
 import           Data.ByteString.Char8 (unpack)
 import           Data.Maybe            (fromJust, isJust)
 import           Test.Hspec
+
+main :: IO ()
+main = hspec spec
 
 options :: Option
 options = Option { initializeGitRepository = True
