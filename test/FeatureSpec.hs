@@ -1,4 +1,4 @@
-module FeatureSpec ( spec ) where
+module FeatureSpec ( main, spec ) where
 
 import           Hi.Version          (version)
 import           Hi.Directory        (inDirectory)
@@ -17,6 +17,9 @@ import           System.Process      (readProcess, readProcessWithExitCode,
                                       system)
 import           System.IO.Silently
 import           Test.Hspec
+
+main :: IO ()
+main = hspec spec
 
 spec :: Spec
 spec = around silence $ do

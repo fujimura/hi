@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module HiSpec ( spec ) where
+module HiSpec ( main, spec ) where
 
 import           Hi                    (process)
 import           Hi.Types
@@ -10,6 +10,9 @@ import           Control.Monad
 import           Data.ByteString.Char8 (pack, unpack)
 import           Data.Maybe            (fromJust, isJust)
 import           Test.Hspec
+
+main :: IO ()
+main = hspec spec
 
 toOption :: (String, String) -> Option
 toOption = uncurry Arg
