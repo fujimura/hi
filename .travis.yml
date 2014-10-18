@@ -6,9 +6,11 @@ before_script:
 
 before_install:
   - cabal install hpc-coveralls
+
 script:
-  - cabal configure --enable-tests --enable-library-coverage && cabal build
+  - cabal configure --enable-tests --enable-library-coverage --ghc-options=-Werror && cabal build
   - run-cabal-test --show-details=always
   - cabal install doctest && doctest $(git ls-files src)
+
 after_script:
   - hpc-coveralls spec --exclude-dir=test
