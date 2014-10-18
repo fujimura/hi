@@ -11,7 +11,7 @@ before_script:
   - git config --global user.name "John Doe"
 
 script:
-  - cabal configure --enable-tests --enable-library-coverage && cabal build
+  - cabal configure --enable-tests --enable-library-coverage --ghc-options=-Werror && cabal build
   - run-cabal-test spec --show-details=always
   - cabal test doctests
 
