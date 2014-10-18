@@ -40,7 +40,7 @@ options =
 toOption :: (String, String) -> Maybe Option
 toOption (key, value) = maybe err ok $ key `lookupOption` options
   where
-    err = error $ "Invalid options \"" ++ key ++ "\" was specified"
+    err = error ("Invalid option " ++ show key ++ " in configuration file!")
 
     ok :: OptDescr Option -> Maybe Option
     ok (Option _ _ argDescr _) = toOption' argDescr value
