@@ -17,8 +17,8 @@ rewritePath :: [Option] -> FilePath -> FilePath
 rewritePath options =
     rename1 . rename2 . untemplate
   where
-    rename1 = replace "package-name" $ fromJust $ lookupArg "packageName" options
-    rename2 = replace "ModuleName" $ toDir . fromJust $ lookupArg "moduleName" options
+    rename1 = replace "package-name" $ fromJust $ lookupArg PackageName options
+    rename2 = replace "ModuleName" $ toDir . fromJust $ lookupArg ModuleName options
 
 -- | Convert module name to path
 -- @
