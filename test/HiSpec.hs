@@ -14,19 +14,19 @@ main = hspec spec
 
 options :: Option
 options = Option { initializeGitRepository = True
-                  , packageName    = "testapp"
-                  , moduleName     = "System.Awesome.Library"
-                  , author         = "Fujimura Daisuke"
-                  , email          = "me@fujimuradaisuke.com"
-                  , templateSource = FromRepo "file://somewhere"
-                  , year           = "2014"
-                  }
+                 , packageName    = "testapp"
+                 , moduleName     = "System.Awesome.Library"
+                 , author         = "Fujimura Daisuke"
+                 , email          = "me@fujimuradaisuke.com"
+                 , templateSource = FromRepo "file://somewhere"
+                 , year           = "2014"
+                 }
 
 lookupContent :: FilePath -> Files -> Maybe String
 lookupContent _  [] = Nothing
 lookupContent fp (f:fs) = if getFilePath f == fp
-                           then Just $ stringifyContents f
-                           else lookupContent fp fs
+                            then Just $ stringifyContents f
+                            else lookupContent fp fs
 
 stringifyContents :: File -> String
 stringifyContents = unpack . getFileContents
