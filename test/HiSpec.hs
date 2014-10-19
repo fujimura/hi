@@ -59,6 +59,12 @@ spec =
           let files = process (options { moduleName = "Bar"}) [TemplateFile "foo/ModuleName/File.hs.template" "module Foo\n"] in
           lookupContent "testapp/foo/Bar/File.hs" files `shouldSatisfy` isJust
 
+      context "`/package-name` exists in template" $
+        it "should generate files in package-name, not in package-name/package-name" $ do
+          let files = process (options {packageName = "foo", moduleName = "Foo"}) [TemplateFile "package-name/ModuleName/File.hs.template" "module Foo\n" ]
+
+          lookupContent "foo/Foo/File.hs" files `shouldSatisfy` isJust
+
       describe "file without .template" $
         it "should be copied without substitution" $
           let files = process (options {moduleName = "Bar"}) [RegularFile "ModuleName/Foofile" "foo: $bar\n"] in
