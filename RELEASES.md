@@ -1,8 +1,11 @@
 # Releases
 
-## 0.1.0 (Unreleased)
+## 1.0.0 (Unreleased)
 
 - Remove config file
+  - Config includes name and email, but they can be supplied from `$ git config`.
+- Files will be generated in `package-name` directory
+  - If specified template has `package-name` directory in its root, it will be ignored.
 
 ## 0.0.8.2
 
