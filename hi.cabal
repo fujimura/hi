@@ -16,14 +16,8 @@ data-files:
     templates/flat/ModuleName.hs.template
     templates/flat/README.md.template
     templates/flat/package-name.cabal.template
-    templates/flat/package-name/LICENSE.template
-    templates/flat/package-name/Main.hs.template
-    templates/flat/package-name/ModuleName.hs.template
-    templates/flat/package-name/README.md.template
-    templates/flat/package-name/package-name.cabal.template
     templates/hspec/.gitignore.template
     templates/hspec/LICENSE.template
-    templates/hspec/README.md
     templates/hspec/README.md.template
     templates/hspec/package-name.cabal.template
     templates/hspec/src/ModuleName.hs.template
