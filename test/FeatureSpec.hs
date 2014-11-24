@@ -1,21 +1,20 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module FeatureSpec ( main, spec ) where
+module FeatureSpec where
 
 import qualified Hi.Cli              as Cli
 import           Hi.Directory        (inDirectory)
 
 import           Control.Applicative
-import           Control.Exception   (bracket_, catch, throwIO)
+import           Control.Exception   (catch, throwIO)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
 import           Data.Version        (showVersion)
-import           System.Directory    (createDirectoryIfMissing,
-                                      doesDirectoryExist, doesFileExist,
-                                      getCurrentDirectory,
-                                      removeDirectoryRecursive,
-                                      setCurrentDirectory)
+import           SpecHelper
+import           System.Directory    (doesDirectoryExist, doesFileExist,
+                                      getCurrentDirectory)
 import           System.Exit         (ExitCode (..))
+import           System.FilePath     (joinPath)
 import           System.IO           (stdout)
 import           System.IO.Silently  (capture, hSilence)
 import           System.Process      (readProcess, system)
@@ -34,6 +33,10 @@ spec = do
 
     describe "with custom git config" $ do
       let cmd = runWithLocalGitConfig [ "-p", packageName , "-m", moduleName ]
+      around cmd features
+
+    describe "with config file" $ do
+      let cmd = runWithConfigurationFile [ "-p", packageName , "-m", moduleName ]
       around cmd features
 
     describe "Package name was omitted and module name was given" $ do
@@ -156,7 +159,7 @@ features = do
 
 runWithCommandLineOptions :: [String] -> IO () -> IO ()
 runWithCommandLineOptions opts action = do
-    inTestDirectory $ hSilence [stdout] $ do
+    inTestDirectory $ hSilence [] $ do
       Cli.run $ opts ++ [ "-a", quote author
                         , "-e", quote email
                         ]
@@ -164,25 +167,23 @@ runWithCommandLineOptions opts action = do
 
 runWithLocalGitConfig :: [String] -> IO () -> IO ()
 runWithLocalGitConfig opts action = do
-    inTestDirectory $ hSilence [stdout] $ do
+    inTestDirectory $ hSilence [] $ do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
         _ <- system $ "git config user.email" ++ " " ++ quote email
         Cli.run opts
         action
 
-inTestDirectory :: IO () -> IO ()
-inTestDirectory action = do
-    pwd <- getCurrentDirectory
-    let go    = createDirectoryIfMissing True testDirectory >> setCurrentDirectory testDirectory
-        flush = removeDirectoryRecursive testDirectory
-        back  = setCurrentDirectory pwd
-    bracket_ go (back >> flush) action
-
-testDirectory :: String
-testDirectory = "test_project"
-
-quote :: String -> String
-quote s = "\"" ++ s ++ "\""
+runWithConfigurationFile :: [String] -> IO () -> IO ()
+runWithConfigurationFile opts action = do
+    inTestDirectory $ hSilence [] $ do
+        writeFile ".hirc" $ concatLines
+            [ "author: " ++ author
+            , "email: " ++ email
+            ]
+        pwd' <- getCurrentDirectory
+        withEnv "HOME" pwd' $ do
+          Cli.run $ opts ++ [ "--configuration-file", (joinPath [pwd', ".hirc"])]
+          action
 
 {-# ANN module "HLint: Redundant do" #-}

@@ -12,6 +12,7 @@ data CommandLineOption = CommandLineOption
                        , email                   :: Maybe String
                        , template                :: Maybe String
                        , repository              :: Maybe String
+                       , configFilePath          :: Maybe String
                        , initializeGitRepository :: Maybe Bool
                        } deriving (Eq, Ord, Show)
 
@@ -23,4 +24,5 @@ commandLineOption = CommandLineOption
    <*> optional ( strOption ( short 'e' <> long "email"       <> metavar "EMAIL"        <> help "Email address of the maintainer" ))
    <*> optional ( strOption ( short 't' <> long "template"    <> metavar "hspec/flat"   <> help "Template to be used" ))
    <*> optional ( strOption ( short 'r' <> long "repository"  <> metavar "REPOSITORY"   <> help "Template repository" ))
+   <*> optional ( strOption ( long "configuration-file"       <> help "Use specified configuration file"))
    <*> optional ( switch    ( long "initialize-git-repository" <> help "Initialize with git repository"))

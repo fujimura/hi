@@ -9,29 +9,31 @@ module Hi.Option
 
 import           Hi.CommandLineOption (CommandLineOption)
 import qualified Hi.CommandLineOption as CommandLineOption
+import           Hi.Config            (parseConfig)
 import qualified Hi.Git               as Git
 import           Hi.Types
 
 import           Control.Applicative
+import           Control.Monad
 import           Data.Char            (isUpper, toLower)
 import           Data.Maybe           (fromMaybe)
 import           Data.Time.Calendar   (toGregorian)
 import           Data.Time.Clock      (getCurrentTime, utctDay)
+import           System.Directory     (doesFileExist)
 
 buildOption :: CommandLineOption -> IO Option
 buildOption copt = do
     let packageName = (removeDup . hyphenize) cModuleName
     year <- getCurrentYear
-    -- TODO Raise error if author/email is not provided from git config or
-    -- commandline options
     author <- guessAuthor
     email <- guessEmail
-    return  Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
+    template <- guessTemplate
+    return $ Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
                     , moduleName     = cModuleName
                     , packageName    = fromMaybe packageName $ CommandLineOption.packageName copt
-                    , author         = fromMaybe author $ CommandLineOption.author copt
-                    , email          = fromMaybe email $ CommandLineOption.email copt
-                    , templateSource = guessTemplate
+                    , author         = author
+                    , email          = email
+                    , templateSource = template
                     , year           = year
                     }
   where
@@ -47,15 +49,40 @@ buildOption copt = do
     hyphenize' (x:xs) | isUpper x = '-':toLower x:hyphenize' xs
                       |  x == '.' = '-':hyphenize' xs
                       | otherwise = x:hyphenize' xs
-    guessAuthor = Git.config "user.name"
-    guessEmail = Git.config "user.email"
+    lookupConfig :: String -> IO (Maybe String)
+    lookupConfig k = case CommandLineOption.configFilePath copt of
+                       Just path -> (lookup k) . parseConfig <$> readFile path
+                       Nothing   -> return Nothing
+    choice :: [IO (Maybe String)] -> IO (Maybe String)
+    choice xs = foldr1 mplus <$> sequence xs
+    guessAuthor :: IO String
+    guessAuthor = do
+      mc <- choice [ (return $ CommandLineOption.author copt)
+                   , (lookupConfig "author")
+                   , (Git.config "user.name")
+                   ]
+      case mc of
+        Just x -> return x
+        Nothing -> fail "No user specified"
+    guessEmail :: IO String
+    guessEmail  = do
+      mc <- choice [ (return $ CommandLineOption.email copt)
+                   , (lookupConfig "email")
+                   , (Git.config "user.email")
+                   ]
+      case mc of
+        Just x -> return x
+        Nothing -> fail "No email specified"
+    getCurrentYear :: IO String
     getCurrentYear  = do
         (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
         return $ show y
-    guessTemplate = case CommandLineOption.template copt of
-                      Just "hspec" -> BuiltInHSpec
-                      Just "flat"  -> BuiltInFlat
-                      _            -> fromMaybe BuiltInHSpec $ FromRepo <$> CommandLineOption.repository copt
+    guessTemplate :: IO TemplateSource
+    guessTemplate = do
+      return $ case CommandLineOption.template copt of
+                 Just "hspec" -> BuiltInHSpec
+                 Just "flat"  -> BuiltInFlat
+                 _            -> fromMaybe BuiltInHSpec $ FromRepo <$> CommandLineOption.repository copt
 
 defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"

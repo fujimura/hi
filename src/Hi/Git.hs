@@ -7,8 +7,8 @@ module Hi.Git
     ) where
 
 import           Control.Applicative
-import           System.Exit         (ExitCode)
-import           System.Process      (readProcess, system)
+import           System.Exit
+import           System.Process      (readProcess, readProcessWithExitCode, system)
 
 expandUrl :: String -> String
 expandUrl ('g':'h':':':xs) = "git@github.com:" ++ xs ++ ".git"
@@ -25,8 +25,12 @@ lsFiles :: IO [String]
 lsFiles = lines <$> readProcess "git" ["ls-files"] []
 
 -- | Return given config value
-config :: String -> IO String
-config name = removeNewline <$> readProcess "git" ["config", name] []
+config :: String -> IO (Maybe String)
+config name = do
+    (exitCode,s,_) <- readProcessWithExitCode "git" ["config", name] []
+    return $ if exitCode == ExitSuccess
+               then Just $ removeNewline s
+               else Nothing
 
 removeNewline :: String -> String
 removeNewline = reverse . dropWhile (=='\n') . reverse
