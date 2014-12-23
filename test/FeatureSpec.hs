@@ -29,27 +29,27 @@ spec :: Spec
 spec = do
     describe "with command line options" $ do
       let cmd = runWithCommandLineOptions [ "-p", packageName , "-m", moduleName ]
-      around cmd features
+      around_ cmd features
 
     describe "with custom git config" $ do
       let cmd = runWithLocalGitConfig [ "-p", packageName , "-m", moduleName ]
-      around cmd features
+      around_ cmd features
 
     describe "with config file" $ do
       let cmd = runWithConfigurationFile [ "-p", packageName , "-m", moduleName ]
-      around cmd features
+      around_ cmd features
 
     describe "Package name was omitted and module name was given" $ do
       let cmd = runWithCommandLineOptions ["-m", "Data.SomethingWeird"]
 
-      around cmd $ do
+      around_ cmd $ do
         it "should use underscorized and hyphenized moudule name as package namee" $ do
           doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
 
     describe "Specifying flat template" $ do
       let cmd = runWithCommandLineOptions ["-m", "Foo.Bar.Baz", "-t", "flat"]
 
-      around cmd $ do
+      around_ cmd $ do
         it "should generate from flat template" $ do
           doesFileExist "foo-bar-baz/Foo/Bar/Baz.hs" `shouldReturn` True
 
@@ -59,7 +59,7 @@ spec = do
                                           , packageName
                                           , "-m"
                                           , moduleName ]
-      around cmd $ do
+      around_ cmd $ do
         it "should initialize it as git repository and make first commit" $ do
           inDirectory "./testapp" $ do
             readProcess "git" ["log", "-1", "--pretty=%s"] [] `shouldReturn` "Initial commit\n"

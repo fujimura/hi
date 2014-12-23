@@ -136,7 +136,7 @@ test-suite spec
       , directory
       , doctest
       , filepath
-      , hspec       >= 1.7.2
+      , hspec       >= 2.0.0
       , optparse-applicative >= 0.10.0
       , parsec
       , process
