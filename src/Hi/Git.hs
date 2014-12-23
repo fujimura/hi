@@ -17,7 +17,7 @@ expandUrl xs = xs
 -- | Clone given repository to current directory
 clone :: String -> IO ExitCode
 clone repoUrl = do
-    _ <- system $ "git clone --no-checkout --quiet --depth=1 " ++ repoUrl ++ " " ++ "./"
+    _ <- system $ "git clone --no-checkout --quiet " ++ repoUrl ++ " " ++ "./"
     system "git checkout HEAD --quiet"
 
 -- | Return file list by `git ls-files`
