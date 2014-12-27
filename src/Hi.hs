@@ -28,7 +28,7 @@ import           System.Process           (system)
 run :: Option -> IO ()
 run option@(Option {templateSource}) = do
     putStrLn $ "Creating new project with " ++ sourceName templateSource
-    writeFiles =<< showFileList =<< process option <$> readTemplates templateSource
+    writeFiles =<< showFileList =<< process option . dropExtraRegularFiles <$> readTemplates templateSource
     postProcess option
   where
     sourceName (FromRepo repository) = "git repository:" ++ Git.expandUrl repository
@@ -87,3 +87,14 @@ postProcess Option {initializeGitRepository, packageName} = do
       inDirectory packageName $
         void $ system "git init && git add . && git commit -m \"Initial commit\""
     return ()
+
+-- | Drop 'RegularFile's if there is a 'TemplateFile' which has same name
+dropExtraRegularFiles :: Files -> Files
+dropExtraRegularFiles []     = []
+dropExtraRegularFiles xs = go (map getFilePath xs) xs
+  where
+    go _ []       = []
+    go paths (y@(RegularFile p _):ys)  = if p `elem` paths
+                                           then go paths ys
+                                           else y : go paths ys
+    go paths (y@(TemplateFile _ _):ys) = y : go paths ys
