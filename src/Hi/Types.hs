@@ -9,7 +9,8 @@ module Hi.Types
 
 import Data.ByteString (ByteString)
 
-data File = TemplateFile { getFilePath :: FilePath, getFileContents :: ByteString } | RegularFile { getFilePath :: FilePath, getFileContents :: ByteString } deriving (Show)
+data File = TemplateFile { getFilePath :: FilePath, getFileContents :: ByteString } |
+            RegularFile  { getFilePath :: FilePath, getFileContents :: ByteString } deriving (Show)
 
 data TemplateSource = FromRepo String | BuiltInHSpec | BuiltInFlat deriving (Eq,Ord,Show)
 

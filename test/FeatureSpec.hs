@@ -43,7 +43,7 @@ spec = do
       let cmd = runWithCommandLineOptions ["-m", "Data.SomethingWeird"]
 
       around_ cmd $ do
-        it "should use underscorized and hyphenized moudule name as package namee" $ do
+        it "should use underscorized and hyphenized moudule name as package name" $ do
           doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
 
     describe "Specifying flat template" $ do
