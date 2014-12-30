@@ -1,4 +1,5 @@
 language: haskell
+ghc: 7.8
 
 before_install:
   - cabal sandbox init
