@@ -152,7 +152,7 @@ features = do
 
 runWithCommandLineOptions :: [String] -> IO () -> IO ()
 runWithCommandLineOptions opts action = do
-    root <- getDataDir
+    root <- getCurrentDirectory
     inTestDirectory $ hSilence [] $ do
       Cli.run $ opts ++ [ "-a", quote author
                         , "-e", quote email
@@ -162,7 +162,7 @@ runWithCommandLineOptions opts action = do
 
 runWithLocalGitConfig :: [String] -> IO () -> IO ()
 runWithLocalGitConfig opts action = do
-    root <- getDataDir
+    root <- getCurrentDirectory
     inTestDirectory $ hSilence [] $ do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
@@ -172,7 +172,7 @@ runWithLocalGitConfig opts action = do
 
 runWithConfigurationFile :: [String] -> IO () -> IO ()
 runWithConfigurationFile opts action = do
-    root <- getDataDir
+    root <- getCurrentDirectory
     inTestDirectory $ hSilence [] $ do
         writeFile ".hirc" $ concatLines
             [ "author: " ++ author
