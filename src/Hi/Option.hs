@@ -19,7 +19,6 @@ import           Data.Char            (isUpper, toLower)
 import           Data.Maybe           (fromMaybe)
 import           Data.Time.Calendar   (toGregorian)
 import           Data.Time.Clock      (getCurrentTime, utctDay)
-import           System.Directory     (doesFileExist)
 
 buildOption :: CommandLineOption -> IO Option
 buildOption copt = do

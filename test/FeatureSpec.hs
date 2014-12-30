@@ -20,7 +20,7 @@ import           System.IO.Silently  (capture, hSilence)
 import           System.Process      (readProcess, system)
 import           Test.Hspec
 
-import           Paths_hi            (version, getDataDir)
+import           Paths_hi            (version)
 
 main :: IO ()
 main = hspec spec
