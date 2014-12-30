@@ -1,0 +1,7 @@
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+machine:
+  ghc:
+    version: 7.8.3
