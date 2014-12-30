@@ -14,13 +14,13 @@ import           SpecHelper
 import           System.Directory    (doesDirectoryExist, doesFileExist,
                                       getCurrentDirectory)
 import           System.Exit         (ExitCode (..))
-import           System.FilePath     (joinPath)
+import           System.FilePath     (joinPath, (</>))
 import           System.IO           (stdout)
 import           System.IO.Silently  (capture, hSilence)
 import           System.Process      (readProcess, system)
 import           Test.Hspec
 
-import           Paths_hi            (version)
+import           Paths_hi            (version, getDataDir)
 
 main :: IO ()
 main = hspec spec
@@ -45,13 +45,6 @@ spec = do
       around_ cmd $ do
         it "should use underscorized and hyphenized moudule name as package name" $ do
           doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
-
-    describe "Specifying flat template" $ do
-      let cmd = runWithCommandLineOptions ["-m", "Foo.Bar.Baz", "-t", "flat"]
-
-      around_ cmd $ do
-        it "should generate from flat template" $ do
-          doesFileExist "foo-bar-baz/Foo/Bar/Baz.hs" `shouldReturn` True
 
     describe "with --initialize-git-repository" $ do
       let cmd = runWithCommandLineOptions [ "--initialize-git-repository"
@@ -159,23 +152,27 @@ features = do
 
 runWithCommandLineOptions :: [String] -> IO () -> IO ()
 runWithCommandLineOptions opts action = do
+    root <- getDataDir
     inTestDirectory $ hSilence [] $ do
       Cli.run $ opts ++ [ "-a", quote author
                         , "-e", quote email
+                        , "-r", (root </> "test" </> "template")
                         ]
       action
 
 runWithLocalGitConfig :: [String] -> IO () -> IO ()
 runWithLocalGitConfig opts action = do
+    root <- getDataDir
     inTestDirectory $ hSilence [] $ do
         _ <- system $ "git init"
         _ <- system $ "git config user.name" ++ " " ++ quote author
         _ <- system $ "git config user.email" ++ " " ++ quote email
-        Cli.run opts
+        Cli.run $ opts ++ [ "-r", (root </> "test" </> "template") ]
         action
 
 runWithConfigurationFile :: [String] -> IO () -> IO ()
 runWithConfigurationFile opts action = do
+    root <- getDataDir
     inTestDirectory $ hSilence [] $ do
         writeFile ".hirc" $ concatLines
             [ "author: " ++ author
@@ -183,7 +180,9 @@ runWithConfigurationFile opts action = do
             ]
         pwd' <- getCurrentDirectory
         withEnv "HOME" pwd' $ do
-          Cli.run $ opts ++ [ "--configuration-file", (joinPath [pwd', ".hirc"])]
+          Cli.run $ opts ++ [ "--configuration-file", (joinPath [pwd', ".hirc"])
+                            , "-r", (root </> "test" </> "template")
+                            ]
           action
 
 {-# ANN module "HLint: Redundant do" #-}

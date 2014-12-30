@@ -78,11 +78,7 @@ buildOption copt = do
         (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
         return $ show y
     guessTemplate :: IO TemplateSource
-    guessTemplate = do
-      return $ case CommandLineOption.template copt of
-                 Just "hspec" -> BuiltInHSpec
-                 Just "flat"  -> BuiltInFlat
-                 _            -> fromMaybe BuiltInHSpec $ FromRepo <$> CommandLineOption.repository copt
+    guessTemplate = return . FromRepo $ maybe defaultRepo id (CommandLineOption.repository copt)
 
 defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"

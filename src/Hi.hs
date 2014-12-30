@@ -32,8 +32,6 @@ run option@(Option {templateSource}) = do
     postProcess option
   where
     sourceName (FromRepo repository) = "git repository:" ++ Git.expandUrl repository
-    sourceName BuiltInHSpec          = "built in template: HSpec"
-    sourceName BuiltInFlat           = "built in template: Flat"
 
 -- |Write given 'Files' to filesystem.
 writeFiles :: Files -> IO ()

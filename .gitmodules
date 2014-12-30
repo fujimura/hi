@@ -1,0 +1,3 @@
+[submodule "test/template"]
+	path = test/template
+	url = git://github.com/fujimura/hi-hspec.git
