@@ -18,7 +18,8 @@ data CommandLineOption = CommandLineOption
 commandLineOption :: Parser CommandLineOption
 commandLineOption = CommandLineOption
    <$> optional (strOption ( short 'm' <> long "moduleName" <> metavar "Module.Name" <> help "Name of Module" ))
-   <*> strOption ( short 'p' <> long "packageName" <> metavar "package-name" <> help "Name of package" )
+   <*> (strOption ( short 'p' <> long "package-name" <> metavar "package-name" <> help "Name of package" )
+       <|> argument str (metavar "package-name" <> help "Name of package"))
    <*> optional ( strOption ( short 'a' <> long "author"      <> metavar "NAME"         <> help "Name of the project's author" ))
    <*> optional ( strOption ( short 'e' <> long "email"       <> metavar "EMAIL"        <> help "Email address of the maintainer" ))
    <*> optional ( strOption ( short 'r' <> long "repository"  <> metavar "REPOSITORY"   <> help "Template repository" ))

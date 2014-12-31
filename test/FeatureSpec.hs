@@ -46,6 +46,13 @@ spec = do
         it "should use Capitalized package name as module name" $ do
           doesDirectoryExist "something-weird/src/Something/Weird" `shouldReturn` True
 
+    describe "Package name was given as an argument" $ do
+      let cmd = runWithCommandLineOptions ["something-weird"]
+
+      around_ cmd $ do
+        it "should use Capitalized package name as module name" $ do
+          doesDirectoryExist "something-weird/src/Something/Weird" `shouldReturn` True
+
     describe "with --initialize-git-repository" $ do
       let cmd = runWithCommandLineOptions [ "--initialize-git-repository"
                                           , "-p"
