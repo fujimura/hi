@@ -39,12 +39,12 @@ spec = do
       let cmd = runWithConfigurationFile [ "-p", packageName , "-m", moduleName ]
       around_ cmd features
 
-    describe "Package name was omitted and module name was given" $ do
-      let cmd = runWithCommandLineOptions ["-m", "Data.SomethingWeird"]
+    describe "Only package name was given" $ do
+      let cmd = runWithCommandLineOptions ["-p", "something-weird"]
 
       around_ cmd $ do
-        it "should use underscorized and hyphenized moudule name as package name" $ do
-          doesDirectoryExist "data-something-weird/src/Data/SomethingWeird" `shouldReturn` True
+        it "should use Capitalized package name as module name" $ do
+          doesDirectoryExist "something-weird/src/Something/Weird" `shouldReturn` True
 
     describe "with --initialize-git-repository" $ do
       let cmd = runWithCommandLineOptions [ "--initialize-git-repository"

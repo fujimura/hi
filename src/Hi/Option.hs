@@ -15,39 +15,27 @@ import           Hi.Types
 
 import           Control.Applicative
 import           Control.Monad
-import           Data.Char            (isUpper, toLower)
+import           Data.Char            (toUpper)
 import           Data.Maybe           (fromMaybe)
 import           Data.Time.Calendar   (toGregorian)
 import           Data.Time.Clock      (getCurrentTime, utctDay)
 
 buildOption :: CommandLineOption -> IO Option
 buildOption copt = do
-    let packageName = (removeDup . hyphenize) cModuleName
+    let moduleName = modularize $ CommandLineOption.packageName copt
     year <- getCurrentYear
     author <- guessAuthor
     email <- guessEmail
     template <- guessTemplate
     return $ Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
-                    , moduleName     = cModuleName
-                    , packageName    = fromMaybe packageName $ CommandLineOption.packageName copt
+                    , moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
+                    , packageName    = CommandLineOption.packageName copt
                     , author         = author
                     , email          = email
                     , templateSource = template
                     , year           = year
                     }
   where
-    cModuleName = CommandLineOption.moduleName copt
-    removeDup []           = []
-    removeDup [x]          = [x]
-    removeDup ('-':'-':xs) = removeDup('-':xs)
-    removeDup (x:xs)       = x: removeDup xs
-    hyphenize  []     = []
-    hyphenize  (x:xs) = hyphenize' $ toLower x:xs
-    hyphenize' []     = []
-    hyphenize' (x:[]) = [toLower x]
-    hyphenize' (x:xs) | isUpper x = '-':toLower x:hyphenize' xs
-                      |  x == '.' = '-':hyphenize' xs
-                      | otherwise = x:hyphenize' xs
     lookupConfig :: String -> IO (Maybe String)
     lookupConfig k = case CommandLineOption.configFilePath copt of
                        Just path -> (lookup k) . parseConfig <$> readFile path
@@ -78,6 +66,26 @@ buildOption copt = do
         return $ show y
     guessTemplate :: IO TemplateSource
     guessTemplate = return . FromRepo $ maybe defaultRepo id (CommandLineOption.repository copt)
+
+-- | Capitalize words and connect them with periods
+--
+-- >>> modularize "package"
+-- "Package"
+--
+-- >>> modularize "package-name"
+-- "Package.Name"
+--
+-- >>> modularize "another-package-name"
+-- "Another.Package.Name"
+--
+modularize :: String -> String
+modularize []     = []
+modularize [x]    = [toUpper x]
+modularize (x:xs) = toUpper x : rest xs
+  where
+    rest []       = []
+    rest ('-':ys) = '.' : modularize ys
+    rest (y:ys)   = y:rest ys
 
 defaultRepo :: String
 defaultRepo = "git://github.com/fujimura/hi-hspec.git"

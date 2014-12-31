@@ -6,8 +6,8 @@ module Hi.CommandLineOption
 import           Options.Applicative
 
 data CommandLineOption = CommandLineOption
-                       { moduleName              :: String
-                       , packageName             :: Maybe String
+                       { moduleName              :: Maybe String
+                       , packageName             :: String
                        , author                  :: Maybe String
                        , email                   :: Maybe String
                        , repository              :: Maybe String
@@ -17,8 +17,8 @@ data CommandLineOption = CommandLineOption
 
 commandLineOption :: Parser CommandLineOption
 commandLineOption = CommandLineOption
-   <$> strOption ( short 'm' <> long "moduleName" <> metavar "Module.Name" <> help "Name of Module" )
-   <*> optional ( strOption ( short 'p' <> long "packageName" <> metavar "package-name" <> help "Name of package" ))
+   <$> optional (strOption ( short 'm' <> long "moduleName" <> metavar "Module.Name" <> help "Name of Module" ))
+   <*> strOption ( short 'p' <> long "packageName" <> metavar "package-name" <> help "Name of package" )
    <*> optional ( strOption ( short 'a' <> long "author"      <> metavar "NAME"         <> help "Name of the project's author" ))
    <*> optional ( strOption ( short 'e' <> long "email"       <> metavar "EMAIL"        <> help "Email address of the maintainer" ))
    <*> optional ( strOption ( short 'r' <> long "repository"  <> metavar "REPOSITORY"   <> help "Template repository" ))
