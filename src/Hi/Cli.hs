@@ -34,7 +34,7 @@ footerText = unlines [ ""
                      , defaultRepo ++ "."
                      , ""
                      , "Example:"
-                     , "    hi --module-name 'Foo.Bar' --author 'you' --email 'you@gmail.com'"
+                     , "    hi foo-bar"
                      ]
 
 version :: Parser (a -> a)

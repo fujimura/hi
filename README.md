@@ -13,8 +13,8 @@ The template can be specified by Git repository. [hi-hspec](https://github.com/f
 ### Basic Example
 
 ```
-$ hi --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
-Creating new project from repository: git://github.com/fujimura/hi-hspec.git
+$ hi foo-bar-baz
+Creating new project with git repository:git://github.com/fujimura/hi-hspec.git
     create  foo-bar-baz/.gitignore
     create  foo-bar-baz/LICENSE
     create  foo-bar-baz/README.md
@@ -23,26 +23,6 @@ Creating new project from repository: git://github.com/fujimura/hi-hspec.git
     create  foo-bar-baz/src/Foo/Bar/Baz/Internal.hs
     create  foo-bar-baz/test/Foo/Bar/BazSpec.hs
     create  foo-bar-baz/test/Spec.hs
-
-$ tree .
-.
-├── LICENSE
-├── README.md
-├── foo-bar-baz.cabal
-├── src
-│   └── Foo
-│       └── Bar
-│           ├── Baz
-│           │   └── Internal.hs
-│           └── Baz.hs
-└── test
-    ├── Foo
-    │   └── Bar
-    │       ├── Baz
-    │       └── BazSpec.hs
-    └── Spec.hs
-
-8 directories, 7 files
 ```
 
 ### Specifying template
@@ -50,7 +30,7 @@ $ tree .
 Specifying repository in GitHub has a shorthand like this:
 
 ```
-$ ./dist/build/Hi/hi --module-name "Foo.Bar.Baz" --repository gh:fujimura/hi-flat
+$ hi foo-bar-baz --repository gh:fujimura/hi-flat
 Creating new project from repository: git@github.com:fujimura/hi-flat.git
     create  foo-bar-baz/.gitignore
     create  foo-bar-baz/LICENSE
@@ -63,24 +43,16 @@ Creating new project from repository: git@github.com:fujimura/hi-flat.git
 ## Options
 
 ```
-$ hi --help
-hi: Usage: hi [OPTION...]
-Generate a haskell project based on a template from github.
-
-  -m Module.Name   --module-name=Module.Name        Name of Module
-  -p package-name  --package-name=package-name      Name of package        ( optional )
-  -a NAME          --author=NAME                    Name of the project's author
-  -e EMAIL         --email=EMAIL                    Email address of the maintainer
-  -r REPOSITORY    --repository=REPOSITORY          Template repository    ( optional )
-  -v               --version                        Show version number
-                   --initialize-git-repository      Initialize with git repository
-  -h               --help                           Display this help and exit
-
-If repository is not provided, it defaults to the repository at
-git://github.com/fujimura/hi-hspec.git.
-
-Example:
-    hi --module-name 'Foo.Bar' --author 'you' --email 'you@gmail.com'
+  -h,--help                Show this help text
+  -v,--version             Print version information
+  -p,--package-name ARG    Name of package
+  -m,--moduleName ARG      Name of Module
+  -a,--author ARG          Name of the project's author
+  -e,--email ARG           Email address of the maintainer
+  -r,--repository ARG      Template repository
+  --configuration-file ARG Use specified configuration file
+  --initialize-git-repository
+                           Initialize with git repository
 ```
 
 ## Templates
