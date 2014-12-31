@@ -4,8 +4,8 @@ module Hi.Cli
 
 import qualified Hi
 import           Hi.CommandLineOption         (CommandLineOption,
-                                               commandLineOption)
-import           Hi.Option                    (buildOption, defaultRepo)
+                                               commandLineOption, defaultRepo)
+import           Hi.Option                    (buildOption)
 import           Hi.Types
 
 import           Data.Monoid                  (mempty)

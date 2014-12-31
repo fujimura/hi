@@ -3,8 +3,7 @@
 
 module Hi.Option
     (
-      defaultRepo
-    , buildOption
+      buildOption
     ) where
 
 import           Hi.CommandLineOption (CommandLineOption)
@@ -26,13 +25,12 @@ buildOption copt = do
     year <- getCurrentYear
     author <- guessAuthor
     email <- guessEmail
-    template <- guessTemplate
     return $ Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
                     , moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
                     , packageName    = CommandLineOption.packageName copt
                     , author         = author
                     , email          = email
-                    , templateSource = template
+                    , templateSource = FromRepo $ CommandLineOption.repository copt
                     , year           = year
                     }
   where
@@ -64,8 +62,6 @@ buildOption copt = do
     getCurrentYear  = do
         (y,_,_) <- (toGregorian . utctDay) <$> getCurrentTime
         return $ show y
-    guessTemplate :: IO TemplateSource
-    guessTemplate = return . FromRepo $ maybe defaultRepo id (CommandLineOption.repository copt)
 
 -- | Capitalize words and connect them with periods
 --
@@ -86,6 +82,3 @@ modularize (x:xs) = toUpper x : rest xs
     rest []       = []
     rest ('-':ys) = '.' : modularize ys
     rest (y:ys)   = y:rest ys
-
-defaultRepo :: String
-defaultRepo = "git://github.com/fujimura/hi-hspec.git"
