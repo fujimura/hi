@@ -1,11 +1,14 @@
 # Releases
 
-## 1.0.0 (Unreleased)
+## 1.0.0
 
-- Remove config file
-  - Config includes name and email, but they can be supplied from `$ git config`.
 - Files will be generated in `package-name` directory
   - If specified template has `package-name` directory in its root, it will be ignored.
+  - Fixes https://github.com/fujimura/hi/issues/26
+- Non-template file will be ignored if template file with same name exists
+  - Fixes https://github.com/fujimura/hi/issues/34 along with fix above
+- `package-name` is a must, `module-name` is optional
+- `package-name` can be specified as argument
 
 ## 0.0.8.2
 
