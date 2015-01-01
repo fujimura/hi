@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hi.Git
     (
       clone
@@ -8,17 +10,18 @@ module Hi.Git
 
 import           Control.Applicative
 import           System.Exit
-import           System.Process      (readProcess, readProcessWithExitCode, system)
+import           System.Process      (readProcess, readProcessWithExitCode, callCommand)
+import           Control.Exception
 
 expandUrl :: String -> String
 expandUrl ('g':'h':':':xs) = "git@github.com:" ++ xs ++ ".git"
 expandUrl xs = xs
 
 -- | Clone given repository to current directory
-clone :: String -> IO ExitCode
-clone repoUrl = do
-    _ <- system $ "git clone --no-checkout --quiet " ++ repoUrl ++ " " ++ "./"
-    system "git checkout HEAD --quiet"
+clone :: String -> IO ()
+clone repoUrl = handle (\(e :: IOException) -> print e >> exitFailure) $ do
+    callCommand $ "git clone --no-checkout --quiet " ++ repoUrl ++ " " ++ "./"
+    callCommand "git checkout HEAD --quiet"
 
 -- | Return file list by `git ls-files`
 lsFiles :: IO [String]

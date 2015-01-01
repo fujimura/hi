@@ -81,7 +81,6 @@ context opts x = T.pack . fromJust $ lookup (T.unpack x) opts
 postProcess :: Option -> IO ()
 postProcess Option {initializeGitRepository, packageName} = do
     when initializeGitRepository $
-      -- TODO This wont' work unless template has `package-name` as root dir.
       inDirectory packageName $
         void $ system "git init && git add . && git commit -m \"Initial commit\""
     return ()

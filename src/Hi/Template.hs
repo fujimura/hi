@@ -19,8 +19,7 @@ import           Data.List.Split     (splitOn)
 readTemplates :: TemplateSource -> IO Files
 readTemplates (FromRepo repo) =
     inTemporaryDirectory "hi" $ do
-        -- TODO Handle error
-        _ <- Git.clone $ Git.expandUrl repo
+        Git.clone $ Git.expandUrl repo
         paths <- Git.lsFiles
         mapM fetchFile paths
 

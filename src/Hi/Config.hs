@@ -11,7 +11,7 @@ import           Text.Parsec.String
 
 -- | Parse config file
 parseConfig :: String -> [(String, String)]
-parseConfig x = case parse configFile "ERROR" x of -- TODO Error message
+parseConfig x = case parse configFile "Invalid config file format" x of
       Left  l  -> error $ show l
       Right xs -> xs
 
