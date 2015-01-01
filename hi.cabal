@@ -53,6 +53,7 @@ library
   exposed-modules:
       Hi
       Hi.Cli
+      Hi.Config
       Hi.Directory
       Hi.FilePath
       Hi.Git
