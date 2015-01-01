@@ -25,35 +25,35 @@ buildOption copt = do
     year <- getCurrentYear
     author <- guessAuthor
     email <- guessEmail
-    return $ Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
-                    , moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
-                    , packageName    = CommandLineOption.packageName copt
-                    , author         = author
-                    , email          = email
-                    , templateSource = FromRepo $ CommandLineOption.repository copt
-                    , year           = year
-                    }
+    return Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
+                  , moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
+                  , packageName    = CommandLineOption.packageName copt
+                  , author         = author
+                  , email          = email
+                  , templateSource = FromRepo $ CommandLineOption.repository copt
+                  , year           = year
+                  }
   where
     lookupConfig :: String -> IO (Maybe String)
     lookupConfig k = case CommandLineOption.configFilePath copt of
-                       Just path -> (lookup k) . parseConfig <$> readFile path
+                       Just path -> lookup k . parseConfig <$> readFile path
                        Nothing   -> return Nothing
     choice :: [IO (Maybe String)] -> IO (Maybe String)
     choice xs = foldr1 mplus <$> sequence xs
     guessAuthor :: IO String
     guessAuthor = do
-      mc <- choice [ (return $ CommandLineOption.author copt)
-                   , (lookupConfig "author")
-                   , (Git.config "user.name")
+      mc <- choice [ return $ CommandLineOption.author copt
+                   , lookupConfig "author"
+                   , Git.config "user.name"
                    ]
       case mc of
         Just x -> return x
         Nothing -> fail "No user specified"
     guessEmail :: IO String
     guessEmail  = do
-      mc <- choice [ (return $ CommandLineOption.email copt)
-                   , (lookupConfig "email")
-                   , (Git.config "user.email")
+      mc <- choice [ return $ CommandLineOption.email copt
+                   , lookupConfig "email"
+                   , Git.config "user.email"
                    ]
       case mc of
         Just x -> return x

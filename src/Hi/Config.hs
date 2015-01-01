@@ -4,8 +4,9 @@ module Hi.Config
       parseConfig
     ) where
 
-import           Control.Applicative   ((<$>), (<*))
-import           Data.Maybe            (catMaybes)
+import           Control.Applicative ((<$>), (<*))
+import           Control.Monad
+import           Data.Maybe          (catMaybes)
 import           Text.Parsec
 import           Text.Parsec.String
 
@@ -22,7 +23,7 @@ sep :: Parser Char
 sep = char ':'
 
 name :: Parser String
-name = many (oneOf $ ['a'..'z'] ++ ['A'..'Z'] ++ ['-'])
+name = many (oneOf $ ['a'..'z'] ++ ['A'..'Z'] ++ "-")
 
 eol :: Parser Char
 eol = newline <|> (eof >> return '\n')
@@ -35,7 +36,7 @@ comment = do
 line :: Parser (Maybe (String, String))
 line = do
     spaces
-    try (comment >> return Nothing) <|> (line' >>= return . Just)
+    try (comment >> return Nothing) <|> liftM Just line'
   where
     line' = do
         spaces

@@ -64,7 +64,7 @@ process Option {..} = map go
   where
     go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
     go (RegularFile  path content) = RegularFile  (rewritePath' path) content
-    rewritePath' path = joinPath $ packageName:(splitPath $ rewritePath packageName moduleName path)
+    rewritePath' path = joinPath $ packageName : splitPath (rewritePath packageName moduleName path)
     substitute' text = BS.concat . LBS.toChunks . encodeUtf8 $
                         substitute (decodeUtf8 text) (context options)
     options          = [("packageName", packageName)

@@ -20,7 +20,7 @@ run []   = showHelpText (prefs idm) opts
 run args = parseArgs args >>= Hi.run
 
 parseArgs :: [String] -> IO Option
-parseArgs args = (handleParseResult $ execParserPure (prefs idm) opts args) >>= buildOption
+parseArgs args = handleParseResult (execParserPure (prefs idm) opts args) >>= buildOption
 
 opts :: ParserInfo CommandLineOption
 opts = info (helper <*> (version <*> commandLineOption))
