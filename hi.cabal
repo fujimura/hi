@@ -1,29 +1,23 @@
-name:                hi
-version:             1.0.0.0
-synopsis:            Generate scaffold for cabal project
-license:             BSD3
-license-file:        LICENSE
-author:              Fujimura Daisuke
-maintainer:          me@fujimuradaisuke.com
-category:            Distribution
-build-type:          Simple
-cabal-version:       >=1.8
-homepage:            https://github.com/fujimura/hi
+name: hi
+version: 1.0.0.0
+cabal-version: >=1.8
+build-type: Simple
+license: BSD3
+license-file: LICENSE
+maintainer: me@fujimuradaisuke.com
+homepage: https://github.com/fujimura/hi
+synopsis: Generate scaffold for cabal project
 description:
     This application generates a scaffold for Haskell project from a Git repository.
-
     .
     This command
     .
-
     .
     > $ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
     .
-
     .
     will generate:
     .
-
     .
     > $ tree .
     > .
@@ -43,109 +37,101 @@ description:
     >     │      └── BazSpec.hs
     >     └── Spec.hs
     .
-
     .
     See <https://github.com/fujimura/hi> for further usage.
     .
-
-
-library
-  exposed-modules:
-      Hi
-      Hi.Cli
-      Hi.Config
-      Hi.Directory
-      Hi.FilePath
-      Hi.Git
-      Hi.Option
-      Hi.CommandLineOption
-      Hi.Template
-      Hi.Types
-  ghc-options:
-      -Wall
-  hs-source-dirs:
-      src
-  other-modules:
-      Paths_hi
-  build-depends:
-        base          == 4.*
-      , ansi-wl-pprint
-      , bytestring
-      , directory
-      , filepath
-      , optparse-applicative >= 0.10.0
-      , parsec
-      , process
-      , split
-      , template      == 0.2.*
-      , temporary     >= 1.2.0.3
-      , text          > 1.0
-      , time
-
-executable hi
-  main-is:
-      Main.hs
-  ghc-options:
-      -Wall
-  hs-source-dirs:
-      src
-  build-depends:
-        base       == 4.*
-      , ansi-wl-pprint
-      , bytestring
-      , directory
-      , filepath
-      , optparse-applicative >= 0.10.0
-      , parsec
-      , process
-      , split
-      , template   == 0.2.*
-      , temporary  == 1.2.0.3
-      , text       > 1.0
-      , time
-
-test-suite spec
-  main-is:
-      Spec.hs
-  type:
-      exitcode-stdio-1.0
-  ghc-options:
-      -Wall
-  hs-source-dirs:
-      src
-    , test
-  build-depends:
-        base
-      , ansi-wl-pprint
-      , HUnit
-      , bytestring
-      , directory
-      , doctest
-      , filepath
-      , hspec       >= 2.0.0
-      , optparse-applicative >= 0.10.0
-      , parsec
-      , process
-      , silently
-      , split
-      , template    == 0.2.*
-      , temporary   == 1.2.0.3
-      , text       > 1.0
-      , time
-
-test-suite doctests
-  type:
-      exitcode-stdio-1.0
-  ghc-options:
-      -threaded
-  hs-source-dirs:
-      src
-    , test
-  main-is:
-      doctests.hs
-  build-depends:
-      base, doctest >= 0.8, process
-
+category: Distribution
+author: Fujimura Daisuke
+ 
 source-repository head
-  type:     git
-  location: https://github.com/fujimura/hi.git
+    type: git
+    location: https://github.com/fujimura/hi.git
+ 
+library
+    build-depends:
+        base ==4.*,
+        ansi-wl-pprint -any,
+        bytestring -any,
+        directory -any,
+        filepath -any,
+        optparse-applicative >=0.10.0,
+        parsec -any,
+        process -any,
+        split -any,
+        template ==0.2.*,
+        temporary >=1.2.0.3,
+        text >1.0,
+        time -any
+    exposed-modules:
+        Hi
+        Hi.Cli
+        Hi.Config
+        Hi.Directory
+        Hi.FilePath
+        Hi.Git
+        Hi.Option
+        Hi.CommandLineOption
+        Hi.Template
+        Hi.Types
+    exposed: True
+    buildable: True
+    hs-source-dirs: src
+    other-modules:
+        Paths_hi
+    ghc-options: -Wall
+ 
+executable hi
+    build-depends:
+        base ==4.*,
+        ansi-wl-pprint -any,
+        bytestring -any,
+        directory -any,
+        filepath -any,
+        optparse-applicative >=0.10.0,
+        parsec -any,
+        process -any,
+        split -any,
+        template ==0.2.*,
+        temporary ==1.2.0.3,
+        text >1.0,
+        time -any
+    main-is: Main.hs
+    buildable: True
+    hs-source-dirs: src
+    ghc-options: -Wall
+ 
+test-suite spec
+    build-depends:
+        base -any,
+        ansi-wl-pprint -any,
+        HUnit -any,
+        bytestring -any,
+        directory -any,
+        doctest -any,
+        filepath -any,
+        hspec >=2.0.0,
+        optparse-applicative >=0.10.0,
+        parsec -any,
+        process -any,
+        silently -any,
+        split -any,
+        template ==0.2.*,
+        temporary ==1.2.0.3,
+        text >1.0,
+        time -any
+    type: exitcode-stdio-1.0
+    main-is: Spec.hs
+    buildable: True
+    hs-source-dirs: src test
+    ghc-options: -Wall
+test-suite doctests
+    build-depends:
+        base -any,
+        doctest >=0.8,
+        process -any
+    type: exitcode-stdio-1.0
+    main-is: doctests.hs
+    buildable: True
+    hs-source-dirs: src test
+    ghc-options: -threaded
+ 
