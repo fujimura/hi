@@ -13,7 +13,7 @@ description:
     This command
     .
     .
-    > $ hi --package-name "foo-bar-baz" --module-name "Foo.Bar.Baz" --author "Fujimura Daisuke" --email "me@fujimuradaisuke.com"
+    > $ hi foo-bar-baz
     .
     .
     will generate:
