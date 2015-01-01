@@ -6,6 +6,7 @@ license: BSD3
 license-file: LICENSE
 maintainer: me@fujimuradaisuke.com
 homepage: https://github.com/fujimura/hi
+bug-reports: https://github.com/fujimura/hi/issues
 synopsis: Generate scaffold for cabal project
 description:
     This application generates a scaffold for Haskell project from a Git repository.
