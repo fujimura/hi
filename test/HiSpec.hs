@@ -20,6 +20,7 @@ options = Option { initializeGitRepository = True
                  , email          = "me@fujimuradaisuke.com"
                  , templateSource = FromRepo "file://somewhere"
                  , year           = "2014"
+                 , afterCommand   = Nothing
                  }
 
 lookupContent :: FilePath -> Files -> Maybe String

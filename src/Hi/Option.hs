@@ -32,6 +32,7 @@ buildOption copt = do
                   , email          = email
                   , templateSource = FromRepo $ CommandLineOption.repository copt
                   , year           = year
+                  , afterCommand   = CommandLineOption.afterCommand copt
                   }
   where
     lookupConfig :: String -> IO (Maybe String)

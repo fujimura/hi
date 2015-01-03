@@ -24,4 +24,5 @@ data Option = Option
              , email :: String
              , year :: String
              , templateSource :: TemplateSource
+             , afterCommand :: Maybe String
              } deriving (Eq,Ord,Show)
