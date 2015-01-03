@@ -25,7 +25,7 @@ buildOption copt = do
     year <- getCurrentYear
     author <- guessAuthor
     email <- guessEmail
-    return Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
+    return Option { initializeGitRepository = CommandLineOption.initializeGitRepository copt
                   , moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
                   , packageName    = CommandLineOption.packageName copt
                   , author         = author

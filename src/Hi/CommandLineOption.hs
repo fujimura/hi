@@ -13,7 +13,7 @@ data CommandLineOption = CommandLineOption
                        , email                   :: Maybe String
                        , repository              :: String
                        , configFilePath          :: Maybe String
-                       , initializeGitRepository :: Maybe Bool
+                       , initializeGitRepository :: Bool
                        , afterCommand            :: Maybe String
                        } deriving (Eq, Ord, Show)
 
@@ -25,7 +25,7 @@ commandLineOption = CommandLineOption
    <*> optional (strOption (short 'e' <> long "email"        <> help "Email address of the maintainer"))
    <*>           strOption (short 'r' <> long "repository"   <> help "Template repository" <> value defaultRepo)
    <*> optional (strOption (long "configuration-file"        <> help "Use specified configuration file"))
-   <*> optional (switch    (long "initialize-git-repository" <> help "Initialize with git repository"))
+   <*>          (switch    (long "initialize-git-repository" <> help "Initialize with git repository"))
    <*> optional (strOption (long "after-command"             <> help "The command to be run after generation"))
 
 defaultRepo :: String
