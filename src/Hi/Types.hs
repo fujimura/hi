@@ -17,12 +17,11 @@ data TemplateSource = FromRepo String deriving (Eq,Ord,Show)
 type Files = [File]
 
 data Option = Option
-             { initializeGitRepository :: Bool
-             , moduleName :: String
+             { moduleName :: String
              , packageName :: String
              , author :: String
              , email :: String
              , year :: String
              , templateSource :: TemplateSource
-             , afterCommand :: Maybe String
+             , afterCommands :: [String]
              } deriving (Eq,Ord,Show)

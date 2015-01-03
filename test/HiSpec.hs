@@ -13,14 +13,13 @@ main :: IO ()
 main = hspec spec
 
 options :: Option
-options = Option { initializeGitRepository = True
-                 , packageName    = "testapp"
+options = Option { packageName    = "testapp"
                  , moduleName     = "System.Awesome.Library"
                  , author         = "Fujimura Daisuke"
                  , email          = "me@fujimuradaisuke.com"
                  , templateSource = FromRepo "file://somewhere"
                  , year           = "2014"
-                 , afterCommand   = Nothing
+                 , afterCommands  = []
                  }
 
 lookupContent :: FilePath -> Files -> Maybe String

@@ -15,7 +15,7 @@ import           Control.Applicative
 import           Control.Monad
 import qualified Data.ByteString          as BS (writeFile, concat)
 import qualified Data.ByteString.Lazy     as LBS (toChunks)
-import           Data.Maybe               (isJust, fromJust)
+import           Data.Maybe               (fromJust)
 import qualified Data.Text                as T (pack, unpack)
 import           Data.Text.Encoding       (decodeUtf8)
 import           Data.Text.Lazy.Encoding  (encodeUtf8)
@@ -79,14 +79,8 @@ context :: [(String, String)] -> Context
 context opts x = T.pack . fromJust $ lookup (T.unpack x) opts
 
 postProcess :: Option -> IO ()
-postProcess Option {initializeGitRepository, packageName, afterCommand} = do
-    when initializeGitRepository $
-      inDirectory packageName $
-        void $ system "git init && git add . && git commit -m \"Initial commit\""
-    when (isJust afterCommand)  $
-      inDirectory packageName $
-        void $ system $ fromJust afterCommand
-    return ()
+postProcess Option {packageName, afterCommands} = do
+    void $ inDirectory packageName $ forM_ afterCommands (void . system)
 
 -- | Drop 'RegularFile's if there is a 'TemplateFile' which has same name
 dropExtraRegularFiles :: Files -> Files
