@@ -57,13 +57,9 @@ Creating new project from repository: git@github.com:fujimura/hi-flat.git
 
 ## Templates
 
-### Available templates at this moment
+### Available templates
 
-- [hi-hspec](https://github.com/fujimura/hi-hspec) : Sources in `src`, tests in `test` by [Hspec](https://github.com/hspec/hspec) .
-
-- [hi-flat](https://github.com/fujimura/hi-flat) : Everything is in root directory, like `cabal init`.
-
-Please let me know if you have your own template. I'll add it here.
+Please see https://github.com/fujimura/hi/wiki#available-templates and feel free to add yours!
 
 ### How to make your own template
 
