@@ -79,11 +79,8 @@ context :: [(String, String)] -> Context
 context opts x = T.pack . fromJust $ lookup (T.unpack x) opts
 
 postProcess :: Option -> IO ()
-postProcess Option {initializeGitRepository, packageName} = do
-    when initializeGitRepository $
-      inDirectory packageName $
-        void $ system "git init && git add . && git commit -m \"Initial commit\""
-    return ()
+postProcess Option {packageName, afterCommands} = do
+    void $ inDirectory packageName $ forM_ afterCommands (void . system)
 
 -- | Drop 'RegularFile's if there is a 'TemplateFile' which has same name
 dropExtraRegularFiles :: Files -> Files

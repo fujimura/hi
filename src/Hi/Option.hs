@@ -15,7 +15,7 @@ import           Hi.Types
 import           Control.Applicative
 import           Control.Monad
 import           Data.Char            (toUpper)
-import           Data.Maybe           (fromMaybe)
+import           Data.Maybe           (catMaybes, fromMaybe)
 import           Data.Time.Calendar   (toGregorian)
 import           Data.Time.Clock      (getCurrentTime, utctDay)
 
@@ -25,13 +25,19 @@ buildOption copt = do
     year <- getCurrentYear
     author <- guessAuthor
     email <- guessEmail
-    return Option { initializeGitRepository = fromMaybe False $ CommandLineOption.initializeGitRepository copt
-                  , moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
+    let mGitInit = if CommandLineOption.initializeGitRepository copt
+                     then Just "git init && git add . && git commit -m \"Initial commit\""
+                     else Nothing
+        afterCommands = catMaybes [ mGitInit
+                                  , CommandLineOption.afterCommand copt
+                                  ]
+    return Option { moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
                   , packageName    = CommandLineOption.packageName copt
                   , author         = author
                   , email          = email
                   , templateSource = FromRepo $ CommandLineOption.repository copt
                   , year           = year
+                  , afterCommands  = afterCommands
                   }
   where
     lookupConfig :: String -> IO (Maybe String)
