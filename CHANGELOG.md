@@ -1,6 +1,11 @@
 # Releases
 
-## 1.0.0
+## 1.1.0.0
+
+- Added `--after-command` option to run arbitrary command after generation
+- Fix version of process
+
+## 1.0.0.0
 
 - Files will be generated in `package-name` directory
   - If specified template has `package-name` directory in its root, it will be ignored.

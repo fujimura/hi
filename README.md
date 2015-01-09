@@ -53,6 +53,7 @@ Creating new project from repository: git@github.com:fujimura/hi-flat.git
   --configuration-file ARG Use specified configuration file
   --initialize-git-repository
                            Initialize with git repository
+  --after-command ARG      The command to be run after generation
 ```
 
 ## Templates
