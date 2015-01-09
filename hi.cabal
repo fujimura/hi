@@ -90,7 +90,7 @@ executable hi
         filepath -any,
         optparse-applicative >=0.10.0,
         parsec -any,
-        process -any,
+        process >=1.2.0.0,
         split -any,
         template ==0.2.*,
         temporary ==1.2.0.3,
