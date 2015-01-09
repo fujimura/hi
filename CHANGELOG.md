@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.0.1
+
+- Fix version of process in executable(the change in 1.1.0.0 is only in library)
+
 ## 1.1.0.0
 
 - Added `--after-command` option to run arbitrary command after generation
