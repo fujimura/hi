@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.0.2(Not released)
+
+- Fix a bug that stops dropping all regular files https://github.com/fujimura/hi/issues/50
+
 ## 1.1.0.1
 
 - Fix version of process in executable(the change in 1.1.0.0 is only in library)
