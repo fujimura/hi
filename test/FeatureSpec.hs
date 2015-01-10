@@ -53,6 +53,11 @@ spec = do
         it "should use Capitalized package name as module name" $ do
           doesDirectoryExist "something-weird/src/Something/Weird" `shouldReturn` True
 
+   -- https://github.com/fujimura/hi/issues/48
+    describe "with --module-name, not --moduleName" $ do
+      let cmd = runWithConfigurationFile [ "-p", packageName , "--module-name", moduleName ]
+      around_ cmd features
+
     describe "with --initialize-git-repository" $ do
       let cmd = runWithCommandLineOptions [ "--initialize-git-repository"
                                           , "-p"

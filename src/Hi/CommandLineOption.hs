@@ -20,7 +20,9 @@ data CommandLineOption = CommandLineOption
 commandLineOption :: Parser CommandLineOption
 commandLineOption = CommandLineOption
    <$>          (strOption (short 'p' <> long "package-name" <> help "Name of package") <|> argument str (help "Name of package"))
-   <*> optional (strOption (short 'm' <> long "moduleName"   <> help "Name of Module"))
+   -- TODO: Deprecate and remove "moduleName" option
+   -- https://github.com/fujimura/hi/issues/48
+   <*> optional (strOption (short 'm' <> long "moduleName"   <> long "module-name"  <> help "Name of Module"))
    <*> optional (strOption (short 'a' <> long "author"       <> help "Name of the project's author"))
    <*> optional (strOption (short 'e' <> long "email"        <> help "Email address of the maintainer"))
    <*>           strOption (short 'r' <> long "repository"   <> help "Template repository" <> value defaultRepo)
