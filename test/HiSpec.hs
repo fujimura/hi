@@ -69,3 +69,13 @@ spec =
         it "should be copied without substitution" $
           let files = process (options {moduleName = "Bar"}) [RegularFile "ModuleName/Foofile" "foo: $bar\n"] in
           lookupContent "testapp/Bar/Foofile" files `shouldBe` Just "foo: $bar\n"
+
+      describe "Regular file and template file with same name" $
+        it "should be copied without substitution" $
+          let files = process (options {moduleName = "Bar"}) [RegularFile "Foofile" "foo: r\n", TemplateFile "Foofile" "foo: t\n"] in
+          files `shouldBe` [TemplateFile "testapp/Foofile" "foo: t\n"]
+
+      describe "Regular file and template file with same name, in root and /package-name" $
+        it "should be copied without substitution" $
+          let files = process (options {moduleName = "Bar"}) [RegularFile "Foofile" "foo: r\n", TemplateFile "package-name/Foofile" "foo: t\n"] in
+          files `shouldBe` [TemplateFile "testapp/Foofile" "foo: t\n"]

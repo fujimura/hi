@@ -59,11 +59,11 @@ showFileList files = do
 
 -- |Process given 'Files' and return result. it does
 --
--- 1. rewrite path
---
--- 2. substitute arguments
+-- 1. Rewrite path
+-- 2. Substitute arguments
+-- 3. Drop regular files if template file with same name exists
 process :: Option -> Files -> Files
-process Option {..} files = map go (dropExtraRegularFiles files)
+process Option {..} = dropExtraRegularFiles . map go
   where
     go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
     go (RegularFile  path content) = RegularFile  (rewritePath' path) content
