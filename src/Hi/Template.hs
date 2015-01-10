@@ -14,12 +14,19 @@ import           Control.Applicative ((<$>))
 import qualified Data.ByteString     as BS (readFile)
 import           Data.List           (isSuffixOf)
 import           Data.List.Split     (splitOn)
+import           System.Directory    (canonicalizePath, doesDirectoryExist)
 
--- | Read templates in given 'FilePath'
+-- | Read templates in given 'TemplateSource'
 readTemplates :: TemplateSource -> IO Files
-readTemplates (FromRepo repo) =
+readTemplates (FromRepo repo) = do
+    e <- doesDirectoryExist repo
+    repo' <- if e
+               -- It seems to be an file path
+               then canonicalizePath repo
+               -- Not looks like a file path
+               else return repo
     inTemporaryDirectory "hi" $ do
-        Git.clone $ Git.expandUrl repo
+        Git.clone $ Git.expandUrl repo'
         paths <- Git.lsFiles
         mapM fetchFile paths
 
