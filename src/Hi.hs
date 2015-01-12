@@ -63,7 +63,7 @@ showFileList files = do
 -- 2. Substitute arguments
 -- 3. Drop regular files if template file with same name exists
 process :: Option -> Files -> Files
-process Option {..} = dropExtraRegularFiles . map go
+process Option {..} = dropExtraRegularFiles . map go . dropFilesInRoot
   where
     go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
     go (RegularFile  path content) = RegularFile  (rewritePath' path) content
@@ -102,3 +102,17 @@ dropExtraRegularFiles xs = go (map getFilePath xs) xs
                                            then go paths ys
                                            else y : go paths ys
     go paths (y@(TemplateFile _ _):ys) = y : go paths ys
+
+-- | Drop all files in root directory.
+--
+-- >>> dropFilesInRoot [RegularFile "package-name/README.md" (BS.pack "a"), RegularFile "foo" (BS.pack "b")]
+-- [RegularFile {getFilePath = "package-name/README.md", getFileContents = "a"}]
+--
+dropFilesInRoot :: Files -> Files
+dropFilesInRoot []     = []
+dropFilesInRoot (x:xs) = go (splitPath $ getFilePath x)
+  where
+    go [] = dropFilesInRoot xs
+    go (path:_) = if "package-name/" == path
+                    then x : dropFilesInRoot xs
+                    else dropFilesInRoot xs
