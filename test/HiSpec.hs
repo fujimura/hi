@@ -36,27 +36,27 @@ spec =
     describe "Hi.process" $ do
       context "Option `packageName` was given and it's in the template" $
         it "should be replaced with the value" $
-          let files = process options [TemplateFile "dummy.template" "Foo $packageName bar, \n"] in
+          let files = process options [TemplateFile "package-name/dummy.template" "Foo $packageName bar, \n"] in
           fromJust (lookupContent "testapp/dummy" files) `shouldContain` packageName options
 
       context "Option `moduleName` was given and it's in the template" $
         it "should be replaced with the value" $
-          let files = process options [TemplateFile "dummy.template" "Foo $moduleName bar, \n"] in
+          let files = process options [TemplateFile "package-name/dummy.template" "Foo $moduleName bar, \n"] in
           fromJust (lookupContent "testapp/dummy" files) `shouldContain` moduleName options
 
       context "Option `author` was given and it's in the template" $
         it "should be replaced with the value" $
-          let files = process options [TemplateFile "dummy.template" "Foo $author bar, \n"] in
+          let files = process options [TemplateFile "package-name/dummy.template" "Foo $author bar, \n"] in
           fromJust (lookupContent "testapp/dummy" files) `shouldContain` author options
 
       context "Option `email` was given and it's in the template" $
         it "should be replaced with the value" $
-          let files = process options [TemplateFile "dummy.template" "Foo $email bar, \n"] in
+          let files = process options [TemplateFile "package-name/dummy.template" "Foo $email bar, \n"] in
           fromJust (lookupContent "testapp/dummy" files) `shouldContain` email options
 
       context "`ModuleName` was given and `moduleName` is in the file path" $
         it "should be replaced with given value, replacing period with path separator" $
-          let files = process (options { moduleName = "Bar"}) [TemplateFile "foo/ModuleName/File.hs.template" "module Foo\n"] in
+          let files = process (options { moduleName = "Bar"}) [TemplateFile "package-name/foo/ModuleName/File.hs.template" "module Foo\n"] in
           lookupContent "testapp/foo/Bar/File.hs" files `shouldSatisfy` isJust
 
       context "`/package-name` exists in template" $
@@ -67,15 +67,15 @@ spec =
 
       describe "file without .template" $
         it "should be copied without substitution" $
-          let files = process (options {moduleName = "Bar"}) [RegularFile "ModuleName/Foofile" "foo: $bar\n"] in
+          let files = process (options {moduleName = "Bar"}) [RegularFile "package-name/ModuleName/Foofile" "foo: $bar\n"] in
           lookupContent "testapp/Bar/Foofile" files `shouldBe` Just "foo: $bar\n"
 
       describe "Regular file and template file with same name" $
         it "should be copied without substitution" $
-          let files = process (options {moduleName = "Bar"}) [RegularFile "Foofile" "foo: r\n", TemplateFile "Foofile" "foo: t\n"] in
+          let files = process (options {moduleName = "Bar"}) [RegularFile "package-name/Foofile" "foo: r\n", TemplateFile "package-name/Foofile" "foo: t\n"] in
           files `shouldBe` [TemplateFile "testapp/Foofile" "foo: t\n"]
 
-      describe "Regular file and template file with same name, in root and /package-name" $
-        it "should be copied without substitution" $
+      describe "Files in root directory" $
+        it "should be copied" $
           let files = process (options {moduleName = "Bar"}) [RegularFile "Foofile" "foo: r\n", TemplateFile "package-name/Foofile" "foo: t\n"] in
           files `shouldBe` [TemplateFile "testapp/Foofile" "foo: t\n"]
