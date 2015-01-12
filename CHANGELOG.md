@@ -1,6 +1,6 @@
 # Releases
 
-## 1.1.0.2(Not released)
+## 1.1.0.2
 
 - Fix a bug that stops dropping all regular files https://github.com/fujimura/hi/issues/50
 - `--module-name`, the option which is mistakenly removed, is back https://github.com/fujimura/hi/issues/48
