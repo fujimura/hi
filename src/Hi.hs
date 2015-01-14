@@ -17,7 +17,7 @@ import           Control.Monad
 import qualified Data.ByteString.Char8   as BS
 import qualified Data.ByteString.Lazy    as LBS (toChunks)
 import           Data.List               ((\\))
-import           Data.Maybe              (fromJust)
+import           Data.Maybe              (fromMaybe)
 import qualified Data.Text               as T (pack, unpack)
 import           Data.Text.Encoding      (decodeUtf8)
 import           Data.Text.Lazy.Encoding (encodeUtf8)
@@ -79,7 +79,7 @@ process Option {..} = dropExtraRegularFiles . map go . dropFilesInRoot
 
 -- | Return 'Context' obtained by given 'Options'
 context :: [(String, String)] -> Context
-context opts x = T.pack . fromJust $ lookup (T.unpack x) opts
+context opts x = T.pack . (fromMaybe "") $ lookup (T.unpack x) opts
 
 postProcess :: Option -> IO ()
 postProcess Option {packageName, afterCommands} = do
