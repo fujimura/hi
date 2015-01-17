@@ -75,6 +75,9 @@ Available variables:
 
 'package-name' and 'ModuleName' in filepath will be replaced with given variable.
 
+Files under `package-name` will be used as the source of generated files.
+Files in root directory will not be copied.
+
 ## Motivation
 
 I'm tired to organize directory structure for every new Haskell project which has some test.
