@@ -1,5 +1,10 @@
 # Releases
 
+## 1.1.0.3
+
+- Files in root directory of template repository isn't cloned anymore https://github.com/fujimura/hi/issues/52
+- Missing option will be remained as-is (related to https://github.com/fujimura/hi/pull/54)
+
 ## 1.1.0.2
 
 - Fix a bug that stops dropping all regular files https://github.com/fujimura/hi/issues/50
