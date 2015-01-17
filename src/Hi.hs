@@ -77,9 +77,10 @@ process Option {..} = dropExtraRegularFiles . map go . dropFilesInRoot
                        ,("year", year)
                        ]
 
--- | Return 'Context' obtained by given 'Options'
+-- | Return 'Context' obtained by given 'Options'. An identifier which has no
+-- corresponding context will not be substituted.
 context :: [(String, String)] -> Context
-context opts x = T.pack . (fromMaybe "") $ lookup (T.unpack x) opts
+context opts x = let x' = T.unpack x in T.pack . (fromMaybe ("$" ++ x')) $ lookup x' opts
 
 postProcess :: Option -> IO ()
 postProcess Option {packageName, afterCommands} = do

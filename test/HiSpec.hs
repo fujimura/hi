@@ -79,3 +79,8 @@ spec =
         it "should be copied" $
           let files = process (options {moduleName = "Bar"}) [RegularFile "Foofile" "foo: r\n", TemplateFile "package-name/Foofile" "foo: t\n"] in
           files `shouldBe` [TemplateFile "testapp/Foofile" "foo: t\n"]
+
+      describe "Unknown variable in template" $
+        it "should not be substituted" $
+          let files = process (options {moduleName = "Bar"}) [TemplateFile "package-name/Foofile" "foo: $unknown\n"] in
+          files `shouldBe` [TemplateFile "testapp/Foofile" "foo: $unknown\n"]
