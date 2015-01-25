@@ -67,7 +67,7 @@ process Option {..} = dropExtraRegularFiles . map go . dropFilesInRoot
   where
     go (TemplateFile path content) = TemplateFile (rewritePath' path) (substitute' content)
     go (RegularFile  path content) = RegularFile  (rewritePath' path) content
-    rewritePath' path = joinPath $ packageName : splitPath (rewritePath packageName moduleName path)
+    rewritePath' path = joinPath $ directoryName : splitPath (rewritePath packageName moduleName path)
     substitute' text = BS.concat . LBS.toChunks . encodeUtf8 $
                         substitute (decodeUtf8 text) (context options)
     options          = [("packageName", packageName)
@@ -83,8 +83,8 @@ context :: [(String, String)] -> Context
 context opts x = let x' = T.unpack x in T.pack . (fromMaybe ("$" ++ x')) $ lookup x' opts
 
 postProcess :: Option -> IO ()
-postProcess Option {packageName, afterCommands} = do
-    void $ inDirectory packageName $ forM_ afterCommands (void . system)
+postProcess Option {directoryName, afterCommands} = do
+    void $ inDirectory directoryName $ forM_ afterCommands (void . system)
 
 -- | Drop 'RegularFile's if there is a 'TemplateFile' which has same name
 --

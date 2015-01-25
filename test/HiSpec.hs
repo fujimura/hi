@@ -15,6 +15,7 @@ main = hspec spec
 options :: Option
 options = Option { packageName    = "testapp"
                  , moduleName     = "System.Awesome.Library"
+                 , directoryName  = "testapp"
                  , author         = "Fujimura Daisuke"
                  , email          = "me@fujimuradaisuke.com"
                  , templateSource = FromRepo "file://somewhere"
@@ -61,9 +62,10 @@ spec =
 
       context "`/package-name` exists in template" $
         it "should generate files in package-name, not in package-name/package-name" $ do
-          let files = process (options {packageName = "foo", moduleName = "Foo"}) [TemplateFile "package-name/ModuleName/File.hs.template" "module Foo\n" ]
+          let files = process (options {packageName = "foo", moduleName = "Foo", directoryName = "baz"})
+                              [TemplateFile "package-name/ModuleName/File.hs.template" "module Foo\n" ]
 
-          lookupContent "foo/Foo/File.hs" files `shouldSatisfy` isJust
+          lookupContent "baz/Foo/File.hs" files `shouldBe` Just "module Foo\n"
 
       describe "file without .template" $
         it "should be copied without substitution" $
@@ -84,3 +86,9 @@ spec =
         it "should not be substituted" $
           let files = process (options {moduleName = "Bar"}) [TemplateFile "package-name/Foofile" "foo: $unknown\n"] in
           files `shouldBe` [TemplateFile "testapp/Foofile" "foo: $unknown\n"]
+
+      describe "Directory name was specified" $
+        it "should use it" $
+          let files = process (options {moduleName = "Bar", directoryName = "baz"})
+                              [TemplateFile "package-name/ModuleName/Foofile" "foo: x\n"] in
+          files `shouldBe` [TemplateFile "baz/Bar/Foofile" "foo: x\n"]

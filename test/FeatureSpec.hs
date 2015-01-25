@@ -53,6 +53,13 @@ spec = do
         it "should use Capitalized package name as module name" $ do
           doesDirectoryExist "something-weird/src/Something/Weird" `shouldReturn` True
 
+    describe "Directory name was given" $ do
+      let cmd = runWithCommandLineOptions ["abc", "-d", "efg"]
+
+      around_ cmd $ do
+        it "should create file in given directory" $ do
+          doesDirectoryExist "efg/src/Abc" `shouldReturn` True
+
    -- https://github.com/fujimura/hi/issues/48
     describe "with --module-name, not --moduleName" $ do
       let cmd = runWithConfigurationFile [ "-p", packageName , "--module-name", moduleName ]
