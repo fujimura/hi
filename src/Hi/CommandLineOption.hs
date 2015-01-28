@@ -9,6 +9,7 @@ import           Options.Applicative
 data CommandLineOption = CommandLineOption
                        { packageName             :: String
                        , moduleName              :: Maybe String
+                       , directoryName           :: Maybe String
                        , author                  :: Maybe String
                        , email                   :: Maybe String
                        , repository              :: String
@@ -23,6 +24,7 @@ commandLineOption = CommandLineOption
    -- TODO: Deprecate and remove "moduleName" option
    -- https://github.com/fujimura/hi/issues/48
    <*> optional (strOption (short 'm' <> long "moduleName"   <> long "module-name"  <> help "Name of Module"))
+   <*> optional (strOption (short 'd' <> long "directory-name" <> help "Directory name to create files"))
    <*> optional (strOption (short 'a' <> long "author"       <> help "Name of the project's author"))
    <*> optional (strOption (short 'e' <> long "email"        <> help "Email address of the maintainer"))
    <*>           strOption (short 'r' <> long "repository"   <> help "Template repository" <> value defaultRepo)

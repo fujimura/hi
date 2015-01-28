@@ -31,8 +31,10 @@ buildOption copt = do
         afterCommands = catMaybes [ mGitInit
                                   , CommandLineOption.afterCommand copt
                                   ]
+        packageName   = CommandLineOption.packageName copt
     return Option { moduleName     = fromMaybe moduleName $ CommandLineOption.moduleName copt
-                  , packageName    = CommandLineOption.packageName copt
+                  , packageName    = packageName
+                  , directoryName  = fromMaybe packageName $ CommandLineOption.directoryName copt
                   , author         = author
                   , email          = email
                   , templateSource = FromRepo $ CommandLineOption.repository copt

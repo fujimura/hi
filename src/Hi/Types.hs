@@ -19,6 +19,7 @@ type Files = [File]
 data Option = Option
              { moduleName :: String
              , packageName :: String
+             , directoryName :: String
              , author :: String
              , email :: String
              , year :: String
