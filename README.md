@@ -1,4 +1,4 @@
-hi [![Build Status](https://travis-ci.org/fujimura/hi.svg?branch=master)](https://travis-ci.org/fujimura/hi)[![Coverage Status](https://img.shields.io/coveralls/fujimura/hi.svg)](https://coveralls.io/r/fujimura/hi?branch=master)[![Hackage](https://img.shields.io/hackage/v/hi.svg)](https://img.shields.io/hackage/v/hi.svg)
+hi [![Build Status](https://travis-ci.org/fujimura/hi.svg?branch=master)](https://travis-ci.org/fujimura/hi)[![Coverage Status](https://img.shields.io/coveralls/fujimura/hi.svg)](https://coveralls.io/r/fujimura/hi?branch=master)[![Hackage](https://img.shields.io/hackage/v/hi.svg)](http://hackage.haskell.org/package/hi)
 ===========
 
 Generate scaffold for a Haskell project
