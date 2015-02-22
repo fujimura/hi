@@ -1,5 +1,9 @@
 # Releases
 
+## 1.2.0.0
+
+- Add option to specify directory name of the files to be generated (https://github.com/fujimura/hi/pull/56)
+
 ## 1.1.0.3
 
 - Files in root directory of template repository isn't cloned anymore https://github.com/fujimura/hi/issues/52
