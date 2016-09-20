@@ -1,0 +1,126 @@
+name: hi
+version: '1.2.0.0'
+synopsis: Generate scaffold for cabal project
+description: ! 'This application generates a scaffold for Haskell project from a Git
+  repository.
+
+
+  This command
+
+
+
+  > $ hi foo-bar-baz
+
+
+
+  will generate:
+
+
+
+  > $ tree .
+
+  > .
+
+  > ├── LICENSE
+
+  > ├── README.md
+
+  > ├── foo-bar-baz.cabal
+
+  > ├── src
+
+  > │  └── Foo
+
+  > │      └── Bar
+
+  > │          ├── Baz
+
+  > │          │  └── Internal.hs
+
+  > │          └── Baz.hs
+
+  > └── test
+
+  >     ├── Foo
+
+  >     │  └── Bar
+
+  >     │      ├── Baz
+
+  >     │      └── BazSpec.hs
+
+  >     └── Spec.hs
+
+
+
+  See <https://github.com/fujimura/hi> for further usage.
+
+'
+category: Distribution
+author: Fujimura Daisuke
+maintainer: me@fujimuradaisuke.com
+license: BSD3
+github: fujimura/hi.git
+dependencies:
+- ansi-wl-pprint
+- bytestring
+- directory
+- filepath
+- optparse-applicative >=0.10.0
+- parsec
+- split
+- template ==0.2.*
+- text >1.0
+- time
+library:
+  source-dirs: src
+  ghc-options: -Wall
+  exposed-modules:
+  - Hi
+  - Hi.Cli
+  - Hi.Config
+  - Hi.Directory
+  - Hi.FilePath
+  - Hi.Git
+  - Hi.Option
+  - Hi.CommandLineOption
+  - Hi.Template
+  - Hi.Types
+  dependencies:
+  - base ==4.*
+  - process >=1.2.0.0
+  - temporary >=1.2.0.3
+executables:
+  hi:
+    main: Main.hs
+    source-dirs: src
+    ghc-options: -Wall
+    dependencies:
+    - base ==4.*
+    - process >=1.2.0.0
+    - temporary ==1.2.0.3
+tests:
+  doctests:
+    main: doctests.hs
+    source-dirs:
+    - src
+    - test
+    ghc-options: -threaded
+    dependencies:
+    - base
+    - doctest >=0.8
+    - process
+  spec:
+    main: Spec.hs
+    source-dirs:
+    - src
+    - test
+    ghc-options: -Wall
+    dependencies:
+    - base
+    - HUnit
+    - doctest
+    - hspec >=2.0.0
+    - process
+    - silently
+    - temporary ==1.2.0.3
