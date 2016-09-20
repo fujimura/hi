@@ -1,68 +1,70 @@
-name: hi
-version: 1.2.0.0
-cabal-version: >=1.8
-build-type: Simple
-license: BSD3
-license-file: LICENSE
-maintainer: me@fujimuradaisuke.com
-homepage: https://github.com/fujimura/hi
-bug-reports: https://github.com/fujimura/hi/issues
-synopsis: Generate scaffold for cabal project
-description:
-    This application generates a scaffold for Haskell project from a Git repository.
-    .
-    This command
-    .
-    .
-    > $ hi foo-bar-baz
-    .
-    .
-    will generate:
-    .
-    .
-    > $ tree .
-    > .
-    > ├── LICENSE
-    > ├── README.md
-    > ├── foo-bar-baz.cabal
-    > ├── src
-    > │  └── Foo
-    > │      └── Bar
-    > │          ├── Baz
-    > │          │  └── Internal.hs
-    > │          └── Baz.hs
-    > └── test
-    >     ├── Foo
-    >     │  └── Bar
-    >     │      ├── Baz
-    >     │      └── BazSpec.hs
-    >     └── Spec.hs
-    .
-    .
-    See <https://github.com/fujimura/hi> for further usage.
-    .
-category: Distribution
-author: Fujimura Daisuke
- 
+-- This file has been generated from package.yaml by hpack version 0.13.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           hi
+version:        1.2.0.0
+cabal-version:  >= 1.10
+build-type:     Simple
+license:        BSD3
+license-file:   LICENSE
+maintainer:     me@fujimuradaisuke.com
+homepage:       https://github.com/fujimura/hi.git#readme
+bug-reports:    https://github.com/fujimura/hi.git/issues
+synopsis:       Generate scaffold for cabal project
+description:    This application generates a scaffold for Haskell project from a Git repository.
+                .
+                This command
+                .
+                .
+                > $ hi foo-bar-baz
+                .
+                .
+                will generate:
+                .
+                .
+                > $ tree .
+                > .
+                > ├── LICENSE
+                > ├── README.md
+                > ├── foo-bar-baz.cabal
+                > ├── src
+                > │  └── Foo
+                > │      └── Bar
+                > │          ├── Baz
+                > │          │  └── Internal.hs
+                > │          └── Baz.hs
+                > └── test
+                >     ├── Foo
+                >     │  └── Bar
+                >     │      ├── Baz
+                >     │      └── BazSpec.hs
+                >     └── Spec.hs
+                .
+                .
+                See <https://github.com/fujimura/hi> for further usage.
+category:       Distribution
+author:         Fujimura Daisuke
+
 source-repository head
     type: git
     location: https://github.com/fujimura/hi.git
- 
+
 library
     build-depends:
-        base ==4.*,
-        ansi-wl-pprint -any,
-        bytestring -any,
-        directory -any,
-        filepath -any,
+        ansi-wl-pprint,
+        bytestring,
+        directory,
+        filepath,
         optparse-applicative >=0.10.0,
-        parsec -any,
-        process >=1.2.0.0,
-        split -any,
+        parsec,
+        split,
         template ==0.2.*,
-        temporary >=1.2.0.3,
         text >1.0,
-        time -any
+        time,
+        base ==4.*,
+        process >=1.2.0.0,
+        temporary >=1.2.0.3
     exposed-modules:
         Hi
         Hi.Cli
@@ -74,65 +76,125 @@ library
         Hi.CommandLineOption
         Hi.Template
         Hi.Types
-    exposed: True
-    buildable: True
-    hs-source-dirs: src
+    hs-source-dirs:
+        src
     other-modules:
+        Main
         Paths_hi
+    default-language: Haskell2010
     ghc-options: -Wall
- 
+
 executable hi
     build-depends:
+        ansi-wl-pprint,
+        bytestring,
+        directory,
+        filepath,
+        optparse-applicative >=0.10.0,
+        parsec,
+        split,
+        template ==0.2.*,
+        text >1.0,
+        time,
         base ==4.*,
-        ansi-wl-pprint -any,
-        bytestring -any,
-        directory -any,
-        filepath -any,
-        optparse-applicative >=0.10.0,
-        parsec -any,
         process >=1.2.0.0,
-        split -any,
-        template ==0.2.*,
-        temporary ==1.2.0.3,
-        text >1.0,
-        time -any
+        temporary ==1.2.0.3
+    other-modules:
+        Hi
+        Hi.Cli
+        Hi.CommandLineOption
+        Hi.Config
+        Hi.Directory
+        Hi.FilePath
+        Hi.Git
+        Hi.Option
+        Hi.Template
+        Hi.Types
+    default-language: Haskell2010
     main-is: Main.hs
-    buildable: True
-    hs-source-dirs: src
+    hs-source-dirs:
+        src
     ghc-options: -Wall
- 
-test-suite spec
-    build-depends:
-        base -any,
-        ansi-wl-pprint -any,
-        HUnit -any,
-        bytestring -any,
-        directory -any,
-        doctest -any,
-        filepath -any,
-        hspec >=2.0.0,
-        optparse-applicative >=0.10.0,
-        parsec -any,
-        process -any,
-        silently -any,
-        split -any,
-        template ==0.2.*,
-        temporary ==1.2.0.3,
-        text >1.0,
-        time -any
-    type: exitcode-stdio-1.0
-    main-is: Spec.hs
-    buildable: True
-    hs-source-dirs: src test
-    ghc-options: -Wall
+
 test-suite doctests
     build-depends:
-        base -any,
+        ansi-wl-pprint,
+        bytestring,
+        directory,
+        filepath,
+        optparse-applicative >=0.10.0,
+        parsec,
+        split,
+        template ==0.2.*,
+        text >1.0,
+        time,
+        base,
         doctest >=0.8,
-        process -any
+        process
+    other-modules:
+        Hi
+        Hi.Cli
+        Hi.CommandLineOption
+        Hi.Config
+        Hi.Directory
+        Hi.FilePath
+        Hi.Git
+        Hi.Option
+        Hi.Template
+        Hi.Types
+        Main
+        FeatureSpec
+        Hi.GitSpec
+        HiSpec
+        Spec
+        SpecHelper
+    default-language: Haskell2010
     type: exitcode-stdio-1.0
     main-is: doctests.hs
-    buildable: True
-    hs-source-dirs: src test
+    hs-source-dirs:
+        src,
+        test
     ghc-options: -threaded
- 
+
+test-suite spec
+    build-depends:
+        ansi-wl-pprint,
+        bytestring,
+        directory,
+        filepath,
+        optparse-applicative >=0.10.0,
+        parsec,
+        split,
+        template ==0.2.*,
+        text >1.0,
+        time,
+        base,
+        HUnit,
+        doctest,
+        hspec >=2.0.0,
+        process,
+        silently,
+        temporary ==1.2.0.3
+    other-modules:
+        Hi
+        Hi.Cli
+        Hi.CommandLineOption
+        Hi.Config
+        Hi.Directory
+        Hi.FilePath
+        Hi.Git
+        Hi.Option
+        Hi.Template
+        Hi.Types
+        Main
+        FeatureSpec
+        Hi.GitSpec
+        HiSpec
+        SpecHelper
+    default-language: Haskell2010
+    type: exitcode-stdio-1.0
+    main-is: Spec.hs
+    hs-source-dirs:
+        src,
+        test
+    ghc-options: -Wall
