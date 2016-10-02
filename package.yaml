@@ -1,5 +1,5 @@
 name: hi
-version: '1.2.0.0'
+version: '1.2.0.1'
 synopsis: Generate scaffold for cabal project
 description: ! 'This application generates a scaffold for Haskell project from a Git
   repository.

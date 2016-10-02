@@ -1,5 +1,9 @@
 # Releases
 
+## 1.2.0.1
+
+- Remove restriction to temporary-1.2.0.3
+
 ## 1.2.0.0
 
 - Add option to specify directory name of the files to be generated (https://github.com/fujimura/hi/pull/56)
