@@ -61,7 +61,7 @@ author: Fujimura Daisuke
 maintainer: me@fujimuradaisuke.com
 license: BSD3
 github: fujimura/hi.git
-ghc-options: -threaded -Wall
+ghc-options: -Wall
 source-dirs: src
 dependencies:
 - base ==4.*
@@ -76,7 +76,6 @@ dependencies:
 - text >1.0
 - time
 library:
-  ghc-options: -Wall
   exposed-modules:
   - Hi
   - Hi.Cli
@@ -100,6 +99,7 @@ executables:
 tests:
   doctests:
     main: doctests.hs
+    ghc-options: -threaded
     source-dirs:
     - test
     dependencies:
