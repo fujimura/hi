@@ -61,7 +61,10 @@ author: Fujimura Daisuke
 maintainer: me@fujimuradaisuke.com
 license: BSD3
 github: fujimura/hi.git
+ghc-options: -threaded -Wall
+source-dirs: src
 dependencies:
+- base ==4.*
 - ansi-wl-pprint
 - bytestring
 - directory
@@ -73,7 +76,6 @@ dependencies:
 - text >1.0
 - time
 library:
-  source-dirs: src
   ghc-options: -Wall
   exposed-modules:
   - Hi
@@ -87,25 +89,19 @@ library:
   - Hi.Template
   - Hi.Types
   dependencies:
-  - base ==4.*
   - process >=1.2.0.0
   - temporary >=1.2.0.3
 executables:
   hi:
     main: Main.hs
-    source-dirs: src
-    ghc-options: -Wall
     dependencies:
-    - base ==4.*
     - process >=1.2.0.0
     - temporary >=1.2.0.3
 tests:
   doctests:
     main: doctests.hs
     source-dirs:
-    - src
     - test
-    ghc-options: -threaded
     dependencies:
     - base
     - doctest >=0.8
@@ -113,11 +109,8 @@ tests:
   spec:
     main: Spec.hs
     source-dirs:
-    - src
     - test
-    ghc-options: -Wall
     dependencies:
-    - base
     - HUnit
     - doctest
     - hspec >=2.0.0

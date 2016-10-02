@@ -52,6 +52,7 @@ source-repository head
 
 library
     build-depends:
+        base ==4.*,
         ansi-wl-pprint,
         bytestring,
         directory,
@@ -62,7 +63,6 @@ library
         template ==0.2.*,
         text >1.0,
         time,
-        base ==4.*,
         process >=1.2.0.0,
         temporary >=1.2.0.3
     exposed-modules:
@@ -82,10 +82,11 @@ library
         Main
         Paths_hi
     default-language: Haskell2010
-    ghc-options: -Wall
+    ghc-options: -threaded -Wall -Wall
 
 executable hi
     build-depends:
+        base ==4.*,
         ansi-wl-pprint,
         bytestring,
         directory,
@@ -96,7 +97,6 @@ executable hi
         template ==0.2.*,
         text >1.0,
         time,
-        base ==4.*,
         process >=1.2.0.0,
         temporary >=1.2.0.3
     other-modules:
@@ -114,10 +114,11 @@ executable hi
     main-is: Main.hs
     hs-source-dirs:
         src
-    ghc-options: -Wall
+    ghc-options: -threaded -Wall
 
 test-suite doctests
     build-depends:
+        base ==4.*,
         ansi-wl-pprint,
         bytestring,
         directory,
@@ -154,10 +155,11 @@ test-suite doctests
     hs-source-dirs:
         src,
         test
-    ghc-options: -threaded
+    ghc-options: -threaded -Wall
 
 test-suite spec
     build-depends:
+        base ==4.*,
         ansi-wl-pprint,
         bytestring,
         directory,
@@ -168,7 +170,6 @@ test-suite spec
         template ==0.2.*,
         text >1.0,
         time,
-        base,
         HUnit,
         doctest,
         hspec >=2.0.0,
@@ -197,4 +198,4 @@ test-suite spec
     hs-source-dirs:
         src,
         test
-    ghc-options: -Wall
+    ghc-options: -threaded -Wall
