@@ -5,6 +5,7 @@ module Hi.CommandLineOption
   ) where
 
 import           Options.Applicative
+import           Data.Monoid
 
 data CommandLineOption = CommandLineOption
                        { packageName             :: String
