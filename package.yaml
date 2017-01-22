@@ -69,7 +69,7 @@ dependencies:
 - bytestring
 - directory
 - filepath
-- optparse-applicative >=0.10.0
+- optparse-applicative >=0.13.0
 - parsec
 - split
 - template ==0.2.*
