@@ -1,3 +1,4 @@
+{-# LANGUAGE PackageImports #-}
 module Hi.Directory
     (
       inTemporaryDirectory
@@ -6,7 +7,7 @@ module Hi.Directory
 
 import           Control.Exception    (bracket_)
 import           System.Directory
-import           System.IO.Temp       (withSystemTempDirectory)
+import "temporary" System.IO.Temp       (withSystemTempDirectory)
 
 -- |Run callback in a temporary directory.
 inTemporaryDirectory :: String         -- ^ Base of temporary directory name
