@@ -76,15 +76,15 @@ spec = do
           inDirectory "./testapp" $ do
             readProcess "git" ["log", "-1", "--pretty=%s"] [] `shouldReturn` "Initial commit\n"
 
-    describe "with --after-command='cabal sandbox init'" $ do
+    describe "with --after-command='touch a" $ do
       let cmd = runWithCommandLineOptions [ "--after-command"
-                                          , "cabal sandbox init"
+                                          , "touch a"
                                           , "-p"
                                           , packageName
                                           ]
       around_ cmd $ do
-        it "should initialize it as git repository and make first commit" $ do
-          doesFileExist "testapp/cabal.sandbox.config" `shouldReturn` True
+        it "should initialize it as git repository and make file named a" $ do
+          doesFileExist "testapp/a" `shouldReturn` True
 
     describe "-v" $ do
       it "should show version number" $ do
