@@ -75,6 +75,8 @@ dependencies:
 - template ==0.2.*
 - text >1.0
 - time
+- process >=1.2.0.0
+- temporary >=1.2.0.3
 library:
   exposed-modules:
   - Hi
@@ -87,12 +89,10 @@ library:
   - Hi.CommandLineOption
   - Hi.Template
   - Hi.Types
-  dependencies:
-  - process >=1.2.0.0
-  - temporary >=1.2.0.3
 executables:
   hi:
     main: Main.hs
+    source-dirs: app
     dependencies:
     - process >=1.2.0.0
     - temporary >=1.2.0.3
