@@ -98,6 +98,7 @@ tests:
     main: doctests.hs
     ghc-options: -threaded
     source-dirs: test
+    other-modules: []
     dependencies:
     - hi
     - doctest >=0.8

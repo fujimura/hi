@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 05c3b0a3652d51dc98bff721470b8ed1f8973a4aeb4b4121033ab61e76b4f641
+-- hash: d33b40db788072e41f35bae10312f498796cb98e5a95bd000266b2aafb1d258a
 
 name:           hi
 version:        1.2.0.1
@@ -142,23 +142,6 @@ test-suite doctests
     , temporary >=1.2.0.3
     , text >1.0
     , time
-  other-modules:
-      Hi
-      Hi.Cli
-      Hi.CommandLineOption
-      Hi.Config
-      Hi.Directory
-      Hi.FilePath
-      Hi.Git
-      Hi.Option
-      Hi.Template
-      Hi.Types
-      FeatureSpec
-      Hi.GitSpec
-      HiSpec
-      Spec
-      SpecHelper
-      Paths_hi
   default-language: Haskell2010
 
 test-suite spec
