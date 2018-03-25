@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: fpco/stack-build:lts-8.9
+    working_directory: /home/stackage
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - restore_cache:
+          key: cache
+      - run: stack build --test --only-dependencies --no-terminal --system-ghc
+      - save_cache:
+          key: cache
+          paths:
+            - ~/.stack
+      - run: stack test --system-ghc
