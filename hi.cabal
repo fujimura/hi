@@ -1,6 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.13.0.
+-- This file has been generated from package.yaml by hpack version 0.20.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: 34cffe672cc33cc797765e9759adfaf551776d336457e9f942291467d0b6d90d
 
 name:           hi
 version:        1.2.0.1
@@ -52,19 +54,19 @@ source-repository head
 
 library
     build-depends:
-        base ==4.*,
         ansi-wl-pprint,
+        base ==4.*,
         bytestring,
         directory,
         filepath,
         optparse-applicative >=0.13.0,
         parsec,
+        process >=1.2.0.0,
         split,
         template ==0.2.*,
+        temporary >=1.2.0.3,
         text >1.0,
-        time,
-        process >=1.2.0.0,
-        temporary >=1.2.0.3
+        time
     exposed-modules:
         Hi
         Hi.Cli
@@ -86,19 +88,19 @@ library
 
 executable hi
     build-depends:
-        base ==4.*,
         ansi-wl-pprint,
+        base ==4.*,
         bytestring,
         directory,
         filepath,
         optparse-applicative >=0.13.0,
         parsec,
+        process >=1.2.0.0,
         split,
         template ==0.2.*,
+        temporary >=1.2.0.3,
         text >1.0,
-        time,
-        process >=1.2.0.0,
-        temporary >=1.2.0.3
+        time
     other-modules:
         Hi
         Hi.Cli
@@ -110,6 +112,7 @@ executable hi
         Hi.Option
         Hi.Template
         Hi.Types
+        Paths_hi
     default-language: Haskell2010
     main-is: Main.hs
     hs-source-dirs:
@@ -118,20 +121,19 @@ executable hi
 
 test-suite doctests
     build-depends:
-        base ==4.*,
         ansi-wl-pprint,
+        base,
         bytestring,
         directory,
+        doctest >=0.8,
         filepath,
         optparse-applicative >=0.13.0,
         parsec,
+        process,
         split,
         template ==0.2.*,
         text >1.0,
-        time,
-        base,
-        doctest >=0.8,
-        process
+        time
     other-modules:
         Hi
         Hi.Cli
@@ -149,33 +151,34 @@ test-suite doctests
         HiSpec
         Spec
         SpecHelper
+        Paths_hi
     default-language: Haskell2010
     type: exitcode-stdio-1.0
     main-is: doctests.hs
     hs-source-dirs:
-        src,
+        src
         test
     ghc-options: -Wall -threaded
 
 test-suite spec
     build-depends:
-        base ==4.*,
+        HUnit,
         ansi-wl-pprint,
+        base ==4.*,
         bytestring,
         directory,
+        doctest,
         filepath,
+        hspec >=2.0.0,
         optparse-applicative >=0.13.0,
         parsec,
-        split,
-        template ==0.2.*,
-        text >1.0,
-        time,
-        HUnit,
-        doctest,
-        hspec >=2.0.0,
         process,
         silently,
-        temporary >=1.2.0.3
+        split,
+        template ==0.2.*,
+        temporary >=1.2.0.3,
+        text >1.0,
+        time
     other-modules:
         Hi
         Hi.Cli
@@ -192,10 +195,11 @@ test-suite spec
         Hi.GitSpec
         HiSpec
         SpecHelper
+        Paths_hi
     default-language: Haskell2010
     type: exitcode-stdio-1.0
     main-is: Spec.hs
     hs-source-dirs:
-        src,
+        src
         test
     ghc-options: -Wall
