@@ -93,27 +93,19 @@ executables:
   hi:
     main: Main.hs
     source-dirs: app
-    dependencies:
-    - process >=1.2.0.0
-    - temporary >=1.2.0.3
 tests:
   doctests:
     main: doctests.hs
     ghc-options: -threaded
-    source-dirs:
-    - test
+    source-dirs: test
     dependencies:
-    - base
+    - hi
     - doctest >=0.8
-    - process
   spec:
     main: Spec.hs
-    source-dirs:
-    - test
+    source-dirs: test
     dependencies:
+    - hi
     - HUnit
-    - doctest
     - hspec >=2.0.0
-    - process
     - silently
-    - temporary >=1.2.0.3
