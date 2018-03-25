@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: fpco/stack-build:lts-8.9
+      - image: fpco/stack-build:lts-11
     working_directory: /home/stackage
     steps:
       - checkout
