@@ -6,6 +6,8 @@ jobs:
     working_directory: /home/stackage
     steps:
       - checkout
+      - run: git config --global user.email "johndoe@example.com"
+      - run: git config --global user.name "John Doe"
       - run: git submodule sync
       - run: git submodule update --init
       - restore_cache:
