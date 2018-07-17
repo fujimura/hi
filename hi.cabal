@@ -5,7 +5,7 @@
 -- hash: 34cffe672cc33cc797765e9759adfaf551776d336457e9f942291467d0b6d90d
 
 name:           hi
-version:        1.2.0.1
+version:        1.2.0.2
 cabal-version:  >= 1.10
 build-type:     Simple
 license:        BSD3
