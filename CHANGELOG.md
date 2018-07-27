@@ -1,5 +1,9 @@
 # Releases
 
+## 1.2.0.2
+
+- Fix broken build caused by changes in optparse-applicative-0.13 (https://github.com/fujimura/hi/pull/60)
+
 ## 1.2.0.1
 
 - Remove restriction to temporary-1.2.0.3
