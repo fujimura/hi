@@ -149,7 +149,6 @@ test-suite doctests
         FeatureSpec
         Hi.GitSpec
         HiSpec
-        Spec
         SpecHelper
         Paths_hi
     default-language: Haskell2010
