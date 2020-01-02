@@ -132,6 +132,7 @@ test-suite doctests
         process,
         split,
         template ==0.2.*,
+        temporary >=1.2.0.3,
         text >1.0,
         time
     other-modules:
@@ -146,10 +147,6 @@ test-suite doctests
         Hi.Template
         Hi.Types
         Main
-        FeatureSpec
-        Hi.GitSpec
-        HiSpec
-        SpecHelper
         Paths_hi
     default-language: Haskell2010
     type: exitcode-stdio-1.0
