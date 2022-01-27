@@ -16,11 +16,10 @@ import qualified Text.PrettyPrint.ANSI.Leijen as PP
 import qualified Paths_hi                     (version)
 
 run :: [String] -> IO ()
-run []   = showHelpText (prefs idm) opts
 run args = parseArgs args >>= Hi.run
 
 parseArgs :: [String] -> IO Option
-parseArgs args = handleParseResult (execParserPure (prefs idm) opts args) >>= buildOption
+parseArgs args = handleParseResult (execParserPure (prefs showHelpOnEmpty) opts args) >>= buildOption
 
 opts :: ParserInfo CommandLineOption
 opts = info (helper <*> (version <*> commandLineOption))
@@ -42,7 +41,3 @@ version = infoOption (showVersion Paths_hi.version)
   (  short 'v'
   <> long "version"
   <> help "Print version information" )
-
-showHelpText :: ParserPrefs -> ParserInfo a -> IO ()
-showHelpText pprefs pinfo = handleParseResult . Failure $
-  parserFailure pprefs pinfo ShowHelpText mempty
