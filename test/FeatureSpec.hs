@@ -15,8 +15,8 @@ import           System.Directory    (doesDirectoryExist, doesFileExist,
                                       getCurrentDirectory)
 import           System.Exit         (ExitCode (..))
 import           System.FilePath     (joinPath, (</>))
-import           System.IO           (stdout)
-import           System.IO.Silently  (capture, hSilence)
+import           System.IO           (stdout, stderr)
+import           System.IO.Silently  (capture, hCapture, hSilence)
 import           System.Process      (readProcess, system)
 import           Test.Hspec
 
@@ -93,6 +93,14 @@ spec = do
 
         (res,_) <- capture $ Cli.run ["-v"] `catch` handle
         res `shouldBe` (showVersion version) ++ "\n"
+
+    describe "with no args" $ do
+      it "should show help" $ do
+        let handle (ExitFailure 1) = return ()
+            handle e               = throwIO e
+
+        (res,_) <- hCapture [stderr] $ Cli.run [] `catch` handle
+        res `shouldContain` "Generate a haskell project based on a template from github"
 
 packageName, moduleName, author, email :: String
 packageName = "testapp"
