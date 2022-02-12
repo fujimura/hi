@@ -124,8 +124,9 @@ test-suite doctests
     , base
     , bytestring
     , directory
-    , doctest               >=0.8
+    , doctest               >=0.20
     , filepath
+    , hi
     , optparse-applicative  >=0.13.0
     , parsec
     , process
