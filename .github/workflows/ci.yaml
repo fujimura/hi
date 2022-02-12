@@ -22,3 +22,4 @@ jobs:
           git submodule sync
           git submodule update --init
       - run: cabal test --test-show-details=direct
+      - run: cabal install doctest --overwrite-policy=always && cabal repl --build-depends=template-haskell --with-ghc=doctest
