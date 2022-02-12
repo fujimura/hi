@@ -1,8 +1,8 @@
+cabal-version: 2.2
 name:          hi
 version:       1.2.0.2
-cabal-version: >=1.10
 build-type:    Simple
-license:       BSD3
+license:       BSD-3-Clause
 license-file:  LICENSE
 maintainer:    me@fujimuradaisuke.com
 homepage:      https://github.com/fujimura/hi.git#readme
@@ -48,9 +48,12 @@ source-repository head
   type:     git
   location: https://github.com/fujimura/hi.git
 
-library
+common shared
+  default-language: Haskell2010
+  other-modules:    Paths_hi
+  ghc-options:      -Wall
   build-depends:
-      ansi-wl-pprint
+    , ansi-wl-pprint
     , base                  >=4       && <5
     , bytestring
     , directory
@@ -59,11 +62,13 @@ library
     , parsec
     , process               >=1.2.0.0
     , split
-    , template              >=0.2     && <0.3
+    , template              ^>=0.2
     , temporary             >=1.2.0.3
     , text                  >1.0
     , time
 
+library
+  import:          shared
   exposed-modules:
     Hi
     Hi.Cli
@@ -76,30 +81,11 @@ library
     Hi.Template
     Hi.Types
 
-  hs-source-dirs:   src
-  other-modules:
-    Main
-    Paths_hi
-
-  default-language: Haskell2010
-  ghc-options:      -Wall
+  hs-source-dirs:  src
+  other-modules:   Main
 
 executable hi
-  build-depends:
-      ansi-wl-pprint
-    , base                  >=4       && <5
-    , bytestring
-    , directory
-    , filepath
-    , optparse-applicative  >=0.13.0
-    , parsec
-    , process               >=1.2.0.0
-    , split
-    , template              >=0.2     && <0.3
-    , temporary             >=1.2.0.3
-    , text                  >1.0
-    , time
-
+  import:         shared
   other-modules:
     Hi
     Hi.Cli
@@ -113,30 +99,17 @@ executable hi
     Hi.Types
     Paths_hi
 
-  default-language: Haskell2010
-  main-is:          Main.hs
-  hs-source-dirs:   src
-  ghc-options:      -Wall
+  main-is:        Main.hs
+  hs-source-dirs: src
 
 test-suite spec
+  import:             shared
   build-depends:
-      ansi-wl-pprint
-    , base                  >=4       && <5
-    , bytestring
-    , directory
-    , filepath
-    , hspec                 >=2.0.0
+    , hspec     >=2.0.0
     , HUnit
-    , optparse-applicative  >=0.13.0
-    , parsec
-    , process
     , silently
-    , split
-    , template              >=0.2     && <0.3
-    , temporary             >=1.2.0.3
-    , text                  >1.0
-    , time
 
+  build-tool-depends: hspec-discover:hspec-discover -any
   other-modules:
     FeatureSpec
     Hi
@@ -151,19 +124,9 @@ test-suite spec
     Hi.Template
     Hi.Types
     HiSpec
-    Main
     Paths_hi
     SpecHelper
 
-  default-language: Haskell2010
-  type:             exitcode-stdio-1.0
-  main-is:          Spec.hs
-  hs-source-dirs:   src test
-
-  -- This file has been generated from package.yaml by hpack version 0.20.0.
-  --
-  -- see: https://github.com/sol/hpack
-  --
-  -- hash: 34cffe672cc33cc797765e9759adfaf551776d336457e9f942291467d0b6d90d
-
-  ghc-options:      -Wall
+  type:               exitcode-stdio-1.0
+  main-is:            Spec.hs
+  hs-source-dirs:     src test
