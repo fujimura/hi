@@ -1,0 +1,24 @@
+on: [push]
+name: test
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ghc: ["9.0.1", "8.10.7"]
+        cabal: ["3.6.2.0"]
+    name: Run test with GHC ${{ matrix.ghc }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Haskell
+        uses: haskell/actions/setup@v1
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ matrix.cabal }}
+      - run: echo "$HOME/.cabal/bin" >> $GITHUB_PATH
+      - run: |
+          git config --global user.email "john@example.com"
+          git config --global user.name "John Doe"
+          git submodule sync
+          git submodule update --init
+      - run: cabal test --test-show-details=direct
