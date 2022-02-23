@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ghc: ["9.0.1", "8.10.7"]
-        cabal: ["3.6.2.0"]
-    name: Run test with GHC ${{ matrix.ghc }}
+        ghc: ["latest", "8.10"]
+        cabal: ["latest"]
+    name: Run test with GHC ${{ matrix.ghc }} && ${{ matrix.cabal }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Haskell
