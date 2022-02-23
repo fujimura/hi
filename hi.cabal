@@ -1,4 +1,4 @@
-cabal-version: 2.2
+cabal-version: 2.4
 name:          hi
 version:       1.2.0.2
 build-type:    Simple
