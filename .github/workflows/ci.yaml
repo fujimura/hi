@@ -7,7 +7,7 @@ jobs:
       matrix:
         ghc: ["latest", "8.10"]
         cabal: ["latest"]
-    name: Run test with GHC ${{ matrix.ghc }} && ${{ matrix.cabal }}
+    name: Build and run test with GHC ${{ matrix.ghc }} && ${{ matrix.cabal }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Haskell
@@ -21,5 +21,6 @@ jobs:
           git config --global user.name "John Doe"
           git submodule sync
           git submodule update --init
+      - run: cabal build
       - run: cabal test --test-show-details=direct
       - run: cabal install doctest --overwrite-policy=always && cabal repl --build-depends=template-haskell --with-ghc=doctest
