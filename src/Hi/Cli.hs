@@ -8,7 +8,6 @@ import           Hi.CommandLineOption         (CommandLineOption,
 import           Hi.Option                    (buildOption)
 import           Hi.Types
 
-import           Data.Monoid                  (mempty, (<>))
 import           Data.Version                 (showVersion)
 import           Options.Applicative
 import qualified Text.PrettyPrint.ANSI.Leijen as PP

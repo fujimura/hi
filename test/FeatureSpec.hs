@@ -5,7 +5,6 @@ module FeatureSpec where
 import qualified Hi.Cli              as Cli
 import           Hi.Directory        (inDirectory)
 
-import           Control.Applicative
 import           Control.Exception   (catch, throwIO)
 import           Data.Time.Calendar  (toGregorian)
 import           Data.Time.Clock     (getCurrentTime, utctDay)
