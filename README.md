@@ -14,7 +14,7 @@ The template can be specified by Git repository. [hi-hspec](https://github.com/f
 
 ```
 $ hi foo-bar-baz
-Creating new project with git repository:git://github.com/fujimura/hi-hspec.git
+Creating new project with git repository:https://github.com/fujimura/hi-hspec.git
     create  foo-bar-baz/.gitignore
     create  foo-bar-baz/LICENSE
     create  foo-bar-baz/README.md

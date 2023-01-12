@@ -34,4 +34,4 @@ commandLineOption = CommandLineOption
    <*> optional (strOption (long "after-command"             <> help "The command to be run after generation"))
 
 defaultRepo :: String
-defaultRepo = "git://github.com/fujimura/hi-hspec.git"
+defaultRepo = "https://github.com/fujimura/hi-hspec.git"
