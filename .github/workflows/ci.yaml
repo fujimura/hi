@@ -7,7 +7,7 @@ jobs:
       matrix:
         ghc: ["latest", "8.10"]
         cabal: ["latest"]
-    name: Build and run test with GHC ${{ matrix.ghc }} && ${{ matrix.cabal }}
+    name: Build and run test with GHC ${{ matrix.ghc }} & Cabal ${{ matrix.cabal }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Haskell
